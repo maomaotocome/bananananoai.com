@@ -20,6 +20,39 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Test endpoint to verify Gemini API connectivity
+  app.post("/api/test-gemini", async (req, res) => {
+    try {
+      if (!process.env.GEMINI_API_KEY) {
+        return res.status(500).json({
+          success: false,
+          error: "GEMINI_API_KEY not configured"
+        });
+      }
+
+      // Simple text test
+      const { GoogleGenAI } = require("@google/genai");
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: "Say 'API is working!' in a few words"
+      });
+
+      res.json({
+        success: true,
+        message: "Gemini API is connected",
+        response: response.text || "Connected successfully"
+      });
+    } catch (error) {
+      console.error("Gemini API test error:", error);
+      res.status(500).json({
+        success: false,
+        error: `API test failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      });
+    }
+  });
+
   // Image editing endpoint with file upload
   app.post("/api/generate-image", upload.single('image'), async (req, res) => {
     try {
