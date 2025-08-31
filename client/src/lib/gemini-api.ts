@@ -17,7 +17,7 @@ export async function generateImage(file: File, prompt: string): Promise<Generat
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Network error' }));
-      throw new Error(errorData.error || `HTTP ${response.status}`);
+      throw new Error(errorData.error || errorData.message || `HTTP ${response.status}`);
     }
 
     const data = await response.json();
@@ -43,7 +43,7 @@ export async function generateImageFromText(prompt: string): Promise<GenerateIma
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Network error' }));
-      throw new Error(errorData.error || `HTTP ${response.status}`);
+      throw new Error(errorData.error || errorData.message || `HTTP ${response.status}`);
     }
 
     const data = await response.json();
