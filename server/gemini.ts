@@ -22,7 +22,7 @@ export async function generateImage(
     const base64Data = imageBuffer.toString('base64');
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-preview-image-generation",
+      model: "gemini-2.5-flash-image-preview",
       contents: [
         {
           role: "user",
@@ -81,7 +81,7 @@ export async function generateImageFromText(prompt: string): Promise<GenerateIma
     }
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-preview-image-generation",
+      model: "gemini-2.5-flash-image-preview",
       contents: [
         {
           role: "user",
