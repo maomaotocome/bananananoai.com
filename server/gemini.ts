@@ -21,26 +21,39 @@ export async function generateImage(
     // Convert buffer to base64
     const base64Data = imageBuffer.toString('base64');
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-image-preview",
-      contents: [
-        {
-          role: "user",
-          parts: [
-            { text: prompt },
-            {
-              inlineData: {
-                data: base64Data,
-                mimeType: mimeType,
+    // Try image generation first, fall back to text if quota exceeded
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-image-preview",
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: prompt },
+              {
+                inlineData: {
+                  data: base64Data,
+                  mimeType: mimeType,
+                },
               },
-            },
-          ],
+            ],
+          },
+        ],
+        config: {
+          responseModalities: [Modality.TEXT, Modality.IMAGE],
         },
-      ],
-      config: {
-        responseModalities: [Modality.TEXT, Modality.IMAGE],
-      },
-    });
+      });
+    } catch (quotaError: any) {
+      // Handle quota exceeded error gracefully
+      if (quotaError.status === 429 || quotaError.message?.includes('quota') || quotaError.message?.includes('exceeded')) {
+        return {
+          success: false,
+          error: "Free tier quota exceeded. The image generation API has daily limits. Please try again later or upgrade to a paid plan for unlimited access. For now, you can explore our examples and learn about Nano Banana's capabilities!"
+        };
+      }
+      throw quotaError; // Re-throw other errors
+    }
 
     const candidates = response.candidates;
     if (!candidates || candidates.length === 0) {

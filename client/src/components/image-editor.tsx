@@ -60,11 +60,22 @@ export default function ImageEditor() {
       }
     },
     onError: (error) => {
-      toast({
-        title: "Generation failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      console.error("Image generation failed:", error);
+      
+      // Check if it's a quota error and provide helpful guidance
+      if (error.message?.includes('quota') || error.message?.includes('exceeded')) {
+        toast({
+          title: "Free tier limit reached",
+          description: "Daily API quota exceeded. Try again later or explore our examples to see Nano Banana's capabilities!",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Generation failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     },
   });
 

@@ -77,8 +77,20 @@ export default function FileUpload({
               data-testid={`file-preview-${index}`}
             >
               <Card className="p-3">
-                <div className="aspect-square bg-muted rounded-lg flex items-center justify-center mb-2">
-                  <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                <div className="aspect-square bg-muted rounded-lg flex items-center justify-center mb-2 overflow-hidden">
+                  {file.type.startsWith('image/') ? (
+                    <img 
+                      src={URL.createObjectURL(file)} 
+                      alt={file.name}
+                      className="w-full h-full object-cover rounded-lg"
+                      onLoad={(e) => {
+                        // Clean up object URL to prevent memory leaks
+                        setTimeout(() => URL.revokeObjectURL((e.target as HTMLImageElement).src), 1000);
+                      }}
+                    />
+                  ) : (
+                    <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground truncate">
                   {file.name}
