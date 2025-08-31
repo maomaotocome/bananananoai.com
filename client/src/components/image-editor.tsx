@@ -134,9 +134,9 @@ export default function ImageEditor() {
 
         <div className="max-w-6xl mx-auto">
           <Card className="p-8">
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-8 h-[600px]">
               {/* Upload Section */}
-              <div className="space-y-6">
+              <div className="flex flex-col space-y-6 h-full">
                 <h3 className="text-lg font-semibold">Upload Images</h3>
                 
                 <FileUpload
@@ -145,7 +145,7 @@ export default function ImageEditor() {
                   data-testid="image-upload"
                 />
 
-                <div className="space-y-4">
+                <div className="flex-1 flex flex-col space-y-4">
                   <label className="block text-sm font-medium">Your Prompt</label>
                   <Textarea
                     placeholder="Describe how you want to transform your image... e.g., 'Make me wear a red dress in a field of sunflowers'"
@@ -169,33 +169,35 @@ export default function ImageEditor() {
                     ))}
                   </div>
 
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                    className="w-full py-4 text-lg font-semibold banana-glow"
-                    data-testid="generate-button"
-                  >
-                    {generateMutation.isPending ? (
-                      <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Generating Magic...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5 mr-2" />
-                        🍌 Generate Magic
-                      </>
-                    )}
-                  </Button>
+                  <div className="mt-auto">
+                    <Button
+                      onClick={handleGenerate}
+                      disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
+                      className="w-full py-4 text-lg font-semibold banana-glow"
+                      data-testid="generate-button"
+                    >
+                      {generateMutation.isPending ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Generating Magic...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5 mr-2" />
+                          🍌 Generate Magic
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
 
               {/* Results Section */}
-              <div className="space-y-6">
+              <div className="flex flex-col space-y-6 h-full">
                 <h3 className="text-lg font-semibold">Results</h3>
 
                 {generatedImages.length === 0 ? (
-                  <div className="bg-muted rounded-xl p-8 text-center min-h-[300px] flex items-center justify-center">
+                  <div className="bg-muted rounded-xl p-8 text-center flex-1 flex items-center justify-center">
                     <div className="text-muted-foreground">
                       <div className="text-4xl mb-4">✨</div>
                       <p>Your transformed images will appear here</p>
@@ -203,14 +205,14 @@ export default function ImageEditor() {
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-4 max-h-[500px] overflow-y-auto">
+                  <div className="flex-1 space-y-4 overflow-y-auto">
                     {generatedImages.map((image, index) => (
                       <Card key={index} className="p-4" data-testid={`generated-image-${index}`}>
                         <div className="bg-muted rounded-lg mb-4 overflow-hidden">
                           <img
                             src={image.url}
                             alt={`Generated: ${image.prompt}`}
-                            className="w-full h-auto max-h-[400px] object-contain"
+                            className="w-full h-auto max-h-[280px] object-contain"
                           />
                         </div>
                         
