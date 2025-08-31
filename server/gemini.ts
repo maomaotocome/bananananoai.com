@@ -66,11 +66,7 @@ export async function generateImage(
     }
 
     // Find the image part in the response
-    console.log("Response structure:", JSON.stringify(response, null, 2));
-    console.log("Content parts:", content.parts);
-    
     for (const part of content.parts) {
-      console.log("Part:", part);
       if (part.inlineData && part.inlineData.data) {
         const imageData = Buffer.from(part.inlineData.data, "base64");
         return {

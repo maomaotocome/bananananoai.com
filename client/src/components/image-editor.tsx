@@ -206,11 +206,11 @@ export default function ImageEditor() {
                   <div className="space-y-4 max-h-[500px] overflow-y-auto">
                     {generatedImages.map((image, index) => (
                       <Card key={index} className="p-4" data-testid={`generated-image-${index}`}>
-                        <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                        <div className="bg-muted rounded-lg mb-4 overflow-hidden">
                           <img
                             src={image.url}
                             alt={`Generated: ${image.prompt}`}
-                            className="w-full h-full object-cover"
+                            className="w-full h-auto max-h-[400px] object-contain"
                           />
                         </div>
                         
