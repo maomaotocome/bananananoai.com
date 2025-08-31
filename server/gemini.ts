@@ -66,7 +66,11 @@ export async function generateImage(
     }
 
     // Find the image part in the response
+    console.log("Response structure:", JSON.stringify(response, null, 2));
+    console.log("Content parts:", content.parts);
+    
     for (const part of content.parts) {
+      console.log("Part:", part);
       if (part.inlineData && part.inlineData.data) {
         const imageData = Buffer.from(part.inlineData.data, "base64");
         return {
@@ -76,7 +80,19 @@ export async function generateImage(
       }
     }
 
-    throw new Error("No image data found in response");
+    // Check if there's text response instead
+    const textParts = content.parts.filter(part => part.text);
+    if (textParts.length > 0) {
+      return {
+        success: false,
+        error: `API returned text instead of image: ${textParts[0].text}. This may indicate the model is not generating images or there's a configuration issue.`
+      };
+    }
+
+    return {
+      success: false,
+      error: "No image data found in response. The API may be configured incorrectly or the model didn't generate an image."
+    };
 
   } catch (error) {
     console.error("Gemini image generation failed:", error);
