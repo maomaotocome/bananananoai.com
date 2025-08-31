@@ -48,55 +48,61 @@ export default function Home() {
     }
   ];
 
-  // Viral trending examples based on social media buzz
+  // Real user cases from Chinese social media and trending applications
   const examples = [
     {
-      category: "🔥 Viral Selfie Magic",
-      description: "Turn two separate photos into a natural-looking selfie - the trick that's breaking Twitter",
-      prompt: "Make them look like they're taking a selfie together in a park",
+      category: "💇‍♀️ 发型预览神器",
+      description: "给托尼老师看效果图！上传照片试戴6种最适合你脸型的发型，¥9.9收费",
+      prompt: "将照片中的人重新想象成不同发型风格，包括韩式短发、法式卷发、复古波浪",
       image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: true,
-      views: "2.3M views"
+      views: "2.3M 小红书",
+      price: "¥9.9/次"
     },
     {
-      category: "🛒 E-commerce Gold",
-      description: "Add identical products to cart - the Amazon seller hack everyone's talking about",
-      prompt: "Add a third bag of dog food in the cart the same as the other two",
+      category: "🎨 纹身效果预览",
+      description: "纹身前先看效果！上传身体部位照片+想要的图案，真实预览纹身效果",
+      prompt: "在手臂上添加传统日式龙纹身，保持原有肤色和肌肉线条",
       image: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: true,
-      views: "1.8M views"
+      views: "1.8M 抖音",
+      price: "¥19.9/次"
     },
     {
-      category: "🏖️ Object Persistence Magic",
-      description: "Change specific objects while keeping backgrounds perfectly intact - the tech that amazed Reddit",
-      prompt: "Change the umbrellas to red but keep the beach exactly the same",
+      category: "🏠 装修效果图生成",
+      description: "拍张毛坯房照片，画个简单示意图，AI帮你生成精装修效果图",
+      prompt: "根据标记位置摆放沙发、茶几、电视柜，生成现代简约风格家居展示照片",
       image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: true,
-      views: "3.1M views"
+      views: "3.1M 微博",
+      price: "¥29.9/套"
     },
     {
-      category: "🎨 Virtual Try-On Revolution",
-      description: "Perfect face consistency across outfit changes - what made fashionistas go crazy",
-      prompt: "Try on different outfits while keeping my face and pose identical",
+      category: "👗 AI试衣魔镜",
+      description: "不会搭配？上传自拍+想要的服装图片，完美换装效果秒出",
+      prompt: "试穿这件白色连衣裙，保持我的脸部特征和身材比例不变",
       image: "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: false,
-      views: "950K views"
+      views: "950K 小红书",
+      price: "¥5.9/次"
     },
     {
-      category: "🏠 Interior Design Instant",
-      description: "Add furniture and change room vibes in seconds - architects love this",
-      prompt: "Add a modern sofa and plants to make it cozy",
+      category: "🎬 直播场景制作",
+      description: "网红都在用！拍张自己的照片+想要的道具，生成专业直播间效果",
+      prompt: "生成一个坐着的中年人，面前摆着各种有趣道具，专业直播间灯光设置",
       image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: false,
-      views: "720K views"
+      views: "720K 直播",
+      price: "¥39.9/套"
     },
     {
-      category: "📸 Product Photo Magic",
-      description: "Create professional product shots with AI backgrounds - Shopify sellers' secret weapon",
-      prompt: "Put sneakers on marble surface with studio lighting",
+      category: "🍳 冰箱变菜谱",
+      description: "拍张冰箱照片，AI自动生成可做的美食菜谱+制作视频教程",
+      prompt: "将这些食材转为完整的逐步食谱信息图，俯视视角，极简风格",
       image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: false,
-      views: "890K views"
+      views: "890K 美食",
+      price: "¥12.9/次"
     }
   ];
 
@@ -275,13 +281,25 @@ export default function Home() {
                   <Badge className="absolute bottom-3 left-3 bg-background/90 backdrop-blur-sm text-xs">
                     {example.views}
                   </Badge>
+                  {example.price && (
+                    <Badge className="absolute top-3 left-3 bg-green-500 text-white font-semibold">
+                      {example.price}
+                    </Badge>
+                  )}
                 </div>
                 <div className="p-6">
-                  <h3 className="font-bold text-lg mb-2">{example.category}</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-bold text-lg">{example.category}</h3>
+                    {example.price && (
+                      <Badge variant="secondary" className="text-xs bg-green-50 text-green-700 border-green-200">
+                        商业应用
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-muted-foreground text-sm mb-4">{example.description}</p>
-                  <div className="flex items-center text-sm text-primary">
-                    <span className="mr-2">📝</span>
-                    <code className="bg-primary/10 px-2 py-1 rounded text-xs">"{example.prompt}"</code>
+                  <div className="flex items-start text-sm text-primary">
+                    <span className="mr-2 mt-1">📝</span>
+                    <code className="bg-primary/10 px-3 py-2 rounded text-xs leading-relaxed flex-1">"{example.prompt}"</code>
                   </div>
                 </div>
               </Card>
