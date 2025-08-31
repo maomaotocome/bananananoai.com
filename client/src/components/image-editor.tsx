@@ -134,33 +134,35 @@ export default function ImageEditor() {
 
         <div className="max-w-6xl mx-auto">
           <Card className="p-8">
-            <div className="grid lg:grid-cols-2 gap-8 h-[600px]">
+            <div className="grid lg:grid-cols-2 gap-8 min-h-[600px]">
               {/* Upload Section */}
-              <div className="flex flex-col space-y-6 h-full">
+              <div className="flex flex-col space-y-6">
                 <h3 className="text-lg font-semibold">Upload Images</h3>
                 
-                <FileUpload
-                  onFilesChange={setFiles}
-                  maxFiles={5}
-                  data-testid="image-upload"
-                />
+                <div className="bg-muted/30 rounded-xl p-4 border-2 border-dashed border-muted-foreground/25">
+                  <FileUpload
+                    onFilesChange={setFiles}
+                    maxFiles={5}
+                    data-testid="image-upload"
+                  />
+                </div>
 
-                <div className="flex-1 flex flex-col space-y-4">
+                <div className="space-y-4">
                   <label className="block text-sm font-medium">Your Prompt</label>
                   <Textarea
                     placeholder="Describe how you want to transform your image... e.g., 'Make me wear a red dress in a field of sunflowers'"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    className="h-32 resize-none"
+                    className="h-28 resize-none"
                     data-testid="prompt-textarea"
                   />
 
-                  <div className="flex gap-2 flex-wrap">
+                  <div className="flex gap-2 flex-wrap max-h-24 overflow-y-auto">
                     {promptSuggestions.map((suggestion) => (
                       <Badge
                         key={suggestion}
                         variant="secondary"
-                        className="cursor-pointer hover:bg-secondary/80 transition-colors"
+                        className="cursor-pointer hover:bg-secondary/80 transition-colors text-xs whitespace-nowrap"
                         onClick={() => handlePromptSuggestion(suggestion)}
                         data-testid={`prompt-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}
                       >
@@ -169,35 +171,33 @@ export default function ImageEditor() {
                     ))}
                   </div>
 
-                  <div className="mt-auto">
-                    <Button
-                      onClick={handleGenerate}
-                      disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                      className="w-full py-4 text-lg font-semibold banana-glow"
-                      data-testid="generate-button"
-                    >
-                      {generateMutation.isPending ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Generating Magic...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-5 h-5 mr-2" />
-                          🍌 Generate Magic
-                        </>
-                      )}
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
+                    className="w-full py-4 text-lg font-semibold banana-glow"
+                    data-testid="generate-button"
+                  >
+                    {generateMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Generating Magic...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        🍌 Generate Magic
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
 
               {/* Results Section */}
-              <div className="flex flex-col space-y-6 h-full">
+              <div className="flex flex-col space-y-6">
                 <h3 className="text-lg font-semibold">Results</h3>
 
                 {generatedImages.length === 0 ? (
-                  <div className="bg-muted rounded-xl p-8 text-center flex-1 flex items-center justify-center">
+                  <div className="bg-muted rounded-xl p-8 text-center min-h-[400px] flex items-center justify-center">
                     <div className="text-muted-foreground">
                       <div className="text-4xl mb-4">✨</div>
                       <p>Your transformed images will appear here</p>
@@ -205,14 +205,14 @@ export default function ImageEditor() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex-1 space-y-4 overflow-y-auto">
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto border rounded-xl p-4 bg-muted/10">
                     {generatedImages.map((image, index) => (
-                      <Card key={index} className="p-4" data-testid={`generated-image-${index}`}>
+                      <Card key={index} className="p-4 shadow-sm" data-testid={`generated-image-${index}`}>
                         <div className="bg-muted rounded-lg mb-4 overflow-hidden">
                           <img
                             src={image.url}
                             alt={`Generated: ${image.prompt}`}
-                            className="w-full h-auto max-h-[280px] object-contain"
+                            className="w-full h-auto max-h-[250px] object-contain"
                           />
                         </div>
                         
