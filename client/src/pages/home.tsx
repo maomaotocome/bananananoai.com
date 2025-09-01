@@ -15,6 +15,8 @@ import {
 import ImageEditor from "@/components/image-editor";
 
 export default function Home() {
+  console.log("Home component is rendering");
+  
   const features = [
     {
       icon: <Zap className="w-6 h-6" />,

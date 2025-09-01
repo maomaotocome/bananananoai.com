@@ -14,6 +14,8 @@ import Tutorials from "@/pages/tutorials";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  console.log("Router component is rendering");
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
