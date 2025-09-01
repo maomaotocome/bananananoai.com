@@ -5,7 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Download, Share2, Sparkles, Zap } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Loader2, Download, Share2, Sparkles, Zap, ChevronDown, Wand2 } from "lucide-react";
 import FileUpload from "./file-upload";
 import { PromptOptimizer } from "./prompt-optimizer";
 import { generateImage } from "@/lib/gemini-api";
@@ -25,6 +26,8 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
   const [files, setFiles] = useState<File[]>([]);
   const [prompt, setPrompt] = useState("");
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [smartSuggestions, setSmartSuggestions] = useState<string[]>([]);
   const { toast } = useToast();
   
   // Update prompt when gallery provides one
@@ -38,40 +41,58 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
     }
   }, [promptFromGallery, prompt, toast]);
 
-  // Nano Banana热门功能分类
-  const nanoBananaFeatures = {
-    characterConsistency: [
-      "Change outfit to a red evening dress while keeping the same person",
-      "Put this person in a snowy mountain scene",
-      "Transform into a professional business suit",
-      "Place in a cozy coffee shop setting"
-    ],
-    virtualTryOn: [
-      "Try on a blue denim jacket",
-      "Wear trendy sunglasses and a baseball cap",
-      "Style with a vintage leather jacket",
-      "Add elegant jewelry and makeup"
-    ],
-    creativeEffects: [
-      "Create a 3D pop-out effect from phone screen",
-      "Transform into a hand-knitted cute doll version",
-      "Make a custom anime figure",
-      "Generate a bobblehead version"
-    ],
-    styleTransformation: [
-      "Change hairstyle to Korean short cut",
-      "Apply vintage 1950s styling",
-      "Transform into glass material effect",
-      "Create black and white portrait art"
-    ]
+  // 功能分类 - 简洁定义
+  const categories = {
+    'character': {
+      label: '👤 Character Consistency',
+      description: 'Keep person same, change scene/outfit',
+      prompts: [
+        "Change outfit while keeping the same person",
+        "Put this person in a different location",
+        "Transform clothing style professionally"
+      ]
+    },
+    'tryOn': {
+      label: '👗 Virtual Try-On', 
+      description: 'Try clothes, accessories, styles',
+      prompts: [
+        "Try on different clothing items",
+        "Add accessories and jewelry",
+        "Style with new fashion trends"
+      ]
+    },
+    'creative': {
+      label: '✨ Creative Effects',
+      description: '3D effects, figurines, art styles',
+      prompts: [
+        "Create 3D pop-out effects",
+        "Transform into cute figurine",
+        "Make artistic cartoon version"
+      ]
+    },
+    'style': {
+      label: '🎨 Style Transform',
+      description: 'Hair, makeup, artistic filters',
+      prompts: [
+        "Change hairstyle completely",
+        "Apply vintage styling",
+        "Transform with artistic effects"
+      ]
+    }
   };
-  
-  const promptSuggestions = [
-    ...nanoBananaFeatures.characterConsistency,
-    ...nanoBananaFeatures.virtualTryOn,
-    ...nanoBananaFeatures.creativeEffects,
-    ...nanoBananaFeatures.styleTransformation
-  ];
+
+  // 智能推荐系统
+  const getSmartSuggestions = (category: string, currentPrompt: string) => {
+    if (!category) return [];
+    const categoryData = categories[category as keyof typeof categories];
+    return categoryData?.prompts || [];
+  };
+
+  // 监听分类变化，更新智能推荐
+  useEffect(() => {
+    const suggestions = getSmartSuggestions(selectedCategory, prompt);
+    setSmartSuggestions(suggestions);
+  }, [selectedCategory, prompt]);
 
   const generateMutation = useMutation({
     mutationFn: async ({ files, prompt }: { files: File[]; prompt: string }) => {
@@ -231,95 +252,58 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
                     </div>
 
                     <div className="space-y-4">
+                      {/* 智能功能选择器 */}
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium whitespace-nowrap">Choose Feature</label>
+                          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select nano banana feature..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(categories).map(([key, category]) => (
+                                <SelectItem key={key} value={key}>
+                                  <div className="flex items-center gap-2">
+                                    <span>{category.label}</span>
+                                    <span className="text-xs text-muted-foreground">- {category.description}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* 智能推荐 */}
+                        {smartSuggestions.length > 0 && (
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                              <Wand2 className="h-4 w-4 text-primary" />
+                              <span className="text-sm font-medium text-primary">Smart Suggestions</span>
+                            </div>
+                            <div className="flex gap-2 flex-wrap">
+                              {smartSuggestions.map((suggestion, index) => (
+                                <Badge
+                                  key={index}
+                                  variant="secondary"
+                                  className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                                  onClick={() => handlePromptSuggestion(suggestion)}
+                                >
+                                  {suggestion}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       <label className="block text-sm font-medium">Your Prompt</label>
                       <Textarea
-                        placeholder="Describe how you want to transform your image... e.g., 'Make me wear a red dress in a field of sunflowers'"
+                        placeholder="Describe your transformation... or select a feature above for smart suggestions"
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="h-28 resize-none"
+                        className="h-24 resize-none"
                         data-testid="prompt-textarea"
                       />
-
-                      {/* Nano Banana功能分类选择器 */}
-                      <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-muted-foreground">🔥 Trending Nano Banana Features</h4>
-                        
-                        {/* 角色一致性 */}
-                        <div className="space-y-2">
-                          <h5 className="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">
-                            👤 Character Consistency (Keep same person)
-                          </h5>
-                          <div className="flex gap-1.5 flex-wrap">
-                            {nanoBananaFeatures.characterConsistency.map((suggestion) => (
-                              <Badge
-                                key={suggestion}
-                                variant="outline"
-                                className="cursor-pointer text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 hover:border-blue-300"
-                                onClick={() => handlePromptSuggestion(suggestion)}
-                              >
-                                {suggestion}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* 虚拟试衣 */}
-                        <div className="space-y-2">
-                          <h5 className="text-xs font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1">
-                            👗 Virtual Try-On
-                          </h5>
-                          <div className="flex gap-1.5 flex-wrap">
-                            {nanoBananaFeatures.virtualTryOn.map((suggestion) => (
-                              <Badge
-                                key={suggestion}
-                                variant="outline"
-                                className="cursor-pointer text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200 hover:border-purple-300"
-                                onClick={() => handlePromptSuggestion(suggestion)}
-                              >
-                                {suggestion}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* 创意效果 */}
-                        <div className="space-y-2">
-                          <h5 className="text-xs font-semibold text-green-600 dark:text-green-400 flex items-center gap-1">
-                            ✨ Creative Effects
-                          </h5>
-                          <div className="flex gap-1.5 flex-wrap">
-                            {nanoBananaFeatures.creativeEffects.map((suggestion) => (
-                              <Badge
-                                key={suggestion}
-                                variant="outline"
-                                className="cursor-pointer text-xs bg-green-50 hover:bg-green-100 text-green-700 border-green-200 hover:border-green-300"
-                                onClick={() => handlePromptSuggestion(suggestion)}
-                              >
-                                {suggestion}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* 风格转换 */}
-                        <div className="space-y-2">
-                          <h5 className="text-xs font-semibold text-orange-600 dark:text-orange-400 flex items-center gap-1">
-                            🎨 Style Transformation
-                          </h5>
-                          <div className="flex gap-1.5 flex-wrap">
-                            {nanoBananaFeatures.styleTransformation.map((suggestion) => (
-                              <Badge
-                                key={suggestion}
-                                variant="outline"
-                                className="cursor-pointer text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200 hover:border-orange-300"
-                                onClick={() => handlePromptSuggestion(suggestion)}
-                              >
-                                {suggestion}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
 
                       <Button
                         onClick={handleGenerate}
