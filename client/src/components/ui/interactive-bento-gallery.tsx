@@ -125,10 +125,15 @@ const MediaItem = ({ item, className, onClick }: { item: MediaItemType, classNam
         <img
             src={item.url} // Image source URL
             alt={item.title} // Alt text for the image
-            className={`${className} object-cover cursor-pointer`} // Style the image
+            className={`${className} w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300`} // Enhanced styling
             onClick={onClick} // Trigger onClick when the image is clicked
             loading="lazy" // Lazy load the image for performance
             decoding="async" // Decode the image asynchronously
+            onError={(e) => {
+                console.log(`Failed to load image: ${item.url}`);
+                // Fallback for failed images
+                e.currentTarget.src = `https://images.unsplash.com/photo-1566275529824-cca6d008f3da?w=400&h=400&fit=crop&crop=center`;
+            }}
         />
     );
 };
@@ -183,9 +188,10 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
                 }}
                 className="fixed inset-0 w-full min-h-screen sm:h-[90vh] md:h-[600px] backdrop-blur-lg 
                           rounded-none sm:rounded-lg md:rounded-xl overflow-hidden z-50"
+                onClick={onClose} // Click backdrop to close
             >
                 {/* Main Content */}
-                <div className="h-full flex flex-col">
+                <div className="h-full flex flex-col" onClick={(e) => e.stopPropagation()}> {/* Prevent close when clicking modal content */}
                     <div className="flex-1 p-2 sm:p-3 md:p-4 flex items-center justify-center bg-gray-50/50 dark:bg-gray-900/50">
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -385,7 +391,7 @@ const InteractiveBentoGallery: React.FC<InteractiveBentoGalleryProps> = ({
                     />
                 ) : (
                     <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 auto-rows-[60px]"
+                        className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 auto-rows-[120px]"
                         initial="hidden"
                         animate="visible"
                         exit="hidden"

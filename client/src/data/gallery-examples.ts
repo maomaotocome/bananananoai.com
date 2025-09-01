@@ -81,10 +81,64 @@ export const nanoBananaExamples: MediaItemType[] = [
     url: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=600&fit=crop&crop=face", 
     span: "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
     prompt: "Change the hairstyle to long curly hair while keeping the face, expression, and everything else exactly the same"
+  },
+  {
+    id: 10,
+    type: "image",
+    title: "Mood Transformation",
+    desc: "Change facial expressions and emotions while preserving identity",
+    url: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=400&fit=crop&crop=face",
+    span: "md:col-span-2 md:row-span-2 sm:col-span-2 sm:row-span-2",
+    prompt: "Transform the expression to a genuine happy smile while keeping everything else exactly the same"
+  },
+  {
+    id: 11,
+    type: "image",
+    title: "Lighting Enhancement",
+    desc: "Perfect photo lighting while maintaining natural appearance",
+    url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop&crop=face",
+    span: "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
+    prompt: "Add perfect studio lighting with soft shadows while keeping the person and pose identical"
+  },
+  {
+    id: 12,
+    type: "image",
+    title: "Artistic Filter",
+    desc: "Apply artistic effects while preserving photo realism",
+    url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=400&fit=crop&crop=face",
+    span: "md:col-span-2 md:row-span-2 sm:col-span-1 sm:row-span-2",
+    prompt: "Apply a subtle oil painting effect while keeping all details and features exactly the same"
+  },
+  {
+    id: 13,
+    type: "image",
+    title: "Accessory Addition",
+    desc: "Add accessories and props while maintaining character integrity",
+    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&crop=face",
+    span: "md:col-span-1 md:row-span-3 sm:col-span-2 sm:row-span-2",
+    prompt: "Add elegant jewelry and accessories while keeping the person and background exactly the same"
+  },
+  {
+    id: 14,
+    type: "image",
+    title: "Scene Context Change",
+    desc: "Change the environment context while preserving subject details",
+    url: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&h=400&fit=crop",
+    span: "md:col-span-2 md:row-span-2 sm:col-span-2 sm:row-span-2",
+    prompt: "Transport this scene to a bustling Tokyo street while keeping all people and objects identical"
+  },
+  {
+    id: 15,
+    type: "image",
+    title: "Texture Enhancement",
+    desc: "Enhance textures and details while maintaining photo authenticity",
+    url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&crop=face",
+    span: "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
+    prompt: "Enhance skin texture and fabric details while keeping everything else exactly the same"
   }
 ];
 
 export const defaultGalleryProps = {
   title: "Popular Nano Banana Examples",
-  description: "See what millions create with Gemini Nano Banana. Click any example to use its prompt in the editor above. Drag to rearrange!"
+  description: "See what millions create with Gemini Nano Banana AI. Click any example to use its prompt in the editor above. Over 15 viral transformation styles available!"
 };
