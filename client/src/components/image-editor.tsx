@@ -162,7 +162,7 @@ export default function ImageEditor() {
                       <Badge
                         key={suggestion}
                         variant="secondary"
-                        className="cursor-pointer bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary transition-all duration-200 text-sm whitespace-nowrap py-2 px-4 rounded-lg border border-primary/20 shadow-[0_2px_6px_rgba(0,0,0,0.08)] hover:shadow-[0_3px_8px_rgba(0,0,0,0.12)] font-semibold hover:scale-105"
+                        className="cursor-pointer bg-gray-100/80 text-gray-700 hover:bg-gray-200/90 hover:text-gray-800 transition-all duration-200 text-xs whitespace-nowrap py-1.5 px-3 rounded-full border-0 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.1)] font-medium"
                         onClick={() => handlePromptSuggestion(suggestion)}
                         data-testid={`prompt-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}
                       >
