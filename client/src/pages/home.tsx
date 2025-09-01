@@ -70,13 +70,13 @@ export default function Home() {
     {
       name: "Sarah Chen",
       role: "Product Designer", 
-      content: "This tool completely changed how I create mockups. Hours in Photoshop now take minutes. I recommend Gemini Nano Banana to everyone.",
+      content: "This Gemini Nano Banana tool completely changed how I create mockups. Hours in Photoshop now take minutes. I recommend Gemini Nano Banana to everyone.",
       rating: 5
     },
     {
       name: "Mike Rodriguez",
       role: "Content Creator",
-      content: "The character consistency is absolutely unreal. I create story sequences keeping characters identical. Every creator needs this platform.",
+      content: "The Gemini Nano Banana character consistency is absolutely unreal. I create story sequences keeping characters identical. Every creator needs this Gemini Nano Banana platform.",
       rating: 5
     }
   ];
@@ -99,7 +99,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough AI that took social media by storm. This revolutionary platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals.
+              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough <strong>Gemini Nano Banana</strong> AI that took social media by storm. This revolutionary <strong>Gemini Nano Banana</strong> platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -149,7 +149,7 @@ export default function Home() {
               Transform Images with <span className="gradient-text">Gemini Nano Banana</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Experience the power of <strong>Gemini Nano Banana</strong> AI image editing. Upload your photo and describe the changes you want in natural language. Our advanced technology delivers professional results instantly with unprecedented quality and speed.
+              Experience the power of <strong>Gemini Nano Banana</strong> AI image editing with <strong>Gemini Nano Banana</strong> technology. Upload your photo and describe the changes you want in natural language. Our advanced <strong>Gemini Nano Banana</strong> technology delivers professional results instantly with unprecedented quality and speed.
             </p>
           </div>
           <ImageEditor 
@@ -176,7 +176,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">Why Choose <span className="gradient-text">Gemini Nano Banana</span>?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E on LMArena benchmarks, delivering superior results that millions trust. Professional creators choose this platform for viral content creation and innovative editing solutions with consistent excellence.
+              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E on LMArena benchmarks, delivering superior <strong>Gemini Nano Banana</strong> results that millions trust. Professional creators choose this <strong>Gemini Nano Banana</strong> platform for viral content creation and innovative editing solutions with consistent excellence.
             </p>
           </div>
           
