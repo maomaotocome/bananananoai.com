@@ -254,18 +254,24 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
                     <div className="space-y-4">
                       {/* 智能功能选择器 */}
                       <div className="space-y-4">
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium whitespace-nowrap">Choose Feature</label>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Choose Feature</label>
                           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select nano banana feature..." />
                             </SelectTrigger>
-                            <SelectContent className="z-[100]">
+                            <SelectContent 
+                              className="w-[400px] max-h-[300px]" 
+                              position="popper"
+                              side="bottom"
+                              align="start"
+                              sideOffset={4}
+                            >
                               {Object.entries(categories).map(([key, category]) => (
-                                <SelectItem key={key} value={key} className="max-w-sm">
-                                  <div className="flex flex-col gap-0.5 w-full">
-                                    <span className="font-medium">{category.label}</span>
-                                    <span className="text-xs text-muted-foreground truncate">{category.description}</span>
+                                <SelectItem key={key} value={key}>
+                                  <div className="flex flex-col gap-1 py-1">
+                                    <span className="font-medium text-sm">{category.label}</span>
+                                    <span className="text-xs text-muted-foreground leading-tight">{category.description}</span>
                                   </div>
                                 </SelectItem>
                               ))}
