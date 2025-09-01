@@ -174,7 +174,7 @@ export default function ImageEditor() {
                   <Button
                     onClick={handleGenerate}
                     disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                    className="w-full py-4 text-lg font-bold hero-cta-button"
+                    className="w-full py-4 text-lg font-bold bg-gradient-to-r from-primary to-secondary text-white hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                     size="lg"
                     data-testid="generate-button"
                   >
