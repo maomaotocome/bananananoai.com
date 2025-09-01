@@ -38,15 +38,39 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
     }
   }, [promptFromGallery, prompt, toast]);
 
+  // Nano Banana热门功能分类
+  const nanoBananaFeatures = {
+    characterConsistency: [
+      "Change outfit to a red evening dress while keeping the same person",
+      "Put this person in a snowy mountain scene",
+      "Transform into a professional business suit",
+      "Place in a cozy coffee shop setting"
+    ],
+    virtualTryOn: [
+      "Try on a blue denim jacket",
+      "Wear trendy sunglasses and a baseball cap",
+      "Style with a vintage leather jacket",
+      "Add elegant jewelry and makeup"
+    ],
+    creativeEffects: [
+      "Create a 3D pop-out effect from phone screen",
+      "Transform into a hand-knitted cute doll version",
+      "Make a custom anime figure",
+      "Generate a bobblehead version"
+    ],
+    styleTransformation: [
+      "Change hairstyle to Korean short cut",
+      "Apply vintage 1950s styling",
+      "Transform into glass material effect",
+      "Create black and white portrait art"
+    ]
+  };
+  
   const promptSuggestions = [
-    "Change outfit to a red dress",
-    "Blend two photos together",
-    "Change background to a beach",
-    "Make it look like anime art",
-    "Remove background",
-    "Add sunglasses and hat",
-    "Change to winter setting",
-    "Make it vintage style"
+    ...nanoBananaFeatures.characterConsistency,
+    ...nanoBananaFeatures.virtualTryOn,
+    ...nanoBananaFeatures.creativeEffects,
+    ...nanoBananaFeatures.styleTransformation
   ];
 
   const generateMutation = useMutation({
@@ -216,18 +240,85 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
                         data-testid="prompt-textarea"
                       />
 
-                      <div className="flex gap-2 flex-wrap max-h-24 overflow-y-auto">
-                        {promptSuggestions.map((suggestion) => (
-                          <Badge
-                            key={suggestion}
-                            variant="secondary"
-                            className="cursor-pointer bg-gray-100 text-gray-900 hover:bg-gray-200 hover:text-black transition-all duration-200 text-xs whitespace-nowrap py-1.5 px-3 rounded-full border border-gray-300 shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.15)] font-semibold"
-                            onClick={() => handlePromptSuggestion(suggestion)}
-                            data-testid={`prompt-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}
-                          >
-                            {suggestion}
-                          </Badge>
-                        ))}
+                      {/* Nano Banana功能分类选择器 */}
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-medium text-muted-foreground">🔥 Trending Nano Banana Features</h4>
+                        
+                        {/* 角色一致性 */}
+                        <div className="space-y-2">
+                          <h5 className="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                            👤 Character Consistency (Keep same person)
+                          </h5>
+                          <div className="flex gap-1.5 flex-wrap">
+                            {nanoBananaFeatures.characterConsistency.map((suggestion) => (
+                              <Badge
+                                key={suggestion}
+                                variant="outline"
+                                className="cursor-pointer text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 hover:border-blue-300"
+                                onClick={() => handlePromptSuggestion(suggestion)}
+                              >
+                                {suggestion}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 虚拟试衣 */}
+                        <div className="space-y-2">
+                          <h5 className="text-xs font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                            👗 Virtual Try-On
+                          </h5>
+                          <div className="flex gap-1.5 flex-wrap">
+                            {nanoBananaFeatures.virtualTryOn.map((suggestion) => (
+                              <Badge
+                                key={suggestion}
+                                variant="outline"
+                                className="cursor-pointer text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200 hover:border-purple-300"
+                                onClick={() => handlePromptSuggestion(suggestion)}
+                              >
+                                {suggestion}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 创意效果 */}
+                        <div className="space-y-2">
+                          <h5 className="text-xs font-semibold text-green-600 dark:text-green-400 flex items-center gap-1">
+                            ✨ Creative Effects
+                          </h5>
+                          <div className="flex gap-1.5 flex-wrap">
+                            {nanoBananaFeatures.creativeEffects.map((suggestion) => (
+                              <Badge
+                                key={suggestion}
+                                variant="outline"
+                                className="cursor-pointer text-xs bg-green-50 hover:bg-green-100 text-green-700 border-green-200 hover:border-green-300"
+                                onClick={() => handlePromptSuggestion(suggestion)}
+                              >
+                                {suggestion}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 风格转换 */}
+                        <div className="space-y-2">
+                          <h5 className="text-xs font-semibold text-orange-600 dark:text-orange-400 flex items-center gap-1">
+                            🎨 Style Transformation
+                          </h5>
+                          <div className="flex gap-1.5 flex-wrap">
+                            {nanoBananaFeatures.styleTransformation.map((suggestion) => (
+                              <Badge
+                                key={suggestion}
+                                variant="outline"
+                                className="cursor-pointer text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200 hover:border-orange-300"
+                                onClick={() => handlePromptSuggestion(suggestion)}
+                              >
+                                {suggestion}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       </div>
 
                       <Button

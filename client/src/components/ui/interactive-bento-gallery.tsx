@@ -176,22 +176,38 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
 
     return (
         <>
+            {/* Modal Backdrop */}
+            <div 
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                onClick={onClose} // Click backdrop to close
+            />
+            
             {/* Main Modal */}
             <motion.div
-                initial={{ scale: 0.98 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.98 }}
+                initial={{ scale: 0.98, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.98, opacity: 0 }}
                 transition={{
                     type: "spring",
                     stiffness: 400,
                     damping: 30
                 }}
-                className="fixed inset-0 w-full min-h-screen sm:h-[90vh] md:h-[600px] backdrop-blur-lg 
-                          rounded-none sm:rounded-lg md:rounded-xl overflow-hidden z-50"
-                onClick={onClose} // Click backdrop to close
+                className="fixed inset-4 sm:inset-8 md:inset-16 bg-white dark:bg-gray-900 
+                          rounded-lg md:rounded-xl overflow-hidden z-50 shadow-2xl"
+                onClick={(e) => e.stopPropagation()} // Prevent close when clicking modal content
             >
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 z-10 bg-black/20 hover:bg-black/40 text-white 
+                             rounded-full p-2 transition-colors duration-200"
+                    data-testid="close-modal-button"
+                >
+                    <X className="w-5 h-5" />
+                </button>
+
                 {/* Main Content */}
-                <div className="h-full flex flex-col" onClick={(e) => e.stopPropagation()}> {/* Prevent close when clicking modal content */}
+                <div className="h-full flex flex-col">
                     <div className="flex-1 p-2 sm:p-3 md:p-4 flex items-center justify-center bg-gray-50/50 dark:bg-gray-900/50">
                         <AnimatePresence mode="wait">
                             <motion.div
