@@ -147,7 +147,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Button 
                 size="lg" 
-                className="px-8 py-4 text-lg font-semibold banana-glow"
+                className="px-8 py-4 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg"
                 data-testid="hero-try-free"
               >
                 🍌 Start Editing for Free
@@ -155,7 +155,7 @@ export default function Home() {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="px-8 py-4 text-lg font-semibold"
+                className="px-8 py-4 text-lg font-semibold border-2"
                 data-testid="hero-watch-tutorial"
               >
                 Watch Tutorial

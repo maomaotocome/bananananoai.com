@@ -117,7 +117,14 @@
   }
   
   .banana-glow {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    box-shadow: 0 4px 14px 0 hsl(var(--primary) / 0.3);
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+  
+  .banana-glow:hover {
+    box-shadow: 0 6px 20px 0 hsl(var(--primary) / 0.4);
+    background: hsl(var(--primary) / 0.9);
   }
   
   .feature-card:hover {
