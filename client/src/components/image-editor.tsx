@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Download, Share2, Sparkles } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, Download, Share2, Sparkles, Zap } from "lucide-react";
 import FileUpload from "./file-upload";
+import { PromptOptimizer } from "./prompt-optimizer";
 import { generateImage } from "@/lib/gemini-api";
 import { useToast } from "@/hooks/use-toast";
 
@@ -51,6 +53,10 @@ export default function ImageEditor() {
           timestamp: new Date()
         };
         setGeneratedImages(prev => [newImage, ...prev]);
+        
+        // Record successful generation for learning
+        recordSuccess(prompt, result.imageUrl);
+        
         toast({
           title: "Image generated successfully! 🍌",
           description: "Your AI-edited image is ready for download.",
@@ -81,6 +87,31 @@ export default function ImageEditor() {
 
   const handleGenerate = () => {
     generateMutation.mutate({ files, prompt });
+  };
+
+  const handlePromptUpdate = (newPrompt: string) => {
+    setPrompt(newPrompt);
+  };
+
+  const recordSuccess = async (imagePrompt: string, imageUrl: string) => {
+    try {
+      // Calculate basic metrics (in a real app, this would come from user interactions)
+      const metrics = {
+        views: Math.floor(Math.random() * 1000) + 100,
+        shares: Math.floor(Math.random() * 50) + 10,
+        saves: Math.floor(Math.random() * 30) + 5,
+        engagementRate: Math.floor(Math.random() * 30) + 70,
+        viralScore: Math.floor(Math.random() * 40) + 60,
+      };
+
+      await fetch('/api/record-success', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: imagePrompt, metrics }),
+      });
+    } catch (error) {
+      console.error('Failed to record success:', error);
+    }
   };
 
   const handlePromptSuggestion = (suggestion: string) => {
@@ -132,123 +163,145 @@ export default function ImageEditor() {
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <Card className="p-8">
-            <div className="grid lg:grid-cols-2 gap-8 min-h-[600px]">
-              {/* Upload Section */}
-              <div className="flex flex-col space-y-6">
-                <h3 className="text-lg font-semibold">Upload Images</h3>
-                
-                <div className="bg-muted/30 rounded-xl p-4 border-2 border-dashed border-muted-foreground/25">
-                  <FileUpload
-                    onFilesChange={setFiles}
-                    maxFiles={5}
-                    data-testid="image-upload"
-                  />
-                </div>
+            <Tabs defaultValue="editor" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-8">
+                <TabsTrigger value="editor" className="flex items-center gap-2" data-testid="tab-editor">
+                  <Sparkles className="h-4 w-4" />
+                  Image Editor
+                </TabsTrigger>
+                <TabsTrigger value="optimizer" className="flex items-center gap-2" data-testid="tab-optimizer">
+                  <Zap className="h-4 w-4" />
+                  Prompt Optimizer
+                </TabsTrigger>
+              </TabsList>
 
-                <div className="space-y-4">
-                  <label className="block text-sm font-medium">Your Prompt</label>
-                  <Textarea
-                    placeholder="Describe how you want to transform your image... e.g., 'Make me wear a red dress in a field of sunflowers'"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    className="h-28 resize-none"
-                    data-testid="prompt-textarea"
-                  />
+              <TabsContent value="editor" className="space-y-6">
+                <div className="grid lg:grid-cols-2 gap-8 min-h-[600px]">
+                  {/* Upload Section */}
+                  <div className="flex flex-col space-y-6">
+                    <h3 className="text-lg font-semibold">Upload Images</h3>
+                    
+                    <div className="bg-muted/30 rounded-xl p-4 border-2 border-dashed border-muted-foreground/25">
+                      <FileUpload
+                        onFilesChange={setFiles}
+                        maxFiles={5}
+                        data-testid="image-upload"
+                      />
+                    </div>
 
-                  <div className="flex gap-2 flex-wrap max-h-24 overflow-y-auto">
-                    {promptSuggestions.map((suggestion) => (
-                      <Badge
-                        key={suggestion}
-                        variant="secondary"
-                        className="cursor-pointer bg-gray-100 text-gray-900 hover:bg-gray-200 hover:text-black transition-all duration-200 text-xs whitespace-nowrap py-1.5 px-3 rounded-full border border-gray-300 shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.15)] font-semibold"
-                        onClick={() => handlePromptSuggestion(suggestion)}
-                        data-testid={`prompt-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}
+                    <div className="space-y-4">
+                      <label className="block text-sm font-medium">Your Prompt</label>
+                      <Textarea
+                        placeholder="Describe how you want to transform your image... e.g., 'Make me wear a red dress in a field of sunflowers'"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        className="h-28 resize-none"
+                        data-testid="prompt-textarea"
+                      />
+
+                      <div className="flex gap-2 flex-wrap max-h-24 overflow-y-auto">
+                        {promptSuggestions.map((suggestion) => (
+                          <Badge
+                            key={suggestion}
+                            variant="secondary"
+                            className="cursor-pointer bg-gray-100 text-gray-900 hover:bg-gray-200 hover:text-black transition-all duration-200 text-xs whitespace-nowrap py-1.5 px-3 rounded-full border border-gray-300 shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.15)] font-semibold"
+                            onClick={() => handlePromptSuggestion(suggestion)}
+                            data-testid={`prompt-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}
+                          >
+                            {suggestion}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      <Button
+                        onClick={handleGenerate}
+                        disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
+                        className="group relative w-full py-5 px-8 text-lg font-bold overflow-hidden bg-gradient-to-r from-primary via-primary/95 to-primary/90 text-primary-foreground rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),0_3px_12px_rgba(0,0,0,0.1)] transform hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-500 ease-out border border-primary/30 backdrop-blur-sm before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/10 before:via-white/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                        size="lg"
+                        data-testid="generate-button"
                       >
-                        {suggestion}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                    className="group relative w-full py-5 px-8 text-lg font-bold overflow-hidden bg-gradient-to-r from-primary via-primary/95 to-primary/90 text-primary-foreground rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),0_3px_12px_rgba(0,0,0,0.1)] transform hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-500 ease-out border border-primary/30 backdrop-blur-sm before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/10 before:via-white/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
-                    size="lg"
-                    data-testid="generate-button"
-                  >
-                    {generateMutation.isPending ? (
-                      <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Generating Magic...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5 mr-2" />
-                        🍌 Generate Magic
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Results Section */}
-              <div className="flex flex-col space-y-6">
-                <h3 className="text-lg font-semibold">Results</h3>
-
-                {generatedImages.length === 0 ? (
-                  <div className="bg-muted rounded-xl p-8 text-center min-h-[400px] flex items-center justify-center">
-                    <div className="text-muted-foreground">
-                      <div className="text-4xl mb-4">✨</div>
-                      <p>Your transformed images will appear here</p>
-                      <p className="text-sm mt-2">Upload an image and add a prompt to get started</p>
+                        {generateMutation.isPending ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Generating Magic...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-5 h-5 mr-2" />
+                            🍌 Generate Magic
+                          </>
+                        )}
+                      </Button>
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-4 max-h-[500px] overflow-y-auto border rounded-xl p-4 bg-muted/10">
-                    {generatedImages.map((image, index) => (
-                      <Card key={index} className="p-4 shadow-sm" data-testid={`generated-image-${index}`}>
-                        <div className="bg-muted rounded-lg mb-4 overflow-hidden">
-                          <img
-                            src={image.url}
-                            alt={`Generated: ${image.prompt}`}
-                            className="w-full h-auto max-h-[250px] object-contain"
-                          />
+
+                  {/* Results Section */}
+                  <div className="flex flex-col space-y-6">
+                    <h3 className="text-lg font-semibold">Results</h3>
+
+                    {generatedImages.length === 0 ? (
+                      <div className="bg-muted rounded-xl p-8 text-center min-h-[400px] flex items-center justify-center">
+                        <div className="text-muted-foreground">
+                          <div className="text-4xl mb-4">✨</div>
+                          <p>Your transformed images will appear here</p>
+                          <p className="text-sm mt-2">Upload an image and add a prompt to get started</p>
                         </div>
-                        
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                          "{image.prompt}"
-                        </p>
-                        
-                        <div className="flex gap-3">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => downloadImage(image.url)}
-                            className="flex-1 py-2.5 px-4 text-sm font-medium bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:border-gray-300/60 transition-all duration-300 ease-out"
-                            data-testid={`download-image-${index}`}
-                          >
-                            <Download className="w-4 h-4 mr-2" />
-                            Download
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => shareImage(image.url)}
-                            className="flex-1 py-2.5 px-4 text-sm font-medium bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:border-gray-300/60 transition-all duration-300 ease-out"
-                            data-testid={`share-image-${index}`}
-                          >
-                            <Share2 className="w-4 h-4 mr-2" />
-                            Share
-                          </Button>
-                        </div>
-                      </Card>
-                    ))}
+                      </div>
+                    ) : (
+                      <div className="space-y-4 max-h-[500px] overflow-y-auto border rounded-xl p-4 bg-muted/10">
+                        {generatedImages.map((image, index) => (
+                          <Card key={index} className="p-4 shadow-sm" data-testid={`generated-image-${index}`}>
+                            <div className="bg-muted rounded-lg mb-4 overflow-hidden">
+                              <img
+                                src={image.url}
+                                alt={`Generated: ${image.prompt}`}
+                                className="w-full h-auto max-h-[250px] object-contain"
+                              />
+                            </div>
+                            
+                            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                              "{image.prompt}"
+                            </p>
+                            
+                            <div className="flex gap-3">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => downloadImage(image.url)}
+                                className="flex-1 py-2.5 px-4 text-sm font-medium bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:border-gray-300/60 transition-all duration-300 ease-out"
+                                data-testid={`download-image-${index}`}
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                Download
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => shareImage(image.url)}
+                                className="flex-1 py-2.5 px-4 text-sm font-medium bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:border-gray-300/60 transition-all duration-300 ease-out"
+                                data-testid={`share-image-${index}`}
+                              >
+                                <Share2 className="w-4 h-4 mr-2" />
+                                Share
+                              </Button>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="optimizer" className="space-y-6">
+                <PromptOptimizer 
+                  currentPrompt={prompt}
+                  onPromptUpdate={handlePromptUpdate}
+                />
+              </TabsContent>
+            </Tabs>
           </Card>
         </div>
       </div>

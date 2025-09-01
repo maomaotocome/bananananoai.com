@@ -2,6 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import multer, { MulterError } from "multer";
 import { generateImage, generateImageFromText } from "./gemini";
+import { promptOptimizerService } from "./promptOptimizer";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -167,6 +168,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false,
         error: error instanceof Error ? error.message : String(error) || "Internal server error"
       });
+    }
+  });
+
+  // Prompt optimization endpoints
+  app.post("/api/optimize-prompt", async (req, res) => {
+    try {
+      const { prompt } = req.body;
+      if (!prompt) {
+        return res.status(400).json({ error: "Prompt is required" });
+      }
+
+      const optimization = await promptOptimizerService.optimizePrompt(prompt);
+      res.json(optimization);
+    } catch (error) {
+      console.error("Error optimizing prompt:", error);
+      res.status(500).json({ error: "Failed to optimize prompt" });
+    }
+  });
+
+  app.get("/api/trending-patterns", (req, res) => {
+    try {
+      const patterns = promptOptimizerService.getTrendingPatterns();
+      res.json(patterns);
+    } catch (error) {
+      console.error("Error fetching trending patterns:", error);
+      res.status(500).json({ error: "Failed to fetch trending patterns" });
+    }
+  });
+
+  app.post("/api/generate-suggestions", async (req, res) => {
+    try {
+      const { basePrompt, count = 3 } = req.body;
+      if (!basePrompt) {
+        return res.status(400).json({ error: "Base prompt is required" });
+      }
+
+      const suggestions = await promptOptimizerService.generateSmartSuggestions(basePrompt, count);
+      res.json({ suggestions });
+    } catch (error) {
+      console.error("Error generating suggestions:", error);
+      res.status(500).json({ error: "Failed to generate suggestions" });
+    }
+  });
+
+  app.post("/api/record-success", (req, res) => {
+    try {
+      const { prompt, metrics } = req.body;
+      if (!prompt || !metrics) {
+        return res.status(400).json({ error: "Prompt and metrics are required" });
+      }
+
+      promptOptimizerService.recordSuccessfulGeneration(prompt, metrics);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error recording success:", error);
+      res.status(500).json({ error: "Failed to record success" });
     }
   });
 
