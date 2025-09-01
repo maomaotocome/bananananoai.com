@@ -21,32 +21,32 @@ export default function Home() {
     {
       icon: <Zap className="w-6 h-6" />,
       title: "Character Consistency",
-      description: "Gemini Nano Banana keeps subjects identical across edits with advanced AI technology."
+      description: "Keep subjects identical across edits with advanced AI technology."
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
       title: "Lightning Speed",
-      description: "Gemini Nano Banana generates professional edits in seconds with powerful AI processing."
+      description: "Generate professional edits in seconds with powerful AI processing."
     },
     {
       icon: <Palette className="w-6 h-6" />,
       title: "Multi-Image Blending",
-      description: "Gemini Nano Banana combines photos seamlessly with advanced technology."
+      description: "Combine photos seamlessly with advanced technology."
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
       title: "Natural Language",
-      description: "Tell Gemini Nano Banana edits in plain English - simple and intuitive."
+      description: "Describe edits in plain English - simple and intuitive."
     },
     {
       icon: <RotateCcw className="w-6 h-6" />,
       title: "Multi-Turn Editing",
-      description: "Make multiple Gemini Nano Banana changes while AI maintains context."
+      description: "Make multiple changes while AI maintains context."
     },
     {
       icon: <Heart className="w-6 h-6" />,
       title: "Free Access",
-      description: "Use Gemini Nano Banana free - no signup required."
+      description: "Use free - no signup required."
     }
   ];
 
@@ -54,7 +54,7 @@ export default function Home() {
   const examples = [
     {
       category: "🔥 Viral Selfie Magic",
-      description: "Gemini Nano Banana turns separate photos into natural selfies - the trick breaking Twitter",
+      description: "Turn separate photos into natural selfies - the trick breaking Twitter",
       prompt: "Make them look like they're taking a selfie together in a park",
       image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: true,
@@ -62,7 +62,7 @@ export default function Home() {
     },
     {
       category: "💇‍♀️ Virtual Hair Try-On",
-      description: "Gemini Nano Banana previews different hairstyles instantly - show your stylist what you want",
+      description: "Preview different hairstyles instantly - show your stylist what you want",
       prompt: "Reimagine this person with different hairstyles: Korean short cut, French curls, vintage waves",
       image: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: true,
@@ -70,7 +70,7 @@ export default function Home() {
     },
     {
       category: "🏖️ Object Persistence Magic",
-      description: "Gemini Nano Banana changes objects while keeping backgrounds intact - tech that amazed Reddit",
+      description: "Change objects while keeping backgrounds intact - tech that amazed Reddit",
       prompt: "Change the umbrellas to red but keep the beach exactly the same",
       image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       viral: true,
@@ -82,13 +82,13 @@ export default function Home() {
     {
       name: "Sarah Chen",
       role: "Product Designer", 
-      content: "Gemini Nano Banana completely changed how I create mockups. Hours in Photoshop now take minutes with Gemini Nano Banana. I recommend Gemini Nano Banana to everyone.",
+      content: "This tool completely changed how I create mockups. Hours in Photoshop now take minutes. I recommend Gemini Nano Banana to everyone.",
       rating: 5
     },
     {
       name: "Mike Rodriguez",
       role: "Content Creator",
-      content: "The Gemini Nano Banana character consistency is absolutely unreal. I create story sequences keeping characters identical with Gemini Nano Banana. Every creator needs Gemini Nano Banana.",
+      content: "The character consistency is absolutely unreal. I create story sequences keeping characters identical. Every creator needs this platform.",
       rating: 5
     }
   ];
@@ -111,7 +111,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough AI that took social media by storm. This revolutionary platform uses advanced technology to deliver professional results. Experience lightning-fast processing while creating stunning visuals. Join millions worldwide who choose <strong>Gemini Nano Banana</strong> for their creative projects.
+              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough AI that took social media by storm. This revolutionary platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -156,7 +156,7 @@ export default function Home() {
       {/* Trust Block */}
       <section className="py-8 border-b border-border bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-muted-foreground font-medium mb-4">Trusted by millions worldwide. <strong>Gemini Nano Banana</strong> powers professional creativity globally with industry-leading technology.</p>
+          <p className="text-muted-foreground font-medium mb-4">Trusted by millions worldwide for professional creativity with industry-leading <strong>Gemini Nano Banana</strong> technology.</p>
           <div className="grid grid-cols-2 gap-4 opacity-60">
             <div className="text-center">
               <div className="text-2xl font-bold text-foreground" data-testid="stat-users">2.5M</div>
