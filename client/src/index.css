@@ -137,10 +137,6 @@
     border: 2px solid hsl(var(--primary) / 0.3);
     position: relative;
     overflow: hidden;
-    color: white !important;
-    font-weight: 700;
-    letter-spacing: 0.025em;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
   
   .hero-cta-button::before {
@@ -165,15 +161,6 @@
       0 4px 12px hsl(var(--primary) / 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transform: translateY(-2px) scale(1.02);
-  }
-  
-  .hero-cta-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: 
-      0 4px 16px hsl(var(--primary) / 0.2),
-      0 1px 4px hsl(var(--primary) / 0.1);
   }
   
   .feature-card:hover {

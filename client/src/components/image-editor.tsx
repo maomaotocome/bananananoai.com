@@ -186,7 +186,7 @@ export default function ImageEditor() {
                     ) : (
                       <>
                         <Sparkles className="w-5 h-5 mr-2" />
-                        Generate Magic
+                        🍌 Generate Magic
                       </>
                     )}
                   </Button>
