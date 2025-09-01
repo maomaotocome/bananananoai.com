@@ -162,7 +162,7 @@ export default function ImageEditor() {
                       <Badge
                         key={suggestion}
                         variant="secondary"
-                        className="cursor-pointer hover:bg-secondary/80 transition-colors text-xs whitespace-nowrap"
+                        className="cursor-pointer bg-gray-100/80 text-gray-700 hover:bg-gray-200/90 hover:text-gray-800 transition-all duration-200 text-xs whitespace-nowrap py-1.5 px-3 rounded-full border-0 shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.1)] font-medium"
                         onClick={() => handlePromptSuggestion(suggestion)}
                         data-testid={`prompt-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}
                       >
@@ -174,7 +174,7 @@ export default function ImageEditor() {
                   <Button
                     onClick={handleGenerate}
                     disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                    className="w-full py-4 text-lg font-bold bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                    className="w-full py-4 px-8 text-lg font-semibold bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.16)] transform hover:scale-[1.02] transition-all duration-500 ease-out border-0 backdrop-blur-sm relative overflow-hidden"
                     size="lg"
                     data-testid="generate-button"
                   >
@@ -221,12 +221,12 @@ export default function ImageEditor() {
                           "{image.prompt}"
                         </p>
                         
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => downloadImage(image.url)}
-                            className="flex-1"
+                            className="flex-1 py-2.5 px-4 text-sm font-medium bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:border-gray-300/60 transition-all duration-300 ease-out"
                             data-testid={`download-image-${index}`}
                           >
                             <Download className="w-4 h-4 mr-2" />
@@ -236,7 +236,7 @@ export default function ImageEditor() {
                             variant="outline"
                             size="sm"
                             onClick={() => shareImage(image.url)}
-                            className="flex-1"
+                            className="flex-1 py-2.5 px-4 text-sm font-medium bg-white/80 backdrop-blur-sm border border-gray-200/50 text-gray-700 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:border-gray-300/60 transition-all duration-300 ease-out"
                             data-testid={`share-image-${index}`}
                           >
                             <Share2 className="w-4 h-4 mr-2" />
