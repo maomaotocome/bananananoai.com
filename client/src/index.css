@@ -169,19 +169,18 @@
   }
   
   .gradient-text {
-    /* 首先设置实体颜色作为回退 */
-    color: hsl(var(--foreground));
-    /* 然后应用渐变效果 */
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    -webkit-background-clip: text;
     background-clip: text;
+    -webkit-background-clip: text;
+    color: hsl(var(--primary));
+    -webkit-text-fill-color: transparent;
   }
   
-  /* 只有在支持背景裁剪时才应用透明效果 */
-  @supports (-webkit-background-clip: text) {
+  /* 回退方案：如果不支持背景裁剪，显示主色调 */
+  @supports not (-webkit-background-clip: text) {
     .gradient-text {
-      color: transparent;
-      -webkit-text-fill-color: transparent;
+      color: hsl(var(--primary));
+      -webkit-text-fill-color: unset;
     }
   }
 }
