@@ -147,10 +147,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Button 
                 size="lg" 
-                className="px-8 py-4 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg"
+                className="px-10 py-5 text-lg font-bold bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary/90 hover:to-secondary/90 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-primary/20 rounded-xl"
                 data-testid="hero-try-free"
               >
-                🍌 Start Editing for Free
+                <span className="text-2xl mr-2">🍌</span>
+                Start Editing for Free
+                <span className="ml-2 text-lg">✨</span>
               </Button>
               <Button 
                 variant="outline" 
@@ -378,10 +380,12 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               size="lg" 
-              className="px-10 py-4 text-lg font-bold pulse-glow"
+              className="px-12 py-5 text-lg font-bold hero-cta-button rounded-xl"
               data-testid="final-cta-start"
             >
-              🍌 Start Creating for Free
+              <span className="text-2xl mr-3">🍌</span>
+              Start Creating for Free
+              <span className="ml-3 text-lg">✨</span>
             </Button>
             <Link href="/api">
               <Button 
