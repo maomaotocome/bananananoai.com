@@ -133,9 +133,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">
-            © 2025 Nano Banana AI. Powered by Google Gemini 2.5 Flash Image.
-          </p>
+          <p className="text-muted-foreground text-sm">Gemini Nano Banana AI</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a
               href="#"
