@@ -111,7 +111,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Gemini Nano Banana</strong> - the AI that broke Twitter! <strong>Gemini Nano Banana</strong> offers professional image editing with <strong>Gemini Nano Banana</strong> technology. Experience <strong>Gemini Nano Banana</strong> power with <strong>Gemini Nano Banana</strong> free access. <strong>Gemini Nano Banana</strong> transforms photos using <strong>Gemini Nano Banana</strong> algorithms. Try <strong>Gemini Nano Banana</strong> today for <strong>Gemini Nano Banana</strong> results.
+              Create viral content with <strong>Gemini Nano Banana</strong> - the AI that broke Twitter! Experience professional <strong>Gemini Nano Banana</strong> image editing with advanced <strong>Gemini Nano Banana</strong> technology. <strong>Gemini Nano Banana</strong> delivers stunning results for creators worldwide. Try <strong>Gemini Nano Banana</strong> free today and discover <strong>Gemini Nano Banana</strong> power. <strong>Gemini Nano Banana</strong> transforms photos with <strong>Gemini Nano Banana</strong> AI algorithms. Professional <strong>Gemini Nano Banana</strong> editing made simple.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -156,7 +156,7 @@ export default function Home() {
       {/* Trust Block */}
       <section className="py-8 border-b border-border bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-muted-foreground font-medium mb-4">Trusted by millions worldwide using the revolutionary <strong>Gemini Nano Banana</strong> platform. <strong>Gemini Nano Banana</strong> transforms image editing with <strong>Gemini Nano Banana</strong> technology.</p>
+          <p className="text-muted-foreground font-medium mb-4">Trusted by millions worldwide using the revolutionary <strong>Gemini Nano Banana</strong> platform. <strong>Gemini Nano Banana</strong> powers professional <strong>Gemini Nano Banana</strong> image editing globally. <strong>Gemini Nano Banana</strong> users create viral content with <strong>Gemini Nano Banana</strong> daily.</p>
           <div className="grid grid-cols-2 gap-4 opacity-60">
             <div className="text-center">
               <div className="text-2xl font-bold text-foreground" data-testid="stat-users">2.5M</div>
@@ -189,7 +189,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">Why Choose <span className="gradient-text">Gemini Nano Banana</span>?</h2>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E on LMArena benchmarks. <strong>Gemini Nano Banana</strong> delivers superior results with <strong>Gemini Nano Banana</strong> advanced AI technology. Professional creators choose <strong>Gemini Nano Banana</strong> for viral content creation.
+              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E on LMArena benchmarks. <strong>Gemini Nano Banana</strong> delivers superior results with <strong>Gemini Nano Banana</strong> technology. Professional creators choose <strong>Gemini Nano Banana</strong> for viral content. <strong>Gemini Nano Banana</strong> leads AI image editing innovation.
             </p>
           </div>
           
@@ -222,7 +222,7 @@ export default function Home() {
           
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-6">
             <p className="text-xl leading-relaxed text-center">
-              <strong>Gemini Nano Banana</strong> is Google's viral AI that dominated LMArena leaderboards. <strong>Gemini Nano Banana</strong> shocked the AI community with unprecedented results. <strong>Gemini Nano Banana</strong> offers revolutionary capabilities that make <strong>Gemini Nano Banana</strong> the top choice.
+              <strong>Gemini Nano Banana</strong> is Google's viral AI that dominated LMArena leaderboards. <strong>Gemini Nano Banana</strong> shocked the AI community with unprecedented <strong>Gemini Nano Banana</strong> results. <strong>Gemini Nano Banana</strong> offers revolutionary capabilities that make <strong>Gemini Nano Banana</strong> the top choice for creators seeking <strong>Gemini Nano Banana</strong> quality.
             </p>
             
             <h3 className="text-2xl font-bold text-foreground mt-8 mb-4">
@@ -235,7 +235,7 @@ export default function Home() {
                   🍌 Character Consistency
                 </h4>
                 <p className="text-sm">
-                  Gemini Nano Banana keeps people looking identical across multiple edits
+                  Keeps people looking identical across multiple edits
                 </p>
               </div>
               
