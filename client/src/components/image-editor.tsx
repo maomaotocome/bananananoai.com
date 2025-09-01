@@ -11,6 +11,7 @@ import FileUpload from "./file-upload";
 import { PromptOptimizer } from "./prompt-optimizer";
 import { generateImage } from "@/lib/gemini-api";
 import { useToast } from "@/hooks/use-toast";
+import { useEventTracking } from "@/hooks/useAnalytics";
 
 interface GeneratedImage {
   url: string;
@@ -29,6 +30,7 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [smartSuggestions, setSmartSuggestions] = useState<string[]>([]);
   const { toast } = useToast();
+  const { trackImageEdit, trackFeatureSelection, trackPromptSuggestion } = useEventTracking();
   
   // Update prompt when gallery provides one
   useEffect(() => {
@@ -93,6 +95,13 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
     const suggestions = getSmartSuggestions(selectedCategory, prompt);
     setSmartSuggestions(suggestions);
   }, [selectedCategory, prompt]);
+
+  // 追踪功能选择（单独的useEffect避免循环）
+  useEffect(() => {
+    if (selectedCategory) {
+      trackFeatureSelection(selectedCategory);
+    }
+  }, [selectedCategory]); // 移除trackFeatureSelection依赖
 
   const generateMutation = useMutation({
     mutationFn: async ({ files, prompt }: { files: File[]; prompt: string }) => {
@@ -176,6 +185,7 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
 
   const handlePromptSuggestion = (suggestion: string) => {
     setPrompt(suggestion);
+    trackPromptSuggestion(suggestion);
   };
 
   const downloadImage = (imageUrl: string) => {
