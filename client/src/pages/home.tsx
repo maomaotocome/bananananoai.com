@@ -111,7 +111,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough AI that took social media by storm. This revolutionary <strong>Gemini Nano Banana</strong> platform uses advanced technology to deliver professional results. Experience lightning-fast processing with <strong>Gemini Nano Banana</strong> while creating stunning visuals. Join millions worldwide who choose <strong>Gemini Nano Banana</strong> for their creative projects.
+              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough AI that took social media by storm. This revolutionary platform uses advanced technology to deliver professional results. Experience lightning-fast processing while creating stunning visuals. Join millions worldwide who choose <strong>Gemini Nano Banana</strong> for their creative projects.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -156,7 +156,7 @@ export default function Home() {
       {/* Trust Block */}
       <section className="py-8 border-b border-border bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-muted-foreground font-medium mb-4">Trusted by millions worldwide. <strong>Gemini Nano Banana</strong> powers professional creativity globally with industry-leading <strong>Gemini Nano Banana</strong> technology.</p>
+          <p className="text-muted-foreground font-medium mb-4">Trusted by millions worldwide. <strong>Gemini Nano Banana</strong> powers professional creativity globally with industry-leading technology.</p>
           <div className="grid grid-cols-2 gap-4 opacity-60">
             <div className="text-center">
               <div className="text-2xl font-bold text-foreground" data-testid="stat-users">2.5M</div>
@@ -187,7 +187,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">Why Choose <span className="gradient-text">Gemini Nano Banana</span>?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E on LMArena benchmarks, delivering superior results that millions trust. Professional creators choose <strong>Gemini Nano Banana</strong> for viral content creation and innovative editing solutions. The <strong>Gemini Nano Banana</strong> platform consistently provides excellence for creators seeking <strong>Gemini Nano Banana</strong> quality and performance.
+              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E on LMArena benchmarks, delivering superior results that millions trust. Professional creators choose this platform for viral content creation and innovative editing solutions. The system consistently provides excellence for creators seeking <strong>Gemini Nano Banana</strong> quality and performance.
             </p>
           </div>
           
@@ -218,7 +218,7 @@ export default function Home() {
           
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-6">
             <p className="text-xl leading-relaxed text-center">
-              <strong>Gemini Nano Banana</strong> is Google's viral AI that dominated LMArena leaderboards, shocking the community with unprecedented results. <strong>Gemini Nano Banana</strong> offers revolutionary capabilities that make it the top choice for creators. Experience professional <strong>Gemini Nano Banana</strong> quality with industry-leading <strong>Gemini Nano Banana</strong> performance.
+              <strong>Gemini Nano Banana</strong> is Google's viral AI that dominated LMArena leaderboards, shocking the community with unprecedented results. This platform offers revolutionary capabilities that make it the top choice for creators. Experience professional <strong>Gemini Nano Banana</strong> quality with industry-leading performance.
             </p>
             
             <h3 className="text-2xl font-bold mb-4">Why It Goes Viral</h3>
@@ -264,7 +264,7 @@ export default function Home() {
             <h3 className="text-2xl font-bold mb-4">How It Works</h3>
             
             <p className="text-lg leading-relaxed">
-              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E, winning 2.5M+ votes on LMArena. Unlike other editors, <strong>Gemini Nano Banana</strong> maintains visual coherence and creates authentic results. Millions create shareable content using <strong>Gemini Nano Banana</strong> technology daily.
+              <strong>Gemini Nano Banana</strong> outperformed Midjourney and DALL-E, winning 2.5M+ votes on LMArena. Unlike other editors, this platform maintains visual coherence and creates authentic results. Millions create shareable content using <strong>Gemini Nano Banana</strong> technology daily.
             </p>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">Popular Examples</h2>
           <p className="text-xl text-center text-muted-foreground mb-12">
-            See what millions create with <strong>Gemini Nano Banana</strong> technology. Users worldwide share viral content daily using <strong>Gemini Nano Banana</strong> creativity tools. Explore <strong>Gemini Nano Banana</strong> examples below.
+            See what millions create with <strong>Gemini Nano Banana</strong> technology. Users worldwide share viral content daily using these creativity tools. Explore <strong>Gemini Nano Banana</strong> examples below.
           </p>
           
           <div className="space-y-8">

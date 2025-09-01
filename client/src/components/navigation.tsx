@@ -24,7 +24,7 @@ export default function Navigation() {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-xl">
               🍌
             </div>
-            <h1 className="text-xl font-bold text-foreground">Gemini Nano Banana</h1>
+            <div className="text-xl font-bold text-foreground">Gemini Nano Banana</div>
           </Link>
 
           {/* Desktop Navigation */}
