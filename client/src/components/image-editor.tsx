@@ -174,7 +174,7 @@ export default function ImageEditor() {
                   <Button
                     onClick={handleGenerate}
                     disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                    className="w-full py-5 px-8 text-lg font-bold bg-primary text-white rounded-2xl shadow-lg hover:bg-primary/90 hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
+                    className="group relative w-full py-5 px-8 text-lg font-bold overflow-hidden bg-gradient-to-r from-primary via-primary/95 to-primary/90 text-primary-foreground rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.1),0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),0_3px_12px_rgba(0,0,0,0.1)] transform hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-500 ease-out border border-primary/30 backdrop-blur-sm before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/10 before:via-white/5 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
                     size="lg"
                     data-testid="generate-button"
                   >
