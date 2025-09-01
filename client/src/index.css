@@ -175,14 +175,11 @@
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
     -webkit-background-clip: text;
     background-clip: text;
+    /* 只有在支持背景裁剪时才设置透明 */
   }
   
   /* 只有在支持背景裁剪时才应用透明效果 */
   @supports (-webkit-background-clip: text) {
-    .gradient-text {
-      color: transparent;
-    }
-  }it-background-clip: text) {
     .gradient-text {
       -webkit-text-fill-color: transparent;
     }
