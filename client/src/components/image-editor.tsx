@@ -174,7 +174,8 @@ export default function ImageEditor() {
                   <Button
                     onClick={handleGenerate}
                     disabled={generateMutation.isPending || files.length === 0 || !prompt.trim()}
-                    className="w-full py-4 text-lg font-semibold banana-glow"
+                    className="w-full py-4 text-lg font-bold hero-cta-button"
+                    size="lg"
                     data-testid="generate-button"
                   >
                     {generateMutation.isPending ? (
