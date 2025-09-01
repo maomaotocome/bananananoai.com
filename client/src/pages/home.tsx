@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,9 +14,24 @@ import {
   Sparkles
 } from "lucide-react";
 import ImageEditor from "@/components/image-editor";
+import InteractiveBentoGallery from "@/components/ui/interactive-bento-gallery";
+import { nanoBananaExamples, defaultGalleryProps } from "@/data/gallery-examples";
 
 export default function Home() {
   console.log("Home component is rendering");
+  
+  // State to handle prompt updates from gallery
+  const [editorPrompt, setEditorPrompt] = React.useState('');
+  
+  // Function to handle prompt selection from gallery
+  const handleUsePrompt = (prompt: string) => {
+    setEditorPrompt(prompt);
+    // Scroll to the editor
+    const editorElement = document.querySelector('[data-testid="image-editor"]');
+    if (editorElement) {
+      editorElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   const features = [
     {
@@ -179,7 +195,9 @@ export default function Home() {
       </section>
 
       {/* Interactive Tool Demo */}
-      <ImageEditor />
+      <div data-testid="image-editor">
+        <ImageEditor promptFromGallery={editorPrompt} />
+      </div>
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-muted/30">
@@ -270,57 +288,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gemini Nano Banana Examples */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">Popular Examples</h2>
-          <p className="text-xl text-center text-muted-foreground mb-12">
-            See what millions create with advanced AI technology. Users worldwide share viral content daily using these creativity tools. Explore <strong>Gemini Nano Banana</strong> examples below.
-          </p>
-          
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-2xl font-bold mb-6 text-foreground">🔥 Viral Content</h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                {examples.slice(0, 3).map((example, index) => (
-                  <Card key={index} className="overflow-hidden hover:shadow-lg transition-all">
-                    <div className="relative">
-                      <img src={example.image} alt={example.description} className="w-full h-32 object-cover" />
-                      <Badge className="absolute top-2 right-2 bg-red-500 text-white text-xs">
-                        VIRAL
-                      </Badge>
-                    </div>
-                    <div className="p-4">
-                      <h4 className="font-bold text-sm mb-2">{example.category}</h4>
-                      <p className="text-muted-foreground text-xs mb-2">{example.description}</p>
-                      <p className="text-xs text-primary font-medium">{example.views}</p>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button 
-              size="lg" 
-              className="px-8 py-3 text-lg font-bold mr-4"
-              data-testid="try-gemini-nano-banana"
-            >
-              🍌 Try Free
-            </Button>
-            <Link to="/api">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="px-6 py-3 text-lg"
-                data-testid="gemini-nano-banana-api"
-              >
-                API Docs
-              </Button>
-            </Link>
-          </div>
-        </div>
+      {/* Interactive Bento Gallery - Popular Examples */}
+      <section className="py-16 bg-muted/20">
+        <InteractiveBentoGallery
+          mediaItems={nanoBananaExamples}
+          title={defaultGalleryProps.title}
+          description={defaultGalleryProps.description}
+          onUsePrompt={handleUsePrompt}
+        />
       </section>
 
       {/* How Gemini Nano Banana Works */}

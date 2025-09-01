@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -17,11 +17,26 @@ interface GeneratedImage {
   timestamp: Date;
 }
 
-export default function ImageEditor() {
+interface ImageEditorProps {
+  promptFromGallery?: string;
+}
+
+export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [prompt, setPrompt] = useState("");
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
   const { toast } = useToast();
+  
+  // Update prompt when gallery provides one
+  useEffect(() => {
+    if (promptFromGallery && promptFromGallery !== prompt) {
+      setPrompt(promptFromGallery);
+      toast({
+        title: "Prompt updated from gallery! 🍌",
+        description: "Ready to generate with the selected example prompt.",
+      });
+    }
+  }, [promptFromGallery, prompt, toast]);
 
   const promptSuggestions = [
     "Change outfit to a red dress",
