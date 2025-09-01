@@ -21,6 +21,17 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // SEO routes - sitemap and robots.txt
+  app.get("/sitemap.xml", (req, res) => {
+    res.set('Content-Type', 'text/xml');
+    res.sendFile('sitemap.xml', { root: './client/public' });
+  });
+
+  app.get("/robots.txt", (req, res) => {
+    res.set('Content-Type', 'text/plain');
+    res.sendFile('robots.txt', { root: './client/public' });
+  });
+
   // Test endpoint to verify Gemini API connectivity
   app.post("/api/test-gemini", async (req, res) => {
     try {
