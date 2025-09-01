@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Github, Twitter, Youtube } from "lucide-react";
+import Logo from "./logo";
 
 export default function Footer() {
   return (
@@ -8,9 +9,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-xl">
-                🍌
-              </div>
+              <Logo className="w-8 h-8" />
               <h3 className="text-xl font-bold gradient-text">Nano Banana AI</h3>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">

@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import Logo from "./logo";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -21,9 +22,7 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center space-x-3" data-testid="logo-link">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-xl">
-              🍌
-            </div>
+            <Logo className="w-8 h-8" />
             <h1 className="text-xl font-bold gradient-text">Nano Banana AI</h1>
           </Link>
 
