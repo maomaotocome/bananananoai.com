@@ -111,7 +111,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Gemini Nano Banana</strong> - the AI that broke Twitter! Experience professional <strong>Gemini Nano Banana</strong> image editing with advanced <strong>Gemini Nano Banana</strong> technology. <strong>Gemini Nano Banana</strong> delivers stunning results for creators worldwide. Try <strong>Gemini Nano Banana</strong> free today and discover <strong>Gemini Nano Banana</strong> power. <strong>Gemini Nano Banana</strong> transforms photos with <strong>Gemini Nano Banana</strong> AI algorithms. Professional <strong>Gemini Nano Banana</strong> editing made simple.
+              Create viral content with <strong>Gemini Nano Banana</strong> - the breakthrough AI that took social media by storm. This revolutionary image editing platform uses advanced artificial intelligence to deliver professional-quality results that creators love. Experience the power of AI-driven photo transformation with intuitive controls and lightning-fast processing. Join millions of content creators who trust this innovative technology for their most important visual projects. Transform your creative workflow with professional-grade editing tools designed for the modern digital landscape.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
