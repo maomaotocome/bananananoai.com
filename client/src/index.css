@@ -181,9 +181,6 @@
   @supports (-webkit-background-clip: text) {
     .gradient-text {
       color: transparent;
-    }
-  }it-background-clip: text) {
-    .gradient-text {
       -webkit-text-fill-color: transparent;
     }
   }
