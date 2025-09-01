@@ -260,12 +260,12 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select nano banana feature..." />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="z-[100]">
                               {Object.entries(categories).map(([key, category]) => (
-                                <SelectItem key={key} value={key}>
-                                  <div className="flex items-center gap-2">
-                                    <span>{category.label}</span>
-                                    <span className="text-xs text-muted-foreground">- {category.description}</span>
+                                <SelectItem key={key} value={key} className="max-w-sm">
+                                  <div className="flex flex-col gap-0.5 w-full">
+                                    <span className="font-medium">{category.label}</span>
+                                    <span className="text-xs text-muted-foreground truncate">{category.description}</span>
                                   </div>
                                 </SelectItem>
                               ))}
