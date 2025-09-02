@@ -12,23 +12,23 @@ interface StepGuideProps {
 const steps = [
   {
     icon: Upload,
-    title: "第1步：上传图片",
-    description: "拖拽或点击上传您想要编辑的图片",
-    detail: "支持JPG、PNG、WebP格式，最大10MB",
+    title: "Step 1: Upload Image",
+    description: "Drag and drop or click to upload your image for editing",
+    detail: "Supports JPG, PNG, WebP formats, max 10MB",
     color: "from-blue-400 to-blue-600"
   },
   {
     icon: Type,
-    title: "第2步：输入描述",
-    description: "用自然语言描述您想要的效果",
-    detail: "例如：'将背景换成海滩'、'添加彩虹效果'",
+    title: "Step 2: Describe Changes",
+    description: "Use natural language to describe the effect you want",
+    detail: "Example: 'change background to beach', 'add rainbow effects'",
     color: "from-purple-400 to-purple-600"
   },
   {
     icon: Sparkles,
-    title: "第3步：生成效果",
-    description: "点击生成按钮，AI将为您创造惊艳效果",
-    detail: "通常需要10-30秒，请耐心等待",
+    title: "Step 3: Generate Results",
+    description: "Click generate and AI will create stunning effects for you",
+    detail: "Usually takes 10-30 seconds, please be patient",
     color: "from-yellow-400 to-orange-500"
   }
 ];
@@ -55,7 +55,7 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold gradient-text">新手引导</h2>
+            <h2 className="text-2xl font-bold gradient-text">Getting Started Guide</h2>
             <Button
               variant="ghost"
               size="sm"
@@ -126,7 +126,7 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
                 disabled={currentStep === 0}
                 data-testid="button-previous-step"
               >
-                上一步
+                Previous
               </Button>
               
               {currentStep < steps.length - 1 ? (
@@ -135,7 +135,7 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
                   className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600"
                   data-testid="button-next-step"
                 >
-                  下一步 <ArrowRight className="w-4 h-4 ml-2" />
+                  Next <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
                 <Button
@@ -143,7 +143,7 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
                   className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700"
                   data-testid="button-start-using"
                 >
-                  开始使用 <Sparkles className="w-4 h-4 ml-2" />
+                  Get Started <Sparkles className="w-4 h-4 ml-2" />
                 </Button>
               )}
             </div>

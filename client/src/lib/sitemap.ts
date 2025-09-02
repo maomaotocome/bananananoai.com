@@ -1,4 +1,4 @@
-// 动态sitemap生成器
+// Dynamic sitemap generator
 export interface SitemapUrl {
   url: string;
   lastmod: string;

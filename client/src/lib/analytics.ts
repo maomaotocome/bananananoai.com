@@ -1,4 +1,4 @@
-// 现代化Google Analytics 4集成
+// Modern Google Analytics 4 Integration
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
@@ -7,19 +7,19 @@ declare global {
   }
 }
 
-// Google Analytics 4配置
+// Google Analytics 4 Configuration
 const GA_MEASUREMENT_ID = 'G-5WPDHCEM4V';
 const CLARITY_PROJECT_ID = 't414yz89wj';
 
-// 初始化Google Analytics
+// Initialize Google Analytics
 export const initGA = () => {
-  // 创建gtag脚本
+  // Create gtag script
   const script = document.createElement('script');
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   document.head.appendChild(script);
 
-  // 初始化dataLayer和gtag
+  // Initialize dataLayer and gtag
   window.dataLayer = window.dataLayer || [];
   window.gtag = function(...args: any[]) {
     window.dataLayer.push(args);
@@ -32,7 +32,7 @@ export const initGA = () => {
   });
 };
 
-// 初始化Microsoft Clarity
+// Initialize Microsoft Clarity
 export const initClarity = () => {
   (function(c: any, l: any, a: any, r: any, i: any, t: any, y: any) {
     c[a] = c[a] || function() {
@@ -43,10 +43,10 @@ export const initClarity = () => {
     t.src = "https://www.clarity.ms/tag/" + i;
     y = l.getElementsByTagName(r)[0];
     y.parentNode.insertBefore(t, y);
-  })(window, document, "clarity", "script", CLARITY_PROJECT_ID);
+  })(window, document, "clarity", "script", CLARITY_PROJECT_ID, {}, {});
 };
 
-// 页面浏览追踪
+// Page view tracking
 export const trackPageView = (path: string, title?: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('config', GA_MEASUREMENT_ID, {
@@ -56,7 +56,7 @@ export const trackPageView = (path: string, title?: string) => {
   }
 };
 
-// 事件追踪
+// Event tracking
 export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, {
@@ -67,7 +67,7 @@ export const trackEvent = (action: string, category: string, label?: string, val
   }
 };
 
-// 转化追踪
+// Conversion tracking
 export const trackConversion = (conversionId: string, conversionLabel?: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'conversion', {
@@ -77,7 +77,7 @@ export const trackConversion = (conversionId: string, conversionLabel?: string) 
   }
 };
 
-// 用户属性设置
+// User properties setting
 export const setUserProperty = (propertyName: string, value: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('config', GA_MEASUREMENT_ID, {
@@ -88,7 +88,7 @@ export const setUserProperty = (propertyName: string, value: string) => {
   }
 };
 
-// Clarity事件追踪
+// Clarity event tracking
 export const trackClarityEvent = (eventName: string, data?: any) => {
   if (typeof window !== 'undefined' && window.clarity) {
     window.clarity('event', eventName, data);

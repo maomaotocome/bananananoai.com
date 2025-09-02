@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { trackPageView, trackEvent, trackClarityEvent } from '@/lib/analytics';
 
-// 页面浏览追踪Hook
+// Page view tracking Hook
 export const usePageTracking = () => {
   const [location] = useLocation();
 
   useEffect(() => {
-    // 追踪页面浏览
+    // Track page view
     trackPageView(location);
     
-    // 追踪Clarity页面浏览
+    // Track Clarity page view
     trackClarityEvent('page_view', {
       path: location,
       timestamp: Date.now()
@@ -18,12 +18,12 @@ export const usePageTracking = () => {
   }, [location]);
 };
 
-// 事件追踪Hook
+// Event tracking Hook
 export const useEventTracking = () => {
   const trackImageEdit = (prompt: string, duration: number) => {
     trackEvent('image_edit', 'editor', 'prompt_used', duration);
     trackClarityEvent('image_edit', {
-      prompt: prompt.substring(0, 100), // 只记录前100字符
+      prompt: prompt.substring(0, 100), // Only record first 100 characters
       duration,
       timestamp: Date.now()
     });

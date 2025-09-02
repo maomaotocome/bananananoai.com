@@ -40,7 +40,7 @@ export function measureWebVitals() {
     }).observe({ type: 'first-input', buffered: true });
   };
   
-  // Cumulative Layout Shift (CLS) - 限制频繁输出
+  // Cumulative Layout Shift (CLS) - Throttle frequent output
   const measureCLS = () => {
     let clsValue = 0;
     let lastLogTime = 0;
@@ -52,7 +52,7 @@ export function measureWebVitals() {
         }
       }
       
-      // 只每隔2秒记录一次，避免过度输出
+      // Only log once every 2 seconds to avoid excessive output
       const now = Date.now();
       if (now - lastLogTime > 2000) {
         console.log('CLS:', clsValue);

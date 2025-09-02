@@ -43,7 +43,7 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
     }
   }, [promptFromGallery, prompt, toast]);
 
-  // 功能分类 - 简洁定义
+  // Feature categories - concise definition
   const categories = {
     'character': {
       label: '👤 Character Consistency',
@@ -83,25 +83,25 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
     }
   };
 
-  // 智能推荐系统
+  // Smart recommendation system
   const getSmartSuggestions = (category: string, currentPrompt: string) => {
     if (!category) return [];
     const categoryData = categories[category as keyof typeof categories];
     return categoryData?.prompts || [];
   };
 
-  // 监听分类变化，更新智能推荐
+  // Listen for category changes, update smart recommendations
   useEffect(() => {
     const suggestions = getSmartSuggestions(selectedCategory, prompt);
     setSmartSuggestions(suggestions);
   }, [selectedCategory, prompt]);
 
-  // 追踪功能选择（单独的useEffect避免循环）
+  // Track feature selection (separate useEffect to avoid loops)
   useEffect(() => {
     if (selectedCategory) {
       trackFeatureSelection(selectedCategory);
     }
-  }, [selectedCategory]); // 移除trackFeatureSelection依赖
+  }, [selectedCategory]); // Remove trackFeatureSelection dependency
 
   const generateMutation = useMutation({
     mutationFn: async ({ files, prompt }: { files: File[]; prompt: string }) => {
@@ -262,7 +262,7 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
                     </div>
 
                     <div className="space-y-4">
-                      {/* 智能功能选择器 */}
+                      {/* Smart feature selector */}
                       <div className="space-y-4">
                         <div className="space-y-3">
                           <label className="text-sm font-medium">Choose Feature</label>
@@ -284,7 +284,7 @@ export default function ImageEditor({ promptFromGallery = '' }: ImageEditorProps
                           </div>
                         </div>
 
-                        {/* 智能推荐 */}
+                        {/* Smart recommendations */}
                         {smartSuggestions.length > 0 && (
                           <div className="space-y-2">
                             <div className="flex items-center gap-2">
