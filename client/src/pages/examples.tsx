@@ -40,8 +40,8 @@ export default function Examples() {
       category: "fashion",
       prompt: "Change her outfit to an elegant red evening gown with sparkles",
       description: "Transform casual wear into formal attire while maintaining character consistency",
-      beforeImage: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
-      afterImage: "https://images.unsplash.com/photo-1566174498049-b3cac3b8a551?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
+      beforeImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
+      afterImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400",
       tags: ["fashion", "formal", "elegant"],
       likes: 234,
       featured: true
