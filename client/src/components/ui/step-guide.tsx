@@ -157,30 +157,28 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
 // Mini step indicator for the main interface
 export const StepIndicator: React.FC = () => {
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6 border border-white/20">
-      <div className="flex items-center justify-center space-x-8">
-        {steps.map((step, index) => {
-          const Icon = step.icon;
-          return (
-            <motion.div
-              key={index}
-              className="flex items-center space-x-2 text-white/80"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className={`w-8 h-8 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center text-white shadow-md`}>
-                <span className="text-sm font-bold">{index + 1}</span>
-              </div>
-              <span className="text-sm font-medium hidden sm:block">
-                {step.title.replace('第1步：', '').replace('第2步：', '').replace('第3步：', '')}
-              </span>
-              {index < steps.length - 1 && (
-                <ArrowRight className="w-4 h-4 text-white/40 hidden sm:block" />
-              )}
-            </motion.div>
-          );
-        })}
+    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 w-full max-w-sm mx-auto">
+      <div className="flex items-center justify-center space-x-6">
+        <div className="flex items-center space-x-1">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white">
+            <span className="text-xs font-bold">1</span>
+          </div>
+          <span className="text-xs font-medium text-white/80 hidden sm:inline">Upload</span>
+        </div>
+        <ArrowRight className="w-4 h-4 text-white/40" />
+        <div className="flex items-center space-x-1">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex items-center justify-center text-white">
+            <span className="text-xs font-bold">2</span>
+          </div>
+          <span className="text-xs font-medium text-white/80 hidden sm:inline">Describe</span>
+        </div>
+        <ArrowRight className="w-4 h-4 text-white/40" />
+        <div className="flex items-center space-x-1">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center text-white">
+            <span className="text-xs font-bold">3</span>
+          </div>
+          <span className="text-xs font-medium text-white/80 hidden sm:inline">Generate</span>
+        </div>
       </div>
     </div>
   );

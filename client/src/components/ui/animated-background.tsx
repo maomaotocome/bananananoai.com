@@ -92,40 +92,17 @@ export const InteractiveButton: React.FC<InteractiveButtonProps> = ({
   'data-testid': dataTestId
 }) => {
   return (
-    <motion.button
-      className={`relative overflow-hidden px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
+    <button
+      className={`relative overflow-hidden px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 min-h-[60px] ${
         variant === 'primary' 
-          ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg hover:shadow-xl' 
-          : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20'
-      } ${className}`}
+          ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]' 
+          : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:scale-[1.02]'
+      } ${className} active:scale-[0.98]`}
       onClick={onClick}
       data-testid={dataTestId}
-      whileHover={{ scale: 1.05, y: -2 }}
-      whileTap={{ scale: 0.95 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
     >
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
-        animate={{ translateX: ['100%', '100%', '-100%'] }}
-        transition={{ 
-          duration: 2,
-          repeat: Infinity,
-          repeatDelay: 3,
-          ease: "easeInOut"
-        }}
-      />
       <span className="relative z-10">{children}</span>
-      
-      {/* Click ripple effect */}
-      <motion.div
-        className="absolute inset-0 bg-white/20 rounded-xl"
-        initial={{ scale: 0, opacity: 0 }}
-        whileTap={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.2 }}
-      />
-    </motion.button>
+    </button>
   );
 };
 

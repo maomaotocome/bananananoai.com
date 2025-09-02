@@ -40,9 +40,10 @@ export function measureWebVitals() {
     }).observe({ type: 'first-input', buffered: true });
   };
   
-  // Cumulative Layout Shift (CLS)
+  // Cumulative Layout Shift (CLS) - 限制频繁输出
   const measureCLS = () => {
     let clsValue = 0;
+    let lastLogTime = 0;
     new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
         const clsEntry = entry as any;
@@ -50,13 +51,20 @@ export function measureWebVitals() {
           clsValue += clsEntry.value;
         }
       }
-      console.log('CLS:', clsValue);
-      if (window.gtag) {
-        window.gtag('event', 'web_vitals', {
-          name: 'CLS',
-          value: Math.round(clsValue * 1000),
-          event_category: 'Web Vitals'
-        });
+      
+      // 只每隔2秒记录一次，避免过度输出
+      const now = Date.now();
+      if (now - lastLogTime > 2000) {
+        console.log('CLS:', clsValue);
+        lastLogTime = now;
+        
+        if (window.gtag) {
+          window.gtag('event', 'web_vitals', {
+            name: 'CLS',
+            value: Math.round(clsValue * 1000),
+            event_category: 'Web Vitals'
+          });
+        }
       }
     }).observe({ type: 'layout-shift', buffered: true });
   };

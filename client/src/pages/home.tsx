@@ -123,7 +123,7 @@ export default function Home() {
               Create viral content with <strong>Banana Nano Ai</strong> - the breakthrough <strong>Banana Nano Ai</strong> AI that took social media by storm. This revolutionary <strong>Banana Nano Ai</strong> platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 min-h-[80px]">
               <InteractiveButton 
                 variant="primary"
                 data-testid="hero-try-free"
@@ -172,8 +172,10 @@ export default function Home() {
               Experience the power of <strong>Banana Nano Ai</strong> AI image editing with <strong>Banana Nano Ai</strong> technology. Upload your photo and describe the changes you want in natural language. Our advanced <strong>Banana Nano Ai</strong> technology delivers professional results instantly with unprecedented quality and speed.
             </p>
           </div>
-          {/* Step indicator */}
-          <StepIndicator />
+          {/* Step indicator with fixed height */}
+          <div className="h-16 flex items-center justify-center">
+            <StepIndicator />
+          </div>
           
           <ImageEditor 
             key={editorPrompt} 
