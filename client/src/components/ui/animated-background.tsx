@@ -41,7 +41,7 @@ export const InteractiveButton: React.FC<InteractiveButtonProps> = ({
     <button
       className={`relative px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 w-full sm:w-auto min-h-[60px] min-w-[200px] flex items-center justify-center ${
         variant === 'primary' 
-          ? 'banana-glow hover:shadow-lg hover:brightness-105' 
+          ? 'banana-glow border border-border/50 hover:shadow-lg hover:brightness-105' 
           : 'bg-muted/50 text-muted-foreground border border-border/50 hover:bg-muted/70 hover:text-foreground shadow-sm hover:shadow-md'
       } ${className}`}
       onClick={onClick}
