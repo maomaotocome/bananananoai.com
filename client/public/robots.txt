@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gemini-nano-banana.com/sitemap.xml
+Sitemap: https://bananananoai.com/sitemap.xml

@@ -51,7 +51,7 @@ export default function HowToUse() {
       description: "Save your creations and share them with the world!",
       tips: [
         "Right-click to save or use the download button",
-        "Share on social media with #NanoBanana",
+        "Share on social media with #BananaNanoAi",
         "Use results as starting points for new edits"
       ]
     }

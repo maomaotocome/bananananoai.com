@@ -1,6 +1,6 @@
 import { MediaItemType } from '@/components/ui/interactive-bento-gallery';
 
-export const nanoBananaExamples: MediaItemType[] = [
+export const bananaNanoAiExamples: MediaItemType[] = [
   {
     id: 1,
     type: "image",

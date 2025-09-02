@@ -15,7 +15,7 @@ export default function WhatIsNanoBanana() {
             🔥 Viral Story Behind the AI Revolution
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            What is <span className="gradient-text">🍌 Nano Banana</span>?
+            What is <span className="gradient-text">🍌 Banana Nano Ai</span>?
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             The mysterious AI that broke Twitter, topped LMArena leaderboards, and became Google's biggest AI reveal of 2025. Here's the complete viral story.
@@ -46,7 +46,7 @@ export default function WhatIsNanoBanana() {
 
         {/* Main Content */}
         <div className="space-y-12">
-          {/* What is Nano Banana */}
+          {/* What is Banana Nano Ai */}
           {/* The Viral Story */}
           <section>
             <h2 className="text-3xl font-bold mb-6 flex items-center">
@@ -82,11 +82,11 @@ export default function WhatIsNanoBanana() {
           <section>
             <h2 className="text-3xl font-bold mb-6 flex items-center">
               <span className="mr-3">🤖</span>
-              What exactly is Nano Banana?
+              What exactly is Banana Nano Ai?
             </h2>
             <Card className="p-8">
               <p className="text-lg leading-relaxed mb-6">
-                <strong>Nano Banana</strong> is Google's internal codename for Gemini 2.5 Flash Image model. 
+                <strong>Banana Nano Ai</strong> is Google's internal codename for Gemini 2.5 Flash Image model. 
                 It became the most talked-about AI after demonstrating unprecedented character consistency 
                 and following instructions better than any previous image AI model.
               </p>
@@ -112,7 +112,7 @@ export default function WhatIsNanoBanana() {
             </h2>
             <Card className="p-8">
               <p className="text-lg leading-relaxed mb-6">
-                Nano Banana excels at <strong>character consistency</strong> across multiple edits, 
+                Banana Nano Ai excels at <strong>character consistency</strong> across multiple edits, 
                 making it perfect for virtual try-ons and iterative changes. Unlike other models that 
                 regenerate everything from scratch, it remembers subjects and maintains their appearance 
                 throughout the editing process.
@@ -121,7 +121,7 @@ export default function WhatIsNanoBanana() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-green-50 dark:bg-green-950 rounded-lg p-6">
                   <h3 className="font-semibold text-green-700 dark:text-green-300 mb-3">
-                    Nano Banana Advantages
+                    Banana Nano Ai Advantages
                   </h3>
                   <ul className="space-y-2 text-green-700 dark:text-green-300">
                     <li>✅ Perfect character consistency</li>
@@ -152,11 +152,11 @@ export default function WhatIsNanoBanana() {
           <section>
             <h2 className="text-3xl font-bold mb-6 flex items-center">
               <span className="mr-3">💰</span>
-              Is Nano Banana free to use?
+              Is Banana Nano Ai free to use?
             </h2>
             <Card className="p-8">
               <p className="text-lg leading-relaxed mb-6">
-                <strong>Yes!</strong> You can use Nano Banana for free through the Gemini app or 
+                <strong>Yes!</strong> You can use Banana Nano Ai for free through the Gemini app or 
                 Google AI Studio. Our platform provides unlimited access to the basic features. 
                 API usage costs $0.039 per image for developers building custom applications.
               </p>
@@ -193,13 +193,13 @@ export default function WhatIsNanoBanana() {
           <section>
             <h2 className="text-3xl font-bold mb-6 flex items-center">
               <span className="mr-3">🎯</span>
-              What can I create with Nano Banana?
+              What can I create with Banana Nano Ai?
             </h2>
             <Card className="p-8">
               <p className="text-lg leading-relaxed mb-6">
                 The possibilities are endless: virtual fashion try-ons, product photography, 
                 interior design previews, creative art styles, photo restoration, meme creation, 
-                character design, and much more. If you can describe it, Nano Banana can create it.
+                character design, and much more. If you can describe it, Banana Nano Ai can create it.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -255,7 +255,7 @@ export default function WhatIsNanoBanana() {
             </h2>
             <Card className="p-8">
               <p className="text-lg leading-relaxed mb-6">
-                Nano Banana uses advanced diffusion models trained specifically for image editing 
+                Banana Nano Ai uses advanced diffusion models trained specifically for image editing 
                 tasks. Unlike traditional image generators, it maintains a "memory" of previous 
                 edits, allowing for consistent character representation across multiple modifications.
               </p>
@@ -303,7 +303,7 @@ export default function WhatIsNanoBanana() {
           {/* Getting Started */}
           <section className="text-center">
             <h2 className="text-3xl font-bold mb-6">
-              Ready to try <span className="gradient-text">Nano Banana</span>?
+              Ready to try <span className="gradient-text">Banana Nano Ai</span>?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
               Start creating amazing images with the world's most advanced AI editing technology.
@@ -330,7 +330,7 @@ export default function WhatIsNanoBanana() {
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/how-to-use">
                 <Card className="p-6 hover:shadow-lg transition-all cursor-pointer">
-                  <h3 className="font-semibold mb-2">How to Use Nano Banana</h3>
+                  <h3 className="font-semibold mb-2">How to Use Banana Nano Ai</h3>
                   <p className="text-sm text-muted-foreground">
                     Step-by-step guide to get started with image editing
                   </p>
@@ -341,7 +341,7 @@ export default function WhatIsNanoBanana() {
                 <Card className="p-6 hover:shadow-lg transition-all cursor-pointer">
                   <h3 className="font-semibold mb-2">API Documentation</h3>
                   <p className="text-sm text-muted-foreground">
-                    Integrate Nano Banana into your applications
+                    Integrate Banana Nano Ai into your applications
                   </p>
                 </Card>
               </Link>
@@ -366,7 +366,7 @@ export default function WhatIsNanoBanana() {
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    See how Nano Banana compares to other models
+                    See how Banana Nano Ai compares to other models
                   </p>
                 </Card>
               </a>

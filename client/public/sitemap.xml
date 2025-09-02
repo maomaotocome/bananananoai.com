@@ -6,7 +6,7 @@
   
   <!-- Homepage - 最高优先级 -->
   <url>
-    <loc>https://gemini-nano-banana.com/</loc>
+    <loc>https://bananananoai.com/</loc>
     <lastmod>2025-09-01T16:30:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
   
   <!-- Examples Page -->
   <url>
-    <loc>https://gemini-nano-banana.com/examples</loc>
+    <loc>https://bananananoai.com/examples</loc>
     <lastmod>2025-09-01T16:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -22,7 +22,7 @@
   
   <!-- Tutorials Page -->
   <url>
-    <loc>https://gemini-nano-banana.com/tutorials</loc>
+    <loc>https://bananananoai.com/tutorials</loc>
     <lastmod>2025-09-01T16:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -30,7 +30,7 @@
   
   <!-- API Documentation -->
   <url>
-    <loc>https://gemini-nano-banana.com/api</loc>
+    <loc>https://bananananoai.com/api</loc>
     <lastmod>2025-09-01T16:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -38,7 +38,7 @@
   
   <!-- Editor Tool -->
   <url>
-    <loc>https://gemini-nano-banana.com/#editor</loc>
+    <loc>https://bananananoai.com/#editor</loc>
     <lastmod>2025-09-01T16:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -46,7 +46,7 @@
   
   <!-- Features Section -->
   <url>
-    <loc>https://gemini-nano-banana.com/#features</loc>
+    <loc>https://bananananoai.com/#features</loc>
     <lastmod>2025-09-01T16:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

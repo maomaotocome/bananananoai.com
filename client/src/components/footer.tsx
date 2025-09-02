@@ -11,7 +11,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-xl">
                 🍌
               </div>
-              <h3 className="text-xl font-bold gradient-text">Nano Banana AI</h3>
+              <h3 className="text-xl font-bold gradient-text">Banana Nano Ai</h3>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
               The ultimate platform for AI-powered image editing using Google's revolutionary
@@ -133,7 +133,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">Gemini Nano Banana AI</p>
+          <p className="text-muted-foreground text-sm">Banana Nano Ai</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a
               href="#"

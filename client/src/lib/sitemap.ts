@@ -8,37 +8,37 @@ export interface SitemapUrl {
 
 export const sitemapUrls: SitemapUrl[] = [
   {
-    url: 'https://gemini-nano-banana.com/',
+    url: 'https://bananananoai.com/',
     lastmod: new Date().toISOString(),
     changefreq: 'daily',
     priority: 1.0
   },
   {
-    url: 'https://gemini-nano-banana.com/examples',
+    url: 'https://bananananoai.com/examples',
     lastmod: new Date().toISOString(),
     changefreq: 'weekly',
     priority: 0.8
   },
   {
-    url: 'https://gemini-nano-banana.com/tutorials',
+    url: 'https://bananananoai.com/tutorials',
     lastmod: new Date().toISOString(),
     changefreq: 'weekly',
     priority: 0.8
   },
   {
-    url: 'https://gemini-nano-banana.com/api',
+    url: 'https://bananananoai.com/api',
     lastmod: new Date().toISOString(),
     changefreq: 'monthly',
     priority: 0.7
   },
   {
-    url: 'https://gemini-nano-banana.com/what-is-nano-banana',
+    url: 'https://bananananoai.com/what-is-nano-banana',
     lastmod: new Date().toISOString(),
     changefreq: 'monthly',
     priority: 0.6
   },
   {
-    url: 'https://gemini-nano-banana.com/how-to-use',
+    url: 'https://bananananoai.com/how-to-use',
     lastmod: new Date().toISOString(),
     changefreq: 'monthly',
     priority: 0.6

@@ -13,7 +13,7 @@ export default function Navigation() {
     { name: "Examples", href: "/examples" },
     { name: "Tutorials", href: "/tutorials" },
     { name: "API", href: "/api" },
-    { name: "What is Nano Banana", href: "/what-is-nano-banana" },
+    { name: "What is Banana Nano Ai", href: "/what-is-nano-banana" },
   ];
 
   return (
@@ -24,7 +24,7 @@ export default function Navigation() {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-xl">
               🍌
             </div>
-            <div className="text-xl font-bold text-foreground">Gemini Nano Banana</div>
+            <div className="text-xl font-bold text-foreground">Banana Nano Ai</div>
           </Link>
 
           {/* Desktop Navigation */}

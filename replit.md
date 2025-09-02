@@ -1,6 +1,6 @@
 # Overview
 
-Nano Banana AI is a web application that provides AI-powered image editing capabilities using Google's Gemini 2.5 Flash Image model. The platform allows users to upload images and modify them using natural language prompts, offering features like virtual try-on, background changes, style transformations, and multi-image blending. The application is built as a full-stack solution with a React frontend and Express.js backend, designed to be user-friendly and accessible without requiring technical expertise.
+Banana Nano Ai is a web application that provides AI-powered image editing capabilities using Google's Gemini 2.5 Flash Image model. The platform allows users to upload images and modify them using natural language prompts, offering features like virtual try-on, background changes, style transformations, and multi-image blending. The application is built as a full-stack solution with a React frontend and Express.js backend, designed to be user-friendly and accessible without requiring technical expertise.
 
 # User Preferences
 
