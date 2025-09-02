@@ -39,10 +39,10 @@ export const InteractiveButton: React.FC<InteractiveButtonProps> = ({
 }) => {
   return (
     <button
-      className={`relative px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 w-full sm:w-auto min-h-[60px] min-w-[200px] flex items-center justify-center ${
+      className={`relative px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 w-full sm:w-auto min-h-[60px] min-w-[200px] flex items-center justify-center ${
         variant === 'primary' 
-          ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-white shadow-[0_8px_32px_rgba(255,165,0,0.3)] hover:shadow-[0_12px_40px_rgba(255,165,0,0.5)] hover:transform hover:-translate-y-1' 
-          : 'bg-white/70 backdrop-blur-md border border-orange-200/50 text-orange-600 shadow-[0_8px_32px_rgba(255,165,0,0.15)] hover:bg-white/80 hover:text-orange-700 hover:shadow-[0_12px_40px_rgba(255,165,0,0.25)] hover:transform hover:-translate-y-1'
+          ? 'banana-glow hover:shadow-lg hover:brightness-105' 
+          : 'bg-muted/50 text-muted-foreground border border-border/50 hover:bg-muted/70 hover:text-foreground shadow-sm hover:shadow-md'
       } ${className}`}
       onClick={onClick}
       data-testid={dataTestId}
