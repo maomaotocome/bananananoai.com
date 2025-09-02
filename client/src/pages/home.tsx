@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,18 +11,23 @@ import {
   Heart,
   Star,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  HelpCircle
 } from "lucide-react";
+import { AnimatedBackground, InteractiveButton } from "@/components/ui/animated-background";
+import { StepGuide, StepIndicator } from "@/components/ui/step-guide";
 import ImageEditor from "@/components/image-editor";
 import InteractiveBentoGallery from "@/components/ui/interactive-bento-gallery";
 import { bananaNanoAiExamples, defaultGalleryProps } from "@/data/gallery-examples";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
+import { StructuredData, OrganizationStructuredData } from "@/components/structured-data";
 
 export default function Home() {
   console.log("Home component is rendering");
   
   // State to handle prompt updates from gallery
   const [editorPrompt, setEditorPrompt] = React.useState('');
+  const [showGuide, setShowGuide] = useState(false);
   
   // Function to handle prompt selection from gallery
   const handleUsePrompt = (prompt: string) => {
@@ -86,9 +91,22 @@ export default function Home() {
     <div className="min-h-screen">
       <SEOHead {...seoConfigs.home} />
       
+      {/* Structured Data for SEO */}
+      <StructuredData 
+        type="SoftwareApplication" 
+        data={{
+          name: "Banana Nano Ai",
+          description: "Revolutionary AI-powered image editing tool",
+          rating: 4.9,
+          reviewCount: 50000
+        }} 
+      />
+      <OrganizationStructuredData />
+      
       {/* Hero Section */}
-      <section className="hero-gradient py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="hero-gradient py-20 lg:py-32 relative overflow-hidden">
+        <AnimatedBackground />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="max-w-4xl mx-auto">
             <Badge className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-sm font-medium text-primary mb-8 border border-primary/20">
               <span className="w-2 h-2 bg-primary rounded-full mr-2 pulse-glow"></span>
@@ -106,24 +124,23 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button 
-                size="lg" 
-                className="px-10 py-5 text-lg font-bold bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary/90 hover:to-secondary/90 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-primary/20 rounded-xl"
+              <InteractiveButton 
+                variant="primary"
                 data-testid="hero-try-free"
               >
                 <span className="text-2xl mr-2">🍌</span>
                 Try Free Now
                 <span className="ml-2 text-lg">✨</span>
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="px-8 py-4 text-lg font-semibold border-2"
+              </InteractiveButton>
+              <InteractiveButton 
+                variant="secondary"
+                onClick={() => setShowGuide(true)}
                 data-testid="hero-watch-tutorial"
               >
-                View Tutorial
+                <HelpCircle className="mr-2 w-5 h-5" />
+                New User Guide
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              </InteractiveButton>
             </div>
             
             <div className="flex flex-wrap gap-6 justify-center items-center text-sm text-muted-foreground">
@@ -155,6 +172,9 @@ export default function Home() {
               Experience the power of <strong>Banana Nano Ai</strong> AI image editing with <strong>Banana Nano Ai</strong> technology. Upload your photo and describe the changes you want in natural language. Our advanced <strong>Banana Nano Ai</strong> technology delivers professional results instantly with unprecedented quality and speed.
             </p>
           </div>
+          {/* Step indicator */}
+          <StepIndicator />
+          
           <ImageEditor 
             key={editorPrompt} 
             promptFromGallery={editorPrompt}
@@ -385,6 +405,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Step Guide Modal */}
+      <StepGuide 
+        isOpen={showGuide}
+        onClose={() => setShowGuide(false)}
+      />
     </div>
   );
 }
