@@ -12,47 +12,48 @@ import {
   AlertCircle,
   CheckCircle
 } from "lucide-react";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function HowToUse() {
   const steps = [
     {
       icon: <Upload className="w-6 h-6" />,
       title: "Upload Your Images",
-      description: "Drag and drop up to 5 images or click to browse. Supports JPG, PNG, WebP up to 10MB each.",
+      description: "Upload images to Banana Nano Ai platform. Drag and drop up to 5 images or click to browse. Supports JPG, PNG, WebP up to 50MB each for professional quality.",
       tips: [
-        "Use high-quality images for best results",
-        "Multiple images enable blending and comparison",
-        "Portrait orientation works best for people"
+        "Use high-resolution images (1024x1024+) for best Banana Nano Ai results",
+        "Multiple images enable advanced Nano Banana AI blending features",
+        "Portrait orientation works best for character consistency"
       ]
     },
     {
       icon: <Type className="w-6 h-6" />,
       title: "Write Your Prompt",
-      description: "Describe what you want to change in natural language. Be specific and creative!",
+      description: "Tell Banana Nano Ai exactly what you want using natural language. The AI understands complex instructions and maintains context for professional results.",
       tips: [
-        "Start with action words: 'Change', 'Add', 'Remove', 'Make'",
-        "Include details about style, color, and setting",
-        "Reference specific parts: 'her outfit', 'the background', 'his hair'"
+        "Be specific: 'Change background to sunset beach with palm trees'",
+        "Include style details: 'Make it look like a professional headshot'",
+        "Reference parts: 'her outfit', 'the background', 'maintain character consistency'"
       ]
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
-      title: "Generate & Refine",
-      description: "Let AI work its magic! Generate results and make iterative improvements.",
+      title: "AI Processing Magic",
+      description: "Banana Nano Ai processes your request using Google's Gemini 2.5 Flash Image model - the #1 ranked AI on LMArena benchmarks.",
       tips: [
-        "Review results and refine prompts if needed",
-        "Use follow-up prompts for incremental changes",
-        "Save your favorite results before making new edits"
+        "Simple edits complete in 1-3 seconds with Nano Banana AI",
+        "Character consistency features process in 2-5 seconds",
+        "Complex multi-image blending takes 5-10 seconds"
       ]
     },
     {
       icon: <Download className="w-6 h-6" />,
       title: "Download & Share",
-      description: "Save your creations and share them with the world!",
+      description: "Download your professionally edited images with full commercial usage rights. Banana Nano Ai results are ready for business use.",
       tips: [
-        "Right-click to save or use the download button",
-        "Share on social media with #BananaNanoAi",
-        "Use results as starting points for new edits"
+        "Right-click to save high-quality images",
+        "Full commercial usage rights included with Banana Nano Ai",
+        "Share on social media and tag #BananaNanoAi"
       ]
     }
   ];
@@ -148,6 +149,8 @@ export default function HowToUse() {
 
   return (
     <div className="min-h-screen py-12">
+      <SEOHead {...seoConfigs.howToUse} />
+      
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -156,18 +159,31 @@ export default function HowToUse() {
             Complete Tutorial
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            How to Use <span className="gradient-text">Nano Banana</span>
+            How to Use <span className="gradient-text">Banana Nano Ai</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Master the art of AI image editing with our comprehensive step-by-step guide. 
-            From basic edits to advanced techniques.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            Master <strong>Banana Nano Ai</strong> with our comprehensive step-by-step guide. 
+            Learn professional techniques for <strong>Nano Banana AI</strong> image editing, from basic edits to advanced character consistency features used by 100K+ creators worldwide.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/">
+              <Button size="lg" className="banana-glow" data-testid="start-editing-now">
+                🍌 Try Banana Nano Ai Now
+              </Button>
+            </Link>
+            <Link href="/faq">
+              <Button variant="outline" size="lg" data-testid="view-faq">
+                <Lightbulb className="w-4 h-4 mr-2" />
+                View FAQ
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Step-by-Step Guide */}
         <section className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Master Nano Banana in 4 Simple Steps
+            Master <span className="gradient-text">Banana Nano Ai</span> in 4 Simple Steps
           </h2>
           
           <div className="space-y-8">

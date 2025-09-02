@@ -124,7 +124,7 @@ const MediaItem = ({ item, className, onClick }: { item: MediaItemType, classNam
     return (
         <img
             src={item.url} // Image source URL
-            alt={item.title} // Alt text for the image
+            alt={`${item.title} - ${item.desc} created with Banana Nano Ai`} // SEO optimized alt text
             className={`${className} w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300`} // Enhanced styling
             onClick={onClick} // Trigger onClick when the image is clicked
             loading="lazy" // Lazy load the image for performance

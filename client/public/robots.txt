@@ -1,4 +1,39 @@
 User-agent: *
 Allow: /
 
+# Allow all search engines to crawl our content
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Sitemap location
 Sitemap: https://bananananoai.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# High priority pages for search engines
+# Homepage and main product features
+Allow: /
+Allow: /how-to-use
+Allow: /examples
+Allow: /faq
+Allow: /tutorials
+
+# Educational content
+Allow: /what-is-nano-banana
+Allow: /blog
+Allow: /case-studies
+
+# API documentation
+Allow: /api
+
+# Marketing pages (lower priority)
+Allow: /social-media-kit
+Allow: /outreach-strategy
+Allow: /landing-funnel

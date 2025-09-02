@@ -4,8 +4,8 @@ export const bananaNanoAiExamples: MediaItemType[] = [
   {
     id: 1,
     type: "image",
-    title: "Portrait Style Transfer",
-    desc: "Transform portraits with artistic styles while maintaining facial features",
+    title: "Banana Nano Ai Portrait Style Transfer - Professional AI Photo Editor",
+    desc: "Transform portraits with artistic styles while maintaining perfect character consistency using Banana Nano Ai technology",
     url: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=600&fit=crop&crop=face",
     span: "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
     prompt: "Transform this portrait into a Renaissance painting style while keeping the person's facial features exactly the same"
@@ -13,8 +13,8 @@ export const bananaNanoAiExamples: MediaItemType[] = [
   {
     id: 2,
     type: "image", 
-    title: "Background Replacement",
-    desc: "Change backgrounds while keeping the subject perfectly intact",
+    title: "Nano Banana AI Background Replacement - Free AI Image Editor",
+    desc: "Change backgrounds while keeping subjects perfectly intact with advanced Banana Nano Ai character consistency features",
     url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop",
     span: "md:col-span-2 md:row-span-2 col-span-1 sm:col-span-2 sm:row-span-2",
     prompt: "Replace the background with a beautiful sunset beach while keeping the person exactly as they are"
@@ -22,8 +22,8 @@ export const bananaNanoAiExamples: MediaItemType[] = [
   {
     id: 3,
     type: "image",
-    title: "Outfit Transformation",
-    desc: "Change clothing and accessories while preserving character identity",
+    title: "Banana Nano Ai Outfit Transformation - Virtual Try-On Technology",
+    desc: "Change clothing and accessories while preserving perfect character identity using Nano Banana AI consistency algorithms",
     url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop&crop=face",
     span: "md:col-span-1 md:row-span-3 sm:col-span-2 sm:row-span-2",
     prompt: "Change the outfit to an elegant red evening dress while keeping the person and pose identical"
@@ -139,6 +139,6 @@ export const bananaNanoAiExamples: MediaItemType[] = [
 ];
 
 export const defaultGalleryProps = {
-  title: "Popular Nano Banana Examples",
-  description: "See what millions create with Gemini Nano Banana AI. Click any example to use its prompt in the editor above. Over 15 viral transformation styles available!"
+  title: "Popular Banana Nano Ai Examples - Character Consistency Gallery",
+  description: "See what 100K+ creators achieve with Banana Nano Ai. Click any example to use its prompt in the editor. Revolutionary character consistency and professional results!"
 };

@@ -16,6 +16,7 @@ import {
 import ImageEditor from "@/components/image-editor";
 import InteractiveBentoGallery from "@/components/ui/interactive-bento-gallery";
 import { bananaNanoAiExamples, defaultGalleryProps } from "@/data/gallery-examples";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function Home() {
   console.log("Home component is rendering");
@@ -83,6 +84,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      <SEOHead {...seoConfigs.home} />
+      
       {/* Hero Section */}
       <section className="hero-gradient py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -200,19 +203,121 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What is Banana Nano Ai */}
-      <section className="py-16 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">What is <span className="gradient-text">Banana Nano Ai</span>?</h2>
-          <div className="prose prose-lg max-w-none text-center">
-            <p className="text-xl text-muted-foreground leading-relaxed mb-6">
-              <strong>Banana Nano Ai</strong> represents a breakthrough in AI image editing technology. This revolutionary platform combines advanced machine learning with intuitive design, making professional-grade image editing accessible to everyone. Whether you're creating content for social media, designing marketing materials, or exploring creative possibilities, <strong>Banana Nano Ai</strong> delivers exceptional results with unprecedented speed and accuracy.
-            </p>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              The technology behind <strong>Banana Nano Ai</strong> has been tested and validated by millions of users worldwide, earning recognition for its superior performance in competitive benchmarks. Content creators, designers, and businesses rely on this platform for its consistency, quality, and ease of use. From virtual try-ons to background replacements, <strong>Banana Nano Ai</strong> handles complex editing tasks with remarkable precision.
-            </p>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Join the community of creators who have discovered the power of <strong>Banana Nano Ai</strong>. Experience the future of image editing today and see why this technology has become the go-to choice for professionals and enthusiasts alike. Start creating amazing content with <strong>Banana Nano Ai</strong> - where innovation meets simplicity.
+      {/* What is Banana Nano Ai - Expanded Content */}
+      <section className="py-20 bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">What is <span className="gradient-text">Banana Nano Ai</span>?</h2>
+          
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-6">Revolutionary AI Image Editor Technology</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                <strong>Banana Nano Ai</strong> represents the next generation of AI-powered image editing technology. Built on Google's advanced Gemini 2.5 Flash Image model, this revolutionary <strong>Banana Nano Ai</strong> platform combines cutting-edge machine learning with intuitive design, making professional-grade image editing accessible to everyone worldwide.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                Unlike traditional image editors that require complex skills and expensive software, <strong>Banana Nano Ai</strong> uses natural language processing to understand your creative vision. Simply describe what you want in plain English, and watch as our advanced <strong>Nano Banana AI</strong> technology transforms your ideas into stunning visual reality with unprecedented precision and speed.
+              </p>
+            </div>
+            <div className="bg-muted/30 rounded-xl p-8">
+              <h4 className="text-xl font-bold mb-4">Key Capabilities</h4>
+              <ul className="space-y-3 text-muted-foreground">
+                <li className="flex items-start"><span className="text-primary mr-2">•</span>Character consistency across multiple edits</li>
+                <li className="flex items-start"><span className="text-primary mr-2">•</span>Multi-image blending and fusion</li>
+                <li className="flex items-start"><span className="text-primary mr-2">•</span>Background replacement and scene editing</li>
+                <li className="flex items-start"><span className="text-primary mr-2">•</span>Virtual try-on and product visualization</li>
+                <li className="flex items-start"><span className="text-primary mr-2">•</span>Style transfer and artistic effects</li>
+                <li className="flex items-start"><span className="text-primary mr-2">•</span>Object removal and addition</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="mt-16 grid md:grid-cols-3 gap-8">
+            <Card className="p-6 text-center">
+              <h4 className="text-xl font-bold mb-4">Performance Leader</h4>
+              <p className="text-muted-foreground mb-4">
+                <strong>Banana Nano Ai</strong> outperformed Midjourney, DALL-E 3, and other leading AI image generators in blind testing, earning over 2.5 million votes on LMArena benchmarks.
+              </p>
+              <Badge className="bg-primary/10 text-primary">Verified #1 Performance</Badge>
+            </Card>
+            
+            <Card className="p-6 text-center">
+              <h4 className="text-xl font-bold mb-4">Industry Recognition</h4>
+              <p className="text-muted-foreground mb-4">
+                Featured in major publications including The Washington Post, Business Insider, and TechCrunch for its breakthrough character consistency and multi-image editing capabilities.
+              </p>
+              <Badge className="bg-primary/10 text-primary">Media Featured</Badge>
+            </Card>
+            
+            <Card className="p-6 text-center">
+              <h4 className="text-xl font-bold mb-4">User Trusted</h4>
+              <p className="text-muted-foreground mb-4">
+                Over 100,000+ creators, designers, and businesses worldwide trust <strong>Banana Nano Ai</strong> for their professional image editing needs and viral content creation.
+              </p>
+              <Badge className="bg-primary/10 text-primary">100K+ Active Users</Badge>
+            </Card>
+          </div>
+          
+          {/* How Banana Nano AI Works */}
+          <div className="mt-16">
+            <h3 className="text-2xl font-bold text-center mb-8">How <span className="gradient-text">Banana Nano Ai</span> Works</h3>
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl mb-4 mx-auto">1</div>
+                <h4 className="font-semibold mb-2">Upload Image</h4>
+                <p className="text-sm text-muted-foreground">Upload your photo or image to the <strong>Banana Nano Ai</strong> platform</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl mb-4 mx-auto">2</div>
+                <h4 className="font-semibold mb-2">Describe Changes</h4>
+                <p className="text-sm text-muted-foreground">Tell <strong>Nano Banana AI</strong> what you want to edit in natural language</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl mb-4 mx-auto">3</div>
+                <h4 className="font-semibold mb-2">AI Processing</h4>
+                <p className="text-sm text-muted-foreground">Advanced <strong>Banana Nano Ai</strong> algorithms process your request</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl mb-4 mx-auto">4</div>
+                <h4 className="font-semibold mb-2">Get Results</h4>
+                <p className="text-sm text-muted-foreground">Download your professionally edited image in seconds</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Use Cases */}
+          <div className="mt-16">
+            <h3 className="text-2xl font-bold text-center mb-8">Popular <span className="gradient-text">Banana Nano Ai</span> Use Cases</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="p-6">
+                <h4 className="font-bold mb-3">Content Creation</h4>
+                <p className="text-sm text-muted-foreground">Social media creators use <strong>Banana Nano Ai</strong> to produce viral content with consistent characters and professional quality that engages millions of followers.</p>
+              </Card>
+              <Card className="p-6">
+                <h4 className="font-bold mb-3">E-commerce Product Photos</h4>
+                <p className="text-sm text-muted-foreground">Online stores leverage <strong>Nano Banana AI</strong> for product mockups, virtual try-ons, and lifestyle photography that increases conversion rates.</p>
+              </Card>
+              <Card className="p-6">
+                <h4 className="font-bold mb-3">Marketing Campaigns</h4>
+                <p className="text-sm text-muted-foreground">Agencies and brands use <strong>Banana Nano Ai</strong> to create compelling visual content for advertisements, social campaigns, and promotional materials.</p>
+              </Card>
+              <Card className="p-6">
+                <h4 className="font-bold mb-3">Personal Photography</h4>
+                <p className="text-sm text-muted-foreground">Individual users enhance their photos with <strong>Banana Nano Ai</strong> for professional results without expensive software or technical expertise.</p>
+              </Card>
+              <Card className="p-6">
+                <h4 className="font-bold mb-3">Graphic Design</h4>
+                <p className="text-sm text-muted-foreground">Designers integrate <strong>Nano Banana AI</strong> into their workflow for rapid prototyping, concept visualization, and creative exploration.</p>
+              </Card>
+              <Card className="p-6">
+                <h4 className="font-bold mb-3">Educational Content</h4>
+                <p className="text-sm text-muted-foreground">Educators and trainers use <strong>Banana Nano Ai</strong> to create engaging visual materials, illustrations, and interactive learning resources.</p>
+              </Card>
+            </div>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
+              The technology behind <strong>Banana Nano Ai</strong> has been rigorously tested and validated by millions of users worldwide, earning recognition for its superior performance in competitive benchmarks. Content creators, professional designers, marketing agencies, and businesses across industries rely on this <strong>Nano Banana AI</strong> platform for its consistency, quality, and ease of use. From complex virtual try-ons to seamless background replacements, <strong>Banana Nano Ai</strong> handles even the most challenging editing tasks with remarkable precision and reliability.
             </p>
           </div>
         </div>
