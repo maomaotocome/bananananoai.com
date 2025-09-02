@@ -42,7 +42,7 @@ export const InteractiveButton: React.FC<InteractiveButtonProps> = ({
       className={`relative px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 w-full sm:w-auto min-h-[60px] min-w-[200px] flex items-center justify-center ${
         variant === 'primary' 
           ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg hover:shadow-xl hover:brightness-110' 
-          : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20'
+          : 'bg-gray-800/90 backdrop-blur-sm text-white border-2 border-gray-600/50 hover:bg-gray-700/90 hover:border-gray-500'
       } ${className}`}
       onClick={onClick}
       data-testid={dataTestId}
