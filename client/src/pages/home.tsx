@@ -126,6 +126,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 min-h-[80px]">
               <InteractiveButton 
                 variant="primary"
+                onClick={() => {
+                  const editorSection = document.getElementById('editor');
+                  if (editorSection) {
+                    editorSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 data-testid="hero-try-free"
               >
                 <span className="text-2xl mr-2">🍌</span>
@@ -386,6 +392,12 @@ export default function Home() {
             <Button 
               size="lg" 
               className="px-10 py-5 text-lg font-bold bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary/90 hover:to-secondary/90 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-primary/20 rounded-xl"
+              onClick={() => {
+                const editorSection = document.getElementById('editor');
+                if (editorSection) {
+                  editorSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               data-testid="cta-start-creating"
             >
               <span className="text-2xl mr-2">🍌</span>

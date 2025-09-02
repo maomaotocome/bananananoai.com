@@ -425,7 +425,7 @@ const InteractiveBentoGallery: React.FC<InteractiveBentoGalleryProps> = ({
                                 layoutId={`media-${item.id}`}
                                 className={`relative overflow-hidden rounded-xl cursor-move ${item.span} 
                                            hover:shadow-lg transition-shadow duration-200
-                                           border border-border/50 hover:border-primary/30`}
+                                           border border-border/50 hover:border-primary/30 transform-gpu`}
                                 onClick={() => !isDragging && setSelectedItem(item)}
                                 variants={{
                                     hidden: { y: 50, scale: 0.9, opacity: 0 },
@@ -441,7 +441,7 @@ const InteractiveBentoGallery: React.FC<InteractiveBentoGalleryProps> = ({
                                         }
                                     }
                                 }}
-                                whileHover={{ scale: 1.02 }}
+                                style={{ transform: 'translateZ(0)' }}
                                 drag
                                 dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                                 dragElastic={1}

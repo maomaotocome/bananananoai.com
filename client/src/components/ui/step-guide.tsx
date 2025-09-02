@@ -70,13 +70,11 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
             {/* Progress indicators */}
             <div className="flex justify-center space-x-2 mb-8">
               {steps.map((_, index) => (
-                <motion.div
+                <div
                   key={index}
-                  className={`w-3 h-3 rounded-full ${
+                  className={`w-3 h-3 rounded-full transition-colors duration-200 ${
                     index <= currentStep ? 'bg-yellow-400' : 'bg-gray-300'
-                  }`}
-                  animate={{ scale: index === currentStep ? 1.2 : 1 }}
-                  transition={{ duration: 0.2 }}
+                  } ${index === currentStep ? 'ring-2 ring-yellow-400/50' : ''}`}
                 />
               ))}
             </div>
@@ -91,20 +89,11 @@ export const StepGuide: React.FC<StepGuideProps> = ({ onClose, isOpen }) => {
                 transition={{ duration: 0.3 }}
                 className="text-center"
               >
-                <motion.div
+                <div
                   className={`w-16 h-16 rounded-full bg-gradient-to-r ${steps[currentStep].color} flex items-center justify-center mx-auto mb-4 shadow-lg`}
-                  animate={{ 
-                    rotate: [0, 5, -5, 0],
-                    scale: [1, 1.05, 1]
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
                 >
                   {React.createElement(steps[currentStep].icon, { className: "w-8 h-8 text-white" })}
-                </motion.div>
+                </div>
                 
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
                   {steps[currentStep].title}
