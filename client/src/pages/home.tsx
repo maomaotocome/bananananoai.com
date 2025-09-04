@@ -120,7 +120,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Banana Nano Ai</strong> - the breakthrough <strong>Banana Nano Ai</strong> AI that took social media by storm. This revolutionary <strong>Banana Nano Ai</strong> platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals.
+              Create viral content with <strong>Banana Nano Ai</strong> - the breakthrough <strong>Banana Nano Ai</strong> AI that took social media by storm. This revolutionary <strong>Banana Nano Ai</strong> platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals. <Link href="/examples" className="text-primary hover:text-primary/80 underline">See examples</Link> of what's possible or <Link href="/how-to-use" className="text-primary hover:text-primary/80 underline">learn how to get started</Link>.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 min-h-[80px]">

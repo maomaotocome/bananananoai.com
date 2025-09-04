@@ -12,9 +12,10 @@ export default function Navigation() {
     { name: "Features", href: "/#features" },
     { name: "Examples", href: "/examples" },
     { name: "Tutorials", href: "/tutorials" },
+    { name: "How to Use", href: "/how-to-use" },
     { name: "Blog", href: "/blog" },
+    { name: "FAQ", href: "/faq" },
     { name: "API", href: "/api" },
-    { name: "What is Banana Nano Ai", href: "/what-is-nano-banana" },
   ];
 
   return (

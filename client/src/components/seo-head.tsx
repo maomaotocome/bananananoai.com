@@ -46,15 +46,21 @@ export function SEOHead({
     updateMetaTag('og:title', title, true);
     updateMetaTag('og:description', description, true);
     updateMetaTag('og:image', image, true);
+    updateMetaTag('og:image:width', '1200', true);
+    updateMetaTag('og:image:height', '630', true);
+    updateMetaTag('og:image:alt', title, true);
     updateMetaTag('og:url', url, true);
     updateMetaTag('og:type', type, true);
     updateMetaTag('og:site_name', 'Banana Nano Ai', true);
+    updateMetaTag('og:locale', 'en_US', true);
     
     // Twitter Card tags
     updateMetaTag('twitter:card', 'summary_large_image');
     updateMetaTag('twitter:title', title);
     updateMetaTag('twitter:description', description);
     updateMetaTag('twitter:image', image);
+    updateMetaTag('twitter:site', '@bananananoai');
+    updateMetaTag('twitter:creator', '@bananananoai');
     
     // Additional SEO tags
     updateMetaTag('robots', 'index, follow');

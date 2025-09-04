@@ -6,6 +6,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { initGA, initClarity } from "@/lib/analytics";
 import { initializePerformance } from "@/lib/performance";
 import { usePageTracking } from "@/hooks/useAnalytics";
+import { SEORedirects } from "@/components/seo-redirects";
+import { SchemaMarkup } from "@/components/schema-markup";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import Home from "@/pages/home";
@@ -63,6 +65,8 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SEORedirects />
+      <SchemaMarkup />
       <Router />
       <Toaster />
     </QueryClientProvider>

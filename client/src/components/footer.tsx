@@ -68,22 +68,22 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/faq"
                     className="hover:text-primary transition-colors"
-                    data-testid="footer-link-pricing"
+                    data-testid="footer-link-faq"
                   >
-                    Pricing
-                  </a>
+                    FAQ
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/how-to-use"
                     className="hover:text-primary transition-colors"
-                    data-testid="footer-link-changelog"
+                    data-testid="footer-link-how-to-use"
                   >
-                    Changelog
-                  </a>
+                    How to Use
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -110,22 +110,22 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/blog"
                     className="hover:text-primary transition-colors"
                     data-testid="footer-link-blog"
                   >
                     Blog
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/case-studies"
                     className="hover:text-primary transition-colors"
-                    data-testid="footer-link-community"
+                    data-testid="footer-link-case-studies"
                   >
-                    Community
-                  </a>
+                    Case Studies
+                  </Link>
                 </li>
               </ul>
             </div>
