@@ -51,9 +51,13 @@ const PosePainter = () => {
     if (!canvas) return { x: 0, y: 0 };
     
     const rect = canvas.getBoundingClientRect();
+    // Calculate the scale between canvas actual size and display size
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
     };
   };
 
@@ -360,11 +364,7 @@ const PosePainter = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    // Set canvas size
-    canvas.width = 600;
-    canvas.height = 400;
-    
-    // Initial dark background
+    // Canvas is already sized via attributes, just draw background
     const ctx = canvas.getContext("2d");
     if (ctx) {
       ctx.fillStyle = "#1a1f2e";
@@ -538,8 +538,10 @@ const PosePainter = () => {
                       onMouseMove={draw}
                       onMouseUp={stopDrawing}
                       onMouseLeave={stopDrawing}
+                      width={600}
+                      height={400}
                       className="w-full border-2 border-gray-300 rounded-lg cursor-crosshair"
-                      style={{ maxHeight: "400px" }}
+                      style={{ maxWidth: "100%", height: "auto" }}
                       data-testid="canvas-sketch"
                     />
                     
