@@ -331,8 +331,11 @@ const PosePainter = () => {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "生成失败");
+        const errorData = await response.json().catch(() => ({ error: "Network error" }));
+        if (response.status === 503) {
+          throw new Error("Nano Banana model is temporarily overloaded. Please try again in a moment.");
+        }
+        throw new Error(errorData.error || "Generation failed");
       }
       
       const result = await response.json();
