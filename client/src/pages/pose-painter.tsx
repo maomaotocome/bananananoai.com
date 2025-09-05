@@ -400,10 +400,10 @@ const PosePainter = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-5 gap-6">
           
           {/* Left Panel */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-3 space-y-6">
             
             {/* Step 1: Provide Inputs */}
             <Card className="bg-white border-yellow-200 shadow-lg">
@@ -675,7 +675,7 @@ const PosePainter = () => {
           </div>
 
           {/* Right Panel - Result */}
-          <div>
+          <div className="lg:col-span-2">
             <Card className="bg-white border-yellow-200 shadow-lg sticky top-8">
               <div className="bg-gradient-to-r from-yellow-100 to-orange-100 px-6 py-4 border-b border-yellow-200">
                 <h2 className="text-lg font-bold text-gray-800 flex items-center justify-between">
@@ -699,33 +699,56 @@ const PosePainter = () => {
               </div>
               
               <div className="p-6">
-                {generatedImage ? (
-                  <div className="space-y-3">
-                    <img
-                      src={generatedImage}
-                      alt="Generated"
-                      className="w-full rounded-lg shadow-md"
-                      data-testid="img-result"
-                    />
-                    <Button
-                      onClick={downloadImage}
-                      className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600"
-                      data-testid="btn-download-main"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Image
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                    <div className="text-center">
-                      <Sparkles className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                      <p className="text-gray-500 text-sm">
-                        Generated image will appear here
-                      </p>
+                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4" style={{ minHeight: "650px" }}>
+                  {isGenerating ? (
+                    <div className="h-full flex items-center justify-center" style={{ minHeight: "600px" }}>
+                      <div className="text-center">
+                        <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-yellow-500 border-t-transparent mb-6"></div>
+                        <p className="text-gray-700 text-xl font-semibold mb-2">
+                          Creating your AI artwork...
+                        </p>
+                        <p className="text-gray-500">
+                          Using Gemini 2.0 Flash to generate character fusion
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  ) : generatedImage ? (
+                    <div className="space-y-4">
+                      <div className="relative group">
+                        <img
+                          src={generatedImage}
+                          alt="AI Generated Artwork"
+                          className="w-full rounded-lg shadow-xl"
+                          style={{ maxHeight: "580px", objectFit: "contain" }}
+                          data-testid="img-result"
+                        />
+                      </div>
+                      <Button
+                        onClick={downloadImage}
+                        className="w-full h-12 text-base font-bold bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 transform hover:scale-[1.02] transition-all"
+                        data-testid="btn-download-main"
+                      >
+                        <Download className="w-5 h-5 mr-2" />
+                        Download High-Quality Image
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="h-full flex items-center justify-center" style={{ minHeight: "600px" }}>
+                      <div className="text-center">
+                        <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-full flex items-center justify-center">
+                          <Sparkles className="w-14 h-14 text-orange-500" />
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-3">
+                          Your AI Artwork Will Appear Here
+                        </h3>
+                        <p className="text-gray-500 max-w-md mx-auto">
+                          Upload reference images, sketch a pose, add a scene description,
+                          and click Generate to create amazing AI art
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </Card>
           </div>

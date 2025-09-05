@@ -38,24 +38,37 @@ export async function generatePoseFusion(
       }
     });
 
-    // Create the fusion prompt
+    // Create the fusion prompt with enhanced character consistency instructions
     const fusionPrompt = `
-You are an expert AI artist specializing in character fusion and pose transfer.
+CRITICAL TASK: Character-Consistent Pose Transfer
 
-Task: Create a new illustration by combining these elements:
-1. Character appearance from the reference image(s) (first ${referenceImages.length} images)
-2. Exact pose from the sketch (last image with white lines on dark background)
-3. Scene and atmosphere: ${sceneDescription}
+You must create an illustration that EXACTLY preserves character identity while applying a new pose.
 
-Critical requirements:
-- MAINTAIN exact character features from references (hair, clothing, colors, style)
-- FOLLOW the pose sketch precisely - match all body positions and gestures
-- Blend characters naturally into the requested scene
-- Use professional anime/manga illustration style
-- Ensure high quality, vibrant colors, and clear details
-- Aspect ratio: ${aspectRatio}
+INPUTS PROVIDED:
+• Reference Character(s): First ${referenceImages.length} image(s) - These show the EXACT character(s) to replicate
+• Pose Guide: Last image - White skeletal lines on dark background showing the target pose
+• Scene Request: "${sceneDescription}"
 
-Generate a cohesive, high-quality illustration that perfectly combines all these elements.`;
+MANDATORY PRESERVATION (from reference images):
+✓ Exact facial features, eye color, eye shape
+✓ Exact hairstyle, hair color, hair accessories
+✓ Exact clothing design, colors, patterns
+✓ Body proportions and build
+✓ Art style and rendering quality
+✓ Any unique accessories or distinctive features
+
+POSE REQUIREMENTS (from sketch):
+✓ Match the exact body positioning shown in the white line sketch
+✓ Preserve gesture and limb angles precisely
+✓ Maintain spatial relationships if multiple figures
+
+OUTPUT SPECIFICATIONS:
+• Aspect ratio: ${aspectRatio}
+• Style: Maintain the exact art style from reference
+• Quality: High detail, clean lines, vibrant colors
+• Consistency: The character(s) must be 100% recognizable as the same from the reference
+
+Generate the final illustration now, ensuring perfect character consistency.`;
 
     // Use Gemini's image generation with references
     const response = await ai.models.generateContent({
