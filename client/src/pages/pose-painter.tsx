@@ -433,7 +433,7 @@ const PosePainter = () => {
                             <img 
                               src={referenceImages[index]!} 
                               alt={`Reference ${index + 1}`}
-                              className="w-full h-40 object-cover rounded-lg border-2 border-yellow-300"
+                              className="w-full h-40 object-contain bg-gray-50 rounded-lg border-2 border-yellow-300"
                               data-testid={`img-ref-${index}`}
                             />
                             <button

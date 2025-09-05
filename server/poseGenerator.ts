@@ -38,37 +38,39 @@ export async function generatePoseFusion(
       }
     });
 
-    // Create the fusion prompt with enhanced character consistency instructions
+    // Create the fusion prompt with strict character consistency and pose matching
     const fusionPrompt = `
-CRITICAL TASK: Character-Consistent Pose Transfer
+TASK: Generate image with EXACT character consistency and pose matching.
 
-You must create an illustration that EXACTLY preserves character identity while applying a new pose.
+INPUT ANALYSIS:
+1. Reference characters (first ${referenceImages.length} images): These are the EXACT characters to reproduce
+2. Pose sketch (last image): White lines on dark background showing target poses
+3. Scene: ${sceneDescription}
 
-INPUTS PROVIDED:
-• Reference Character(s): First ${referenceImages.length} image(s) - These show the EXACT character(s) to replicate
-• Pose Guide: Last image - White skeletal lines on dark background showing the target pose
-• Scene Request: "${sceneDescription}"
+STRICT REQUIREMENTS:
 
-MANDATORY PRESERVATION (from reference images):
-✓ Exact facial features, eye color, eye shape
-✓ Exact hairstyle, hair color, hair accessories
-✓ Exact clothing design, colors, patterns
-✓ Body proportions and build
-✓ Art style and rendering quality
-✓ Any unique accessories or distinctive features
+CHARACTER CONSISTENCY (100% match from reference):
+- Face: EXACT same facial features, eye shape, eye color, expressions
+- Hair: EXACT same hairstyle, color, length, accessories
+- Clothing: EXACT same outfit, colors, patterns, details
+- Accessories: ALL same items (glasses, jewelry, bags, etc)
+- Art style: MAINTAIN exact style from reference image
 
-POSE REQUIREMENTS (from sketch):
-✓ Match the exact body positioning shown in the white line sketch
-✓ Preserve gesture and limb angles precisely
-✓ Maintain spatial relationships if multiple figures
+POSE ACCURACY (from sketch):
+- Body position: EXACTLY match the white line sketch positions
+- Arms: Match exact arm positions and angles
+- Legs: Match exact leg positions and stances  
+- Head tilt: Match head angle if visible
+- If multiple figures: Preserve exact spatial relationships
 
-OUTPUT SPECIFICATIONS:
-• Aspect ratio: ${aspectRatio}
-• Style: Maintain the exact art style from reference
-• Quality: High detail, clean lines, vibrant colors
-• Consistency: The character(s) must be 100% recognizable as the same from the reference
+SCENE INTEGRATION:
+- Place characters naturally in: ${sceneDescription}
+- Maintain lighting consistent with scene
+- Add appropriate background elements
 
-Generate the final illustration now, ensuring perfect character consistency.`;
+CRITICAL: The generated characters MUST be immediately recognizable as the SAME characters from the reference images, just in the new pose from the sketch.
+
+Aspect ratio: ${aspectRatio}`;
 
     // Use Gemini's image generation with references
     const response = await ai.models.generateContent({
@@ -125,11 +127,26 @@ export async function generatePoseFusionEdit(
     const poseBase64 = poseSketch.replace(/^data:image\/\w+;base64,/, "");
 
     const editPrompt = `
-Edit this image to match the pose shown in the sketch while maintaining the character's appearance.
-The sketch shows white lines indicating the desired pose.
-Additional requirements: ${prompt}
-Keep the character's face, hair, clothing, and colors exactly the same.
-Only change the pose to match the sketch.`;
+CRITICAL: Character-consistent pose editing task.
+
+INPUTS:
+1. Original character image (first image) - This is the EXACT character to preserve
+2. Target pose sketch (second image) - White lines showing the new pose to apply
+3. Scene request: ${prompt}
+
+MANDATORY PRESERVATION:
+- Face: Keep EXACT same facial features, expressions, eye color
+- Hair: Keep EXACT same hairstyle, color, accessories
+- Clothing: Keep EXACT same outfit, patterns, colors, details
+- Accessories: Keep ALL items (glasses, jewelry, etc)
+- Art style: Maintain EXACT rendering style
+
+POSE CHANGE:
+- Body position: Change to EXACTLY match the white line sketch
+- Arms/legs: Match the exact positions shown in sketch
+- Maintain character proportions
+
+The result MUST be the SAME character, just in the new pose.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-preview-image-generation", 
