@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import multer, { MulterError } from "multer";
 import { generateImage, generateImageFromText } from "./gemini";
 import { promptOptimizerService } from "./promptOptimizer";
+import { generatePoseImage, enhancePrompt } from "./gemini";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -235,6 +236,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error recording success:", error);
       res.status(500).json({ error: "Failed to record success" });
+    }
+  });
+
+  // Pose Painter API endpoint
+  app.post("/api/generate-pose-image", async (req, res) => {
+    try {
+      const { referenceImages, poseSketch, sceneDescription, aspectRatio } = req.body;
+
+      // Validate required fields
+      if (!referenceImages || !Array.isArray(referenceImages) || referenceImages.length === 0) {
+        return res.status(400).json({ error: "At least one reference image is required" });
+      }
+
+      if (!poseSketch) {
+        return res.status(400).json({ error: "Pose sketch is required" });
+      }
+
+      if (!sceneDescription || !sceneDescription.trim()) {
+        return res.status(400).json({ error: "Scene description is required" });
+      }
+
+      // Generate the pose image
+      const result = await generatePoseImage({
+        referenceImages,
+        poseSketch,
+        sceneDescription: sceneDescription.trim(),
+        aspectRatio: aspectRatio || "1:1"
+      });
+
+      if (!result.success) {
+        return res.status(500).json({ error: result.error });
+      }
+
+      // Convert image buffer to base64 for frontend display
+      if (result.imageData) {
+        const base64Image = `data:image/png;base64,${result.imageData.toString('base64')}`;
+        res.json({ 
+          success: true, 
+          imageUrl: base64Image,
+          message: "Image generated successfully"
+        });
+      } else {
+        res.status(500).json({ error: "No image data received" });
+      }
+
+    } catch (error) {
+      console.error("Error in pose generation endpoint:", error);
+      res.status(500).json({ 
+        error: "Internal server error during image generation",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Enhance prompt endpoint for pose painter
+  app.post("/api/enhance-pose-prompt", async (req, res) => {
+    try {
+      const { prompt } = req.body;
+
+      if (!prompt || !prompt.trim()) {
+        return res.status(400).json({ error: "Prompt is required" });
+      }
+
+      const enhancedPrompt = await enhancePrompt(prompt.trim());
+      res.json({ 
+        success: true, 
+        enhancedPrompt,
+        originalPrompt: prompt
+      });
+
+    } catch (error) {
+      console.error("Error enhancing prompt:", error);
+      res.status(500).json({ 
+        error: "Failed to enhance prompt",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
     }
   });
 

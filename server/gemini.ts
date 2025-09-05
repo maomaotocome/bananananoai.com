@@ -99,6 +99,187 @@ export async function generateImage(
   }
 }
 
+export interface PoseGenerationRequest {
+  referenceImages: string[];
+  poseSketch: string;
+  sceneDescription: string;
+  aspectRatio: string;
+}
+
+export async function generatePoseImage({
+  referenceImages,
+  poseSketch,
+  sceneDescription,
+  aspectRatio
+}: PoseGenerationRequest): Promise<GenerateImageResponse> {
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY environment variable is not set");
+    }
+
+    // Prepare all image inputs
+    const imageParts = [];
+    
+    // Add reference images
+    for (const refImage of referenceImages) {
+      const base64Data = refImage.includes(',') ? refImage.split(',')[1] : refImage;
+      imageParts.push({
+        inlineData: {
+          data: base64Data,
+          mimeType: "image/png"
+        }
+      });
+    }
+
+    // Add pose sketch
+    const sketchData = poseSketch.includes(',') ? poseSketch.split(',')[1] : poseSketch;
+    imageParts.push({
+      inlineData: {
+        data: sketchData,
+        mimeType: "image/png"
+      }
+    });
+
+    // Create comprehensive prompt for character consistency and pose generation
+    const prompt = `You are an expert character artist. Create a stunning character illustration based on the provided reference images and pose sketch.
+
+REFERENCE IMAGES: The first ${referenceImages.length} image(s) show the character's appearance, clothing, and style that must be maintained exactly.
+
+POSE SKETCH: The final image is a simple line drawing showing the exact pose the character should be in.
+
+SCENE DESCRIPTION: ${sceneDescription}
+
+REQUIREMENTS:
+1. Maintain EXACT character consistency from the reference images:
+   - Facial features, hair style and color
+   - Clothing details and colors  
+   - Body proportions and distinctive characteristics
+   - Art style and aesthetic
+
+2. Follow the EXACT pose from the sketch:
+   - Body positioning and stance
+   - Arm and leg placement
+   - Head orientation
+   - Overall composition
+
+3. Create the scene with:
+   - ${sceneDescription}
+   - High-quality, detailed artwork
+   - Proper lighting and atmosphere
+   - ${aspectRatio} aspect ratio
+   - Professional illustration quality
+
+Generate a beautiful, detailed character illustration that perfectly combines the character from the reference images with the pose from the sketch in the described scene.`;
+
+    // Try image generation
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-image-preview",
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: prompt },
+              ...imageParts
+            ],
+          },
+        ],
+        config: {
+          responseModalities: [Modality.TEXT, Modality.IMAGE],
+        },
+      });
+    } catch (quotaError: any) {
+      if (quotaError.status === 429 || quotaError.message?.includes('quota') || quotaError.message?.includes('exceeded')) {
+        return {
+          success: false,
+          error: "Free tier quota exceeded. Please try again later or upgrade to a paid plan for unlimited access."
+        };
+      }
+      throw quotaError;
+    }
+
+    const candidates = response.candidates;
+    if (!candidates || candidates.length === 0) {
+      throw new Error("No candidates returned from Gemini API");
+    }
+
+    const content = candidates[0].content;
+    if (!content || !content.parts) {
+      throw new Error("No content parts in response");
+    }
+
+    // Find the image part in the response
+    for (const part of content.parts) {
+      if (part.inlineData && part.inlineData.data) {
+        const imageData = Buffer.from(part.inlineData.data, "base64");
+        return {
+          success: true,
+          imageData: imageData,
+        };
+      }
+    }
+
+    // If no image found, return text explanation
+    const textPart = content.parts.find(part => part.text);
+    if (textPart) {
+      return {
+        success: false,
+        error: `Image generation not available. Text response: ${textPart.text}`
+      };
+    }
+
+    throw new Error("No image or text content in response");
+
+  } catch (error) {
+    console.error("Error generating pose image:", error);
+    return {
+      success: false,
+      error: `Failed to generate pose image: ${error}`
+    };
+  }
+}
+
+export async function enhancePrompt(userPrompt: string): Promise<string> {
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      return userPrompt;
+    }
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `You are an expert at writing prompts for AI image generation. 
+              Enhance this user prompt to be more detailed and effective for character pose generation:
+              
+              "${userPrompt}"
+              
+              Add specific details about:
+              - Visual style and art quality
+              - Lighting and atmosphere  
+              - Character details and clothing
+              - Background and environment
+              - Pose dynamics and emotion
+              
+              Keep it concise but comprehensive. Return only the enhanced prompt.`
+            }
+          ]
+        }
+      ]
+    });
+
+    const result = response.candidates?.[0]?.content?.parts?.[0]?.text;
+    return result?.trim() || userPrompt;
+  } catch (error) {
+    console.error("Error enhancing prompt:", error);
+    return userPrompt;
+  }
+}
+
 export async function generateImageFromText(prompt: string): Promise<GenerateImageResponse> {
   try {
     if (!process.env.GEMINI_API_KEY) {

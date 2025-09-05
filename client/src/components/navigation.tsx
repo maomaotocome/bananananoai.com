@@ -10,6 +10,7 @@ export default function Navigation() {
 
   const navigation = [
     { name: "Features", href: "/#features" },
+    { name: "🎨 Pose Painter", href: "/pose-painter" },
     { name: "Examples", href: "/examples" },
     { name: "Tutorials", href: "/tutorials" },
     { name: "How to Use", href: "/how-to-use" },

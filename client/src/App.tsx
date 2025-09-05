@@ -23,6 +23,7 @@ import OutreachStrategy from "@/pages/outreach-strategy";
 import LandingFunnel from "@/pages/landing-funnel";
 import FAQ from "@/pages/faq";
 import NotFound from "@/pages/not-found";
+import PosePainter from "@/pages/pose-painter";
 
 function Router() {
   console.log("Router component is rendering");
@@ -47,6 +48,7 @@ function Router() {
           <Route path="/outreach-strategy" component={OutreachStrategy} />
           <Route path="/landing-funnel" component={LandingFunnel} />
           <Route path="/faq" component={FAQ} />
+          <Route path="/pose-painter" component={PosePainter} />
           <Route component={NotFound} />
         </Switch>
       </main>
