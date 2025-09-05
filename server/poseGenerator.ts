@@ -65,7 +65,7 @@ Generate a cohesive, high-quality illustration that perfectly combines all these
         { text: fusionPrompt }
       ],
       config: {
-        responseModalities: [Modality.IMAGE],
+        responseModalities: [Modality.IMAGE, Modality.TEXT],
       }
     });
 
@@ -136,7 +136,7 @@ Only change the pose to match the sketch.`;
         { text: editPrompt }
       ],
       config: {
-        responseModalities: [Modality.IMAGE],
+        responseModalities: [Modality.IMAGE, Modality.TEXT],
       }
     });
 
