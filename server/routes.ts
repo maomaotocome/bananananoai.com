@@ -190,15 +190,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { referenceImages, poseSketch, sceneDescription, aspectRatio } = req.body;
 
       if (!referenceImages || !Array.isArray(referenceImages) || referenceImages.length === 0) {
-        return res.status(400).json({ error: "至少需要一张参考图片" });
+        return res.status(400).json({ error: "At least one reference image is required" });
       }
 
       if (!poseSketch) {
-        return res.status(400).json({ error: "需要姿势草图" });
+        return res.status(400).json({ error: "Pose sketch is required" });
       }
 
       if (!sceneDescription || !sceneDescription.trim()) {
-        return res.status(400).json({ error: "需要场景描述" });
+        return res.status(400).json({ error: "Scene description is required" });
       }
 
       // Use the new pose fusion generator for better character consistency
@@ -216,7 +216,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.json({
           success: true,
           imageUrl: base64Image,
-          message: "角色融合图像生成成功"
+          message: "Character fusion image generated successfully"
         });
       } else {
         // Fallback to edit approach if fusion fails
@@ -241,14 +241,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         res.status(500).json({
           success: false,
-          error: result.error || "图像生成失败，请重试"
+          error: result.error || "Image generation failed, please try again"
         });
       }
 
     } catch (error) {
       console.error("Pose generation error:", error);
       res.status(500).json({ 
-        error: error instanceof Error ? error.message : "图像生成失败，请重试" 
+        error: error instanceof Error ? error.message : "Image generation failed, please try again" 
       });
     }
   });

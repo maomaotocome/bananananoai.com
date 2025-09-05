@@ -38,11 +38,11 @@ const PosePainter = () => {
 
   // Popular prompts that work well
   const popularPrompts = [
-    "两个朋友在樱花树下击掌庆祝，粉色花瓣飘落，温暖阳光",
-    "魔法学院的两个学生施展魔法，闪耀的魔法光效，奇幻背景",
-    "赛博朋克城市中的两个角色，霓虹灯光，未来科技感",
-    "两个冒险者在山顶眺望日落，壮美风景，史诗氛围",
-    "校园祭典上两个学生跳舞，彩色灯光，欢乐气氛"
+    "Two friends high-fiving under cherry blossoms, pink petals falling, warm sunlight",
+    "Two magic academy students casting spells, shimmering magical effects, fantasy background",
+    "Two characters in a cyberpunk city, neon lights, futuristic tech atmosphere",
+    "Two adventurers overlooking sunset from mountain peak, epic scenery, dramatic lighting",
+    "Two students dancing at school festival, colorful lights, joyful celebration"
   ];
 
   // Fixed canvas drawing (solves mouse position offset)
@@ -258,7 +258,7 @@ const PosePainter = () => {
     
     const file = files[0];
     if (!file.type.startsWith("image/")) {
-      setError("请上传图片文件");
+      setError("Please upload an image file");
       return;
     }
     
@@ -285,31 +285,31 @@ const PosePainter = () => {
   const generateImage = async () => {
     // Validation
     if (!referenceImages.some(img => img !== null)) {
-      setError("请至少上传一张参考图片");
+      setError("Please upload at least one reference image");
       return;
     }
     
     const canvas = canvasRef.current;
     if (!canvas) {
-      setError("画布未初始化");
+      setError("Canvas not initialized");
       return;
     }
     
     // Check if canvas has drawings
     const ctx = canvas.getContext("2d");
     if (!ctx) {
-      setError("无法获取画布上下文");
+      setError("Cannot get canvas context");
       return;
     }
     
     if (!prompt.trim()) {
-      setError("请输入场景描述");
+      setError("Please enter a scene description");
       return;
     }
     
     setIsGenerating(true);
     setError("");
-    setStatusMessage("正在生成角色融合图像...");
+    setStatusMessage("Generating character fusion image...");
     
     try {
       const poseSketch = canvas.toDataURL("image/png");
@@ -333,12 +333,12 @@ const PosePainter = () => {
       
       const result = await response.json();
       setGeneratedImage(result.imageUrl);
-      setStatusMessage("生成成功！");
+      setStatusMessage("Generation successful!");
       trackEvent("generate_success", "pose_painter");
       
     } catch (error) {
       console.error("Generation error:", error);
-      setError(error instanceof Error ? error.message : "生成失败，请重试");
+      setError(error instanceof Error ? error.message : "Generation failed, please try again");
       setStatusMessage("");
     } finally {
       setIsGenerating(false);
@@ -375,9 +375,9 @@ const PosePainter = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100">
       <SEOHead 
-        title="AI Character Fusion Studio - 角色融合AI | Banana Nano AI"
-        description="使用AI技术创建角色融合艺术。上传参考图像，绘制姿势，生成独特的AI插画。"
-        keywords="AI角色融合, pose painter, AI艺术生成器, 角色插画"
+        title="AI Character Fusion Studio - Pose Painter | Banana Nano AI"
+        description="Create AI character fusion art. Upload reference images, sketch poses, and generate unique AI illustrations."
+        keywords="AI character fusion, pose painter, AI art generator, character illustration"
       />
       
       {/* Header */}
@@ -392,7 +392,7 @@ const PosePainter = () => {
                 AI Character Fusion Studio
               </h1>
               <p className="text-gray-600 text-sm">
-                融合参考图像、姿势草图和文字描述，创造独特的AI艺术
+                Blend reference images, pose sketches, and text prompts into unique AI-generated art
               </p>
             </div>
           </div>
@@ -459,7 +459,7 @@ const PosePainter = () => {
                                 Reference Image {index + 1}
                               </span>
                               <span className="text-xs text-gray-500 mt-1">
-                                点击上传
+                                Click to upload
                               </span>
                             </div>
                           </label>
@@ -499,7 +499,7 @@ const PosePainter = () => {
                       className="text-xs"
                       data-testid="preset-standing"
                     >
-                      🧍‍♀️🧍‍♂️ 站立
+                      🧍‍♀️🧍‍♂️ Standing
                     </Button>
                     <Button
                       onClick={() => addPresetPose("dancing")}
@@ -508,7 +508,7 @@ const PosePainter = () => {
                       className="text-xs"
                       data-testid="preset-dancing"
                     >
-                      💃🕺 跳舞
+                      💃🕺 Dancing
                     </Button>
                     <Button
                       onClick={() => addPresetPose("highfive")}
@@ -517,7 +517,7 @@ const PosePainter = () => {
                       className="text-xs"
                       data-testid="preset-highfive"
                     >
-                      🙋‍♀️🙋‍♂️ 击掌
+                      🙋‍♀️🙋‍♂️ High Five
                     </Button>
                     <Button
                       onClick={() => addPresetPose("sitting")}
@@ -526,7 +526,7 @@ const PosePainter = () => {
                       className="text-xs"
                       data-testid="preset-sitting"
                     >
-                      🪑 坐着
+                      🪑 Sitting
                     </Button>
                   </div>
                   
@@ -573,7 +573,7 @@ const PosePainter = () => {
                     </div>
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
-                    使用预设姿势或自由绘制。白色画笔绘制角色姿势。
+                    Use preset poses or draw freely. White brush draws character poses.
                   </p>
                 </div>
 
@@ -601,12 +601,12 @@ const PosePainter = () => {
                 {/* Prompt */}
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 block">
-                    Prompt - 场景描述
+                    Prompt - Scene Description
                   </label>
                   
                   {/* Popular prompts */}
                   <div className="mb-3 space-y-1">
-                    <p className="text-xs text-gray-500">流行玩法：</p>
+                    <p className="text-xs text-gray-500">Popular examples:</p>
                     <div className="flex flex-wrap gap-2">
                       {popularPrompts.map((example, i) => (
                         <button
@@ -624,7 +624,7 @@ const PosePainter = () => {
                   <Textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="描述场景、背景、氛围..."
+                    placeholder="Describe the scene, background, atmosphere..."
                     className="min-h-[80px]"
                     data-testid="textarea-prompt"
                   />
@@ -659,7 +659,7 @@ const PosePainter = () => {
                   {isGenerating ? (
                     <>
                       <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
-                      生成中...
+                      Generating...
                     </>
                   ) : (
                     <>
@@ -719,7 +719,7 @@ const PosePainter = () => {
                     <div className="text-center">
                       <Sparkles className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                       <p className="text-gray-500 text-sm">
-                        生成的图像将显示在这里
+                        Generated image will appear here
                       </p>
                     </div>
                   </div>
