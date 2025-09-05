@@ -183,6 +183,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Pose Painter specific endpoint
+  app.post("/api/generate-pose-image", async (req, res) => {
+    try {
+      const { referenceImages, poseSketch, sceneDescription, aspectRatio } = req.body;
+
+      if (!referenceImages || !Array.isArray(referenceImages) || referenceImages.length === 0) {
+        return res.status(400).json({ error: "至少需要一张参考图片" });
+      }
+
+      if (!poseSketch) {
+        return res.status(400).json({ error: "需要姿势草图" });
+      }
+
+      if (!sceneDescription || !sceneDescription.trim()) {
+        return res.status(400).json({ error: "需要场景描述" });
+      }
+
+      // Create detailed prompt for character fusion
+      const prompt = `Create a high-quality illustration combining the following elements:
+
+1. Character Reference: Use the visual style, clothing, and appearance from the reference image(s) provided
+2. Pose: Follow the exact pose shown in the pose sketch
+3. Scene: ${sceneDescription}
+4. Aspect Ratio: ${aspectRatio}
+
+Important requirements:
+- Maintain character consistency from reference images
+- Follow the pose sketch precisely
+- Create a cohesive, well-composed illustration
+- Use vibrant colors and professional art style
+- Ensure characters are clearly visible and well-integrated into the scene
+
+Style: Digital illustration, anime/manga style, high quality, detailed`;
+
+      const result = await generateImageFromText(prompt);
+      
+      if (result.success && result.imageData) {
+        // Convert buffer to base64 data URL for frontend
+        const base64Image = `data:image/png;base64,${result.imageData.toString('base64')}`;
+        
+        res.json({
+          success: true,
+          imageUrl: base64Image,
+          message: "角色融合图像生成成功"
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: result.error || "图像生成失败，请重试"
+        });
+      }
+
+    } catch (error) {
+      console.error("Pose generation error:", error);
+      res.status(500).json({ 
+        error: error instanceof Error ? error.message : "图像生成失败，请重试" 
+      });
+    }
+  });
+
   // Prompt optimization endpoints
   app.post("/api/optimize-prompt", async (req, res) => {
     try {
