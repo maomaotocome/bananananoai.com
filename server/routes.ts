@@ -4,6 +4,7 @@ import multer, { MulterError } from "multer";
 import { generateImage, generateImageFromText } from "./gemini";
 import { promptOptimizerService } from "./promptOptimizer";
 import { generatePoseImage, enhancePrompt } from "./gemini";
+import { generatePoseFusion, generatePoseFusionEdit } from "./poseGenerator";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -200,24 +201,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "需要场景描述" });
       }
 
-      // Create detailed prompt for character fusion
-      const prompt = `Create a high-quality illustration combining the following elements:
-
-1. Character Reference: Use the visual style, clothing, and appearance from the reference image(s) provided
-2. Pose: Follow the exact pose shown in the pose sketch
-3. Scene: ${sceneDescription}
-4. Aspect Ratio: ${aspectRatio}
-
-Important requirements:
-- Maintain character consistency from reference images
-- Follow the pose sketch precisely
-- Create a cohesive, well-composed illustration
-- Use vibrant colors and professional art style
-- Ensure characters are clearly visible and well-integrated into the scene
-
-Style: Digital illustration, anime/manga style, high quality, detailed`;
-
-      const result = await generateImageFromText(prompt);
+      // Use the new pose fusion generator for better character consistency
+      const result = await generatePoseFusion(
+        referenceImages,
+        poseSketch,
+        sceneDescription,
+        aspectRatio
+      );
       
       if (result.success && result.imageData) {
         // Convert buffer to base64 data URL for frontend
@@ -229,6 +219,26 @@ Style: Digital illustration, anime/manga style, high quality, detailed`;
           message: "角色融合图像生成成功"
         });
       } else {
+        // Fallback to edit approach if fusion fails
+        if (referenceImages.length === 1) {
+          const editResult = await generatePoseFusionEdit(
+            referenceImages[0],
+            poseSketch,
+            sceneDescription
+          );
+          
+          if (editResult.success && editResult.imageData) {
+            const base64Image = `data:image/png;base64,${editResult.imageData.toString('base64')}`;
+            
+            res.json({
+              success: true,
+              imageUrl: base64Image,
+              message: "角色融合图像生成成功"
+            });
+            return;
+          }
+        }
+        
         res.status(500).json({
           success: false,
           error: result.error || "图像生成失败，请重试"
