@@ -389,10 +389,10 @@ const PosePainter = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-800">
-                AI Character Fusion Studio
+                AI Character Fusion Studio (Nano Banana)
               </h1>
               <p className="text-gray-600 text-sm">
-                Blend reference images, pose sketches, and text prompts into unique AI-generated art
+                Powered by Gemini 2.5 Flash Image - Blend characters, poses, and scenes with perfect consistency
               </p>
             </div>
           </div>
@@ -708,7 +708,7 @@ const PosePainter = () => {
                           Creating your AI artwork...
                         </p>
                         <p className="text-gray-500">
-                          Using Gemini 2.0 Flash to generate character fusion
+                          Using Nano Banana (Gemini 2.5 Flash Image) for character consistency
                         </p>
                       </div>
                     </div>

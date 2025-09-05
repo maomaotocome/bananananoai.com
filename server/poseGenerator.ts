@@ -72,9 +72,9 @@ CRITICAL: The generated characters MUST be immediately recognizable as the SAME 
 
 Aspect ratio: ${aspectRatio}`;
 
-    // Use Gemini's image generation with references
+    // Use Gemini 2.5 Flash Image (aka Nano Banana) for better character consistency
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-preview-image-generation",
+      model: "gemini-2.5-flash-image-preview",
       contents: [
         ...imageInputs,
         { text: fusionPrompt }
@@ -149,7 +149,7 @@ POSE CHANGE:
 The result MUST be the SAME character, just in the new pose.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-preview-image-generation", 
+      model: "gemini-2.5-flash-image-preview", 
       contents: [
         {
           inlineData: {
