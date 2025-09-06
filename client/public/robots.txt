@@ -20,6 +20,7 @@ Crawl-delay: 1
 # High priority pages for search engines
 # Homepage and main product features
 Allow: /
+Allow: /pose-painter
 Allow: /how-to-use
 Allow: /examples
 Allow: /faq
