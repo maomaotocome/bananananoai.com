@@ -120,7 +120,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create viral content with <strong>Banana Nano Ai</strong> - the breakthrough <strong>Banana Nano Ai</strong> AI that took social media by storm. This revolutionary <strong>Banana Nano Ai</strong> platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals. <Link href="/examples" className="text-primary hover:text-primary/80 underline">See examples</Link> of what's possible or <Link href="/how-to-use" className="text-primary hover:text-primary/80 underline">learn how to get started</Link>.
+              Create viral content with <strong>Banana Nano Ai</strong> - the breakthrough <strong>Banana Nano Ai</strong> AI that took social media by storm. This revolutionary <strong>Banana Nano Ai</strong> platform uses advanced technology to deliver professional results with lightning-fast processing for stunning visuals. <Link href="/examples" className="text-primary hover:text-primary/80 underline font-semibold" data-testid="hero-examples-link">See examples</Link> of what's possible, <Link href="/how-to-use" className="text-primary hover:text-primary/80 underline font-semibold" data-testid="hero-guide-link">learn how to get started</Link>, explore our <Link href="/tutorials" className="text-primary hover:text-primary/80 underline font-semibold" data-testid="hero-tutorials-link">step-by-step tutorials</Link>, or discover <Link href="/blog" className="text-primary hover:text-primary/80 underline font-semibold" data-testid="hero-blog-link">latest AI editing techniques</Link>.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 min-h-[80px]">
@@ -175,7 +175,7 @@ export default function Home() {
               Transform Images with <span className="gradient-text">Banana Nano Ai</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Experience the power of <strong>Banana Nano Ai</strong> AI image editing with <strong>Banana Nano Ai</strong> technology. Upload your photo and describe the changes you want in natural language. Our advanced <strong>Banana Nano Ai</strong> technology delivers professional results instantly with unprecedented quality and speed.
+              Experience the power of <strong>Banana Nano Ai</strong> AI image editing with <strong>Banana Nano Ai</strong> technology. Upload your photo and describe the changes you want in natural language. Our advanced <strong>Banana Nano Ai</strong> technology delivers professional results instantly with unprecedented quality and speed. New to AI editing? Start with our <Link href="/how-to-use" className="text-primary hover:text-primary/80 underline font-medium" data-testid="editor-guide-link">beginner's guide</Link> or try the powerful <Link href="/pose-painter" className="text-primary hover:text-primary/80 underline font-medium" data-testid="editor-pose-painter-link">Pose Painter tool</Link>.
             </p>
           </div>
           {/* Step indicator with fixed height */}
@@ -240,10 +240,10 @@ export default function Home() {
             <div>
               <h3 className="text-2xl font-bold mb-6">Revolutionary AI Image Editor Technology</h3>
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                <strong>Banana Nano Ai</strong> represents the next generation of AI-powered image editing technology. Built on Google's advanced Gemini 2.5 Flash Image model, this revolutionary <strong>Banana Nano Ai</strong> platform combines cutting-edge machine learning with intuitive design, making professional-grade image editing accessible to everyone worldwide.
+                <strong>Banana Nano Ai</strong> represents the next generation of AI-powered image editing technology. Built on Google's advanced Gemini 2.5 Flash Image model, this revolutionary <strong>Banana Nano Ai</strong> platform combines cutting-edge machine learning with intuitive design, making professional-grade image editing accessible to everyone worldwide. Discover more details in our <Link href="/api" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-api-link">technical documentation</Link> or see real-world applications in our <Link href="/case-studies" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-case-studies-link">success stories</Link>.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                Unlike traditional image editors that require complex skills and expensive software, <strong>Banana Nano Ai</strong> uses natural language processing to understand your creative vision. Simply describe what you want in plain English, and watch as our advanced <strong>Nano Banana AI</strong> technology transforms your ideas into stunning visual reality with unprecedented precision and speed.
+                Unlike traditional image editors that require complex skills and expensive software, <strong>Banana Nano Ai</strong> uses natural language processing to understand your creative vision. Simply describe what you want in plain English, and watch as our advanced <strong>Nano Banana AI</strong> technology transforms your ideas into stunning visual reality with unprecedented precision and speed. Master the platform with our comprehensive <Link href="/tutorials" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-tutorials-link">video tutorials</Link> and get answers to common questions in our <Link href="/faq" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-faq-link">FAQ section</Link>.
               </p>
             </div>
             <div className="bg-muted/30 rounded-xl p-8">
@@ -345,7 +345,7 @@ export default function Home() {
           
           <div className="mt-12 text-center">
             <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
-              The technology behind <strong>Banana Nano Ai</strong> has been rigorously tested and validated by millions of users worldwide, earning recognition for its superior performance in competitive benchmarks. Content creators, professional designers, marketing agencies, and businesses across industries rely on this <strong>Nano Banana AI</strong> platform for its consistency, quality, and ease of use. From complex virtual try-ons to seamless background replacements, <strong>Banana Nano Ai</strong> handles even the most challenging editing tasks with remarkable precision and reliability.
+              The technology behind <strong>Banana Nano Ai</strong> has been rigorously tested and validated by millions of users worldwide, earning recognition for its superior performance in competitive benchmarks. Content creators, professional designers, marketing agencies, and businesses across industries rely on this <strong>Nano Banana AI</strong> platform for its consistency, quality, and ease of use. From complex virtual try-ons to seamless background replacements, <strong>Banana Nano Ai</strong> handles even the most challenging editing tasks with remarkable precision and reliability. Explore <Link href="/examples" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-examples-link">real examples</Link> of these capabilities, read detailed <Link href="/case-studies" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-detailed-case-studies-link">case studies</Link> from successful users, or access our <Link href="/social-media-kit" className="text-primary hover:text-primary/80 underline font-medium" data-testid="content-social-kit-link">social media templates</Link> for viral content creation.
             </p>
           </div>
         </div>
@@ -386,7 +386,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Create with <span className="gradient-text">Banana Nano Ai</span>?</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join millions who trust <strong>Banana Nano Ai</strong> for professional image editing. Start creating amazing content today with our revolutionary AI technology.
+            Join millions who trust <strong>Banana Nano Ai</strong> for professional image editing. Start creating amazing content today with our revolutionary AI technology. Need help getting started? Check our <Link href="/how-to-use" className="text-primary hover:text-primary/80 underline font-medium" data-testid="cta-guide-link">beginner guide</Link>, watch <Link href="/tutorials" className="text-primary hover:text-primary/80 underline font-medium" data-testid="cta-tutorials-link">tutorial videos</Link>, or browse <Link href="/examples" className="text-primary hover:text-primary/80 underline font-medium" data-testid="cta-examples-link">inspiration gallery</Link>.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
