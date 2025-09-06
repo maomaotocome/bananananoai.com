@@ -42,25 +42,32 @@ export function SEOHead({
     updateMetaTag('description', description);
     updateMetaTag('keywords', keywords);
     
-    // Open Graph tags
+    // Open Graph tags - Enhanced
     updateMetaTag('og:title', title, true);
     updateMetaTag('og:description', description, true);
     updateMetaTag('og:image', image, true);
+    updateMetaTag('og:image:secure_url', image, true);
     updateMetaTag('og:image:width', '1200', true);
     updateMetaTag('og:image:height', '630', true);
     updateMetaTag('og:image:alt', title, true);
+    updateMetaTag('og:image:type', 'image/jpeg', true);
     updateMetaTag('og:url', url, true);
     updateMetaTag('og:type', type, true);
     updateMetaTag('og:site_name', 'Banana Nano Ai', true);
     updateMetaTag('og:locale', 'en_US', true);
+    updateMetaTag('og:locale:alternate', 'en_GB', true);
+    updateMetaTag('og:updated_time', new Date().toISOString(), true);
     
-    // Twitter Card tags
+    // Twitter Card tags - Enhanced
     updateMetaTag('twitter:card', 'summary_large_image');
     updateMetaTag('twitter:title', title);
     updateMetaTag('twitter:description', description);
     updateMetaTag('twitter:image', image);
+    updateMetaTag('twitter:image:alt', title);
     updateMetaTag('twitter:site', '@bananananoai');
     updateMetaTag('twitter:creator', '@bananananoai');
+    updateMetaTag('twitter:domain', 'bananananoai.com');
+    updateMetaTag('twitter:url', url);
     
     // Additional SEO tags
     updateMetaTag('robots', 'index, follow');

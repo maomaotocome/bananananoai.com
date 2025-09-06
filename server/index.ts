@@ -3,6 +3,32 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// Force HTTPS redirect in production
+app.use((req, res, next) => {
+  // Skip redirect for localhost and development
+  if (req.hostname === 'localhost' || req.hostname === '127.0.0.1' || process.env.NODE_ENV === 'development') {
+    return next();
+  }
+
+  // Redirect HTTP to HTTPS
+  if (req.header('x-forwarded-proto') !== 'https' && req.protocol !== 'https') {
+    return res.redirect(301, `https://${req.get('host')}${req.url}`);
+  }
+  
+  next();
+});
+
+// WWW to non-WWW redirect
+app.use((req, res, next) => {
+  if (req.hostname.startsWith('www.')) {
+    const nonWwwHost = req.hostname.replace(/^www\./, '');
+    const protocol = req.secure || req.header('x-forwarded-proto') === 'https' ? 'https' : 'http';
+    return res.redirect(301, `${protocol}://${nonWwwHost}${req.url}`);
+  }
+  next();
+});
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
