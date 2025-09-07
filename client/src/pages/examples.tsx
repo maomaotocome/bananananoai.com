@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { useState } from "react";
-import { 
-  Search, 
-  ArrowRight, 
-  Copy, 
+import {
+  Search,
+  ArrowRight,
+  Copy,
   Download,
   Heart,
   Star,
@@ -16,6 +16,7 @@ import {
   List
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function Examples() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -135,6 +136,7 @@ export default function Examples() {
 
   return (
     <div className="min-h-screen py-12">
+      <SEOHead {...seoConfigs.examples} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

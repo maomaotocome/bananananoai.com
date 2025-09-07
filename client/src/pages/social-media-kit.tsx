@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function SocialMediaKit() {
   const { toast } = useToast();
@@ -166,6 +167,7 @@ export default function SocialMediaKit() {
 
   return (
     <div className="min-h-screen py-12 bg-background">
+      <SEOHead {...seoConfigs.socialMediaKit} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

@@ -26,6 +26,12 @@ export const sitemapUrls: SitemapUrl[] = [
     priority: 0.8
   },
   {
+    url: 'https://bananananoai.com/blog',
+    lastmod: new Date().toISOString(),
+    changefreq: 'weekly',
+    priority: 0.7
+  },
+  {
     url: 'https://bananananoai.com/api',
     lastmod: new Date().toISOString(),
     changefreq: 'monthly',
@@ -42,6 +48,42 @@ export const sitemapUrls: SitemapUrl[] = [
     lastmod: new Date().toISOString(),
     changefreq: 'monthly',
     priority: 0.6
+  },
+  {
+    url: 'https://bananananoai.com/faq',
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.6
+  },
+  {
+    url: 'https://bananananoai.com/case-studies',
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.6
+  },
+  {
+    url: 'https://bananananoai.com/social-media-kit',
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.5
+  },
+  {
+    url: 'https://bananananoai.com/outreach-strategy',
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.5
+  },
+  {
+    url: 'https://bananananoai.com/landing-funnel',
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.5
+  },
+  {
+    url: 'https://bananananoai.com/pose-painter',
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.5
   }
 ];
 
