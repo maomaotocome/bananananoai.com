@@ -2,18 +2,19 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Code, 
-  Key, 
-  Zap, 
-  Shield, 
-  DollarSign, 
+import {
+  Code,
+  Key,
+  Zap,
+  Shield,
+  DollarSign,
   Copy,
   ExternalLink,
   CheckCircle
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function ApiDocs() {
   const { toast } = useToast();
@@ -195,6 +196,7 @@ echo $result;
 
   return (
     <div className="min-h-screen py-12">
+      <SEOHead {...seoConfigs.apiDocs} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

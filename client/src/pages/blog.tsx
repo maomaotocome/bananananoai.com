@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { useState } from "react";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 import { 
   Calendar, 
   Clock, 
@@ -120,6 +121,7 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen py-12 bg-background">
+      <SEOHead {...seoConfigs.blog} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

@@ -2,11 +2,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { 
-  TrendingUp, 
-  Users, 
-  DollarSign, 
-  ArrowRight, 
+import {
+  TrendingUp,
+  Users,
+  DollarSign,
+  ArrowRight,
   BarChart3,
   Target,
   Zap,
@@ -14,6 +14,7 @@ import {
   ExternalLink,
   Download
 } from "lucide-react";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function CaseStudies() {
   const caseStudies = [
@@ -112,6 +113,7 @@ export default function CaseStudies() {
 
   return (
     <div className="min-h-screen py-12 bg-background">
+      <SEOHead {...seoConfigs.caseStudies} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

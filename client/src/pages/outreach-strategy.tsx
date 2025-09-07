@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function OutreachStrategy() {
   const { toast } = useToast();
@@ -226,6 +227,7 @@ Best,
 
   return (
     <div className="min-h-screen py-12 bg-background">
+      <SEOHead {...seoConfigs.outreachStrategy} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

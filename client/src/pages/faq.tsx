@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { Link } from "wouter";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
+import { StructuredData } from "@/components/structured-data";
 
 export default function FAQ() {
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
@@ -319,6 +320,7 @@ export default function FAQ() {
   return (
     <div className="min-h-screen py-12 bg-background">
       <SEOHead {...seoConfigs.faq} />
+      <StructuredData type="FAQPage" data={{ faqs }} />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}

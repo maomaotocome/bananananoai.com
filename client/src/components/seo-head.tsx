@@ -155,5 +155,11 @@ export const seoConfigs = {
     description: "Strategic user acquisition funnel for Banana Nano Ai. Convert visitors to advocates with optimized landing pages and retention strategies.",
     keywords: "banana nano ai growth, nano banana ai funnel, user acquisition strategy, ai tool marketing funnel, conversion optimization",
     url: "https://bananananoai.com/landing-funnel"
+  },
+  whatIsNanoBanana: {
+    title: "What is Banana Nano Ai? Viral Story & Model Breakdown",
+    description: "Learn the origin of Banana Nano Ai, the viral AI model that topped leaderboards and sparked global curiosity.",
+    keywords: "what is banana nano ai, nano banana story, google nano banana ai, viral ai model",
+    url: "https://bananananoai.com/what-is-nano-banana"
   }
 };

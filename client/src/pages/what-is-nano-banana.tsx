@@ -3,10 +3,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ExternalLink, ArrowRight, Zap, Award, Globe, Code } from "lucide-react";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function WhatIsNanoBanana() {
   return (
     <div className="min-h-screen py-12">
+      <SEOHead {...seoConfigs.whatIsNanoBanana} />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
