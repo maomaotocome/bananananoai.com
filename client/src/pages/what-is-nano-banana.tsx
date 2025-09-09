@@ -3,10 +3,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ExternalLink, ArrowRight, Zap, Award, Globe, Code } from "lucide-react";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function WhatIsNanoBanana() {
   return (
     <div className="min-h-screen py-12">
+      <SEOHead 
+        title="What is Banana Nano Ai? Complete Guide to Google's Viral AI | 2025"
+        description="Discover the complete story of Banana Nano Ai - the viral AI that broke Twitter and topped LMArena with 2.5M votes. Learn about Google's revolutionary image editor."
+        keywords="what is banana nano ai, nano banana ai explained, google ai viral story, gemini image model, banana nano ai guide"
+        url="https://bananananoai.com/what-is-nano-banana"
+      />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

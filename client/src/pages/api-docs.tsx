@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from "@/components/seo-head";
 
 export default function ApiDocs() {
   const { toast } = useToast();
@@ -195,6 +196,12 @@ echo $result;
 
   return (
     <div className="min-h-screen py-12">
+      <SEOHead 
+        title="Banana Nano Ai API Documentation - Developer Guide & Integration"
+        description="Complete API documentation for Banana Nano Ai. Learn how to integrate our powerful AI image editing capabilities into your applications with code examples and SDKs."
+        keywords="banana nano ai api, nano banana ai developers, ai image api, gemini api integration, developer documentation"
+        url="https://bananananoai.com/api"
+      />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

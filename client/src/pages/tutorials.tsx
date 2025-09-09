@@ -18,6 +18,7 @@ import {
   Download,
   ExternalLink
 } from "lucide-react";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function Tutorials() {
   const [completedTutorials, setCompletedTutorials] = useState<Set<number>>(new Set());
@@ -178,6 +179,7 @@ export default function Tutorials() {
 
   return (
     <div className="min-h-screen py-12">
+      <SEOHead {...seoConfigs.tutorials} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
