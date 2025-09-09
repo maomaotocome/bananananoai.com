@@ -16,6 +16,7 @@ import {
   Zap
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead, seoConfigs } from "@/components/seo-head";
 
 export default function Blog() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,6 +121,7 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen py-12 bg-background">
+      <SEOHead {...seoConfigs.blog} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -239,7 +241,7 @@ export default function Blog() {
                       alt={post.title}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {post.featured && (
+                    {('featured' in post && post.featured) && (
                       <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs">
                         Featured
                       </Badge>
