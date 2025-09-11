@@ -4,7 +4,7 @@ import React from 'react';
 
 // Structured data for better SEO according to ChatGPT recommendations
 interface StructuredDataProps {
-  type: 'WebApplication' | 'SoftwareApplication' | 'FAQPage' | 'ImageObject' | 'Review';
+  type: 'WebApplication' | 'SoftwareApplication' | 'FAQPage' | 'ImageObject' | 'Review' | 'Blog' | 'CollectionPage' | 'HowTo' | 'Custom';
   data: any;
 }
 
@@ -71,6 +71,14 @@ export const StructuredData: React.FC<StructuredDataProps> = ({ type, data }) =>
           }
         })) || []
       };
+      break;
+
+    case 'Blog':
+    case 'CollectionPage':
+    case 'HowTo':
+    case 'Custom':
+      // Use the provided data directly for these types
+      structuredData = data;
       break;
 
     case 'ImageObject':

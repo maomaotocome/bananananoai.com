@@ -15,6 +15,7 @@ import {
   Download
 } from "lucide-react";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
+import { StructuredData } from "@/components/structured-data";
 
 export default function CaseStudies() {
   const caseStudies = [
@@ -114,6 +115,33 @@ export default function CaseStudies() {
   return (
     <div className="min-h-screen py-12 bg-background">
       <SEOHead {...seoConfigs.caseStudies} />
+      
+      {/* Case Studies structured data */}
+      <StructuredData 
+        type="CollectionPage"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Banana Nano Ai Case Studies",
+          "description": "Real success stories and ROI data from businesses using Banana Nano Ai for image editing",
+          "url": "https://bananananoai.com/case-studies",
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": caseStudies.length,
+            "itemListElement": caseStudies.map((study, index) => ({
+              "@type": "Article",
+              "position": index + 1,
+              "name": study.company + " Case Study",
+              "description": study.description,
+              "author": {
+                "@type": "Organization",
+                "name": "Banana Nano Ai"
+              }
+            }))
+          }
+        }}
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
+import { StructuredData } from "@/components/structured-data";
 
 export default function Blog() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -122,6 +123,29 @@ export default function Blog() {
   return (
     <div className="min-h-screen py-12 bg-background">
       <SEOHead {...seoConfigs.blog} />
+      
+      {/* Blog structured data for better indexing */}
+      <StructuredData 
+        type="Blog"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": "Banana Nano Ai Blog",
+          "description": "Latest insights, tutorials, and case studies about AI image editing with Banana Nano Ai",
+          "url": "https://bananananoai.com/blog",
+          "author": {
+            "@type": "Organization",
+            "name": "Banana Nano Ai",
+            "url": "https://bananananoai.com"
+          },
+          "publisher": {
+            "@type": "Organization", 
+            "name": "Banana Nano Ai",
+            "url": "https://bananananoai.com"
+          }
+        }}
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -241,7 +265,7 @@ export default function Blog() {
                       alt={post.title}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {('featured' in post && post.featured) && (
+                    {(post as any).featured && (
                       <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs">
                         Featured
                       </Badge>

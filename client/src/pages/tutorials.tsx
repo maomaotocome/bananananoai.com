@@ -19,6 +19,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
+import { StructuredData } from "@/components/structured-data";
 
 export default function Tutorials() {
   const [completedTutorials, setCompletedTutorials] = useState<Set<number>>(new Set());
@@ -180,6 +181,35 @@ export default function Tutorials() {
   return (
     <div className="min-h-screen py-12">
       <SEOHead {...seoConfigs.tutorials} />
+      
+      {/* Tutorials structured data for HowTo schema */}
+      <StructuredData 
+        type="HowTo"
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Banana Nano Ai Tutorials",
+          "description": "Comprehensive tutorials and guides for mastering AI image editing with Banana Nano Ai",
+          "url": "https://bananananoai.com/tutorials",
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": featuredTutorials.length,
+            "itemListElement": featuredTutorials.map((tutorial, index) => ({
+              "@type": "HowTo",
+              "position": index + 1,
+              "name": tutorial.title,
+              "description": tutorial.description,
+              "estimatedCost": "0",
+              "totalTime": tutorial.duration,
+              "author": {
+                "@type": "Organization",
+                "name": "Banana Nano Ai"
+              }
+            }))
+          }
+        }}
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">

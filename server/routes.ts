@@ -34,6 +34,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile('robots.txt', { root: './client/public' });
   });
 
+  // Favicon handling - solve Soft 404 issue with proper ICO format
+  app.get("/favicon.ico", (req, res) => {
+    // Set appropriate headers for favicon
+    res.set({
+      'Content-Type': 'image/x-icon',
+      'Cache-Control': 'public, max-age=31536000' // 1 year cache
+    });
+    
+    // Generate a proper 16x16 ICO file with banana emoji-like pattern
+    // ICO header: ICONDIR structure
+    const icoHeader = Buffer.from([
+      0x00, 0x00, // Reserved, must be 0
+      0x01, 0x00, // Type: 1 = ICO
+      0x01, 0x00, // Number of images: 1
+    ]);
+    
+    // ICO directory entry: ICONDIRENTRY structure  
+    const icoEntry = Buffer.from([
+      0x10,       // Width: 16 pixels
+      0x10,       // Height: 16 pixels
+      0x00,       // Color count: 0 (256+ colors)
+      0x00,       // Reserved: 0
+      0x01, 0x00, // Color planes: 1
+      0x20, 0x00, // Bits per pixel: 32
+      0x00, 0x04, 0x00, 0x00, // Size of image data: 1024 bytes
+      0x16, 0x00, 0x00, 0x00  // Offset to image data: 22 bytes
+    ]);
+    
+    // BMP header for the icon image
+    const bmpHeader = Buffer.from([
+      0x28, 0x00, 0x00, 0x00, // Header size: 40 bytes
+      0x10, 0x00, 0x00, 0x00, // Width: 16 pixels
+      0x20, 0x00, 0x00, 0x00, // Height: 32 pixels (16*2 for AND mask)
+      0x01, 0x00,             // Color planes: 1
+      0x20, 0x00,             // Bits per pixel: 32
+      0x00, 0x00, 0x00, 0x00, // Compression: none
+      0x00, 0x04, 0x00, 0x00, // Image size: 1024 bytes
+      0x00, 0x00, 0x00, 0x00, // X pixels per meter
+      0x00, 0x00, 0x00, 0x00, // Y pixels per meter
+      0x00, 0x00, 0x00, 0x00, // Colors used
+      0x00, 0x00, 0x00, 0x00  // Important colors
+    ]);
+    
+    // Create yellow/golden color pattern for banana theme
+    const yellow = Buffer.from([0x00, 0xD4, 0xFF, 0xFF]); // BGRA format
+    const darkYellow = Buffer.from([0x00, 0x8B, 0xFF, 0xFF]);
+    const transparent = Buffer.from([0x00, 0x00, 0x00, 0x00]);
+    
+    // Create 16x16 pixel data (bottom-up bitmap)
+    const pixelData = Buffer.alloc(16 * 16 * 4); // 1024 bytes
+    for (let y = 0; y < 16; y++) {
+      for (let x = 0; x < 16; x++) {
+        const pos = (y * 16 + x) * 4;
+        // Simple banana-like pattern
+        if (x >= 4 && x <= 11 && y >= 3 && y <= 12) {
+          if (x === 4 || x === 11 || y === 3 || y === 12) {
+            darkYellow.copy(pixelData, pos);
+          } else {
+            yellow.copy(pixelData, pos);
+          }
+        } else {
+          transparent.copy(pixelData, pos);
+        }
+      }
+    }
+    
+    // AND mask (all zeros for 32-bit icons)
+    const andMask = Buffer.alloc(16 * 16 / 8); // 32 bytes
+    
+    const icoFile = Buffer.concat([icoHeader, icoEntry, bmpHeader, pixelData, andMask]);
+    res.end(icoFile);
+  });
+
   // Test endpoint to verify Gemini API connectivity
   app.post("/api/test-gemini", async (req, res) => {
     try {
