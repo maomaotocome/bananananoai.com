@@ -8,7 +8,7 @@ declare global {
 }
 
 // Google Analytics 4 Configuration
-const GA_MEASUREMENT_ID = 'G-5WPDHCEM4V';
+const GA_MEASUREMENT_ID = 'G-S63C99GVPN';
 const CLARITY_PROJECT_ID = 't414yz89wj';
 
 // Initialize Google Analytics
