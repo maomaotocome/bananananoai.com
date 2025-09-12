@@ -14,10 +14,10 @@ const CLARITY_PROJECT_ID = 't414yz89wj';
 // Prevent duplicate initialization
 let isGAInitialized = false;
 
-// Initialize Google Analytics
+// Initialize Google Analytics - CANONICAL IMPLEMENTATION
 export const initGA = () => {
   // CRITICAL: Prevent duplicate initialization 
-  if (isGAInitialized || (typeof window !== 'undefined' && typeof window.gtag === 'function')) {
+  if (isGAInitialized || document.querySelector(`script[src*="gtag/js?id=${GA_MEASUREMENT_ID}"]`)) {
     console.log('🚫 GA4 already initialized - skipping duplicate initialization');
     return;
   }
@@ -25,64 +25,62 @@ export const initGA = () => {
   // Mark as initialized
   isGAInitialized = true;
   
-  // Create gtag script - Check if already exists
-  const existingScript = document.querySelector(`script[src*="gtag/js?id=${GA_MEASUREMENT_ID}"]`);
-  if (existingScript) {
-    console.log('🚫 GA4 script already exists - skipping script creation');
-  } else {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(script);
-  }
-
-  // Initialize dataLayer and gtag
+  // STEP 1: Initialize dataLayer and gtag function BEFORE script loads (Google's canonical approach)
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function(...args: any[]) {
+  window.gtag = function gtag(...args: any[]) {
     window.dataLayer.push(args);
   };
   
+  // STEP 2: Call gtag with current timestamp
   window.gtag('js', new Date());
   
-  // Enhanced configuration for better data collection
-  const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+  // STEP 3: Create and append the Google Analytics script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(script);
   
-  // Fix for development/replit environment
-  const isDevelopment = window.location.hostname.includes('replit.dev') || 
-                       window.location.hostname === 'localhost' || 
-                       window.location.hostname.includes('127.0.0.1');
-  
-  // CRITICAL FIX: Force debug mode for DebugView  
-  const debugConfig = {
-    // Debug mode for development - ALWAYS true for replit.dev/localhost
-    debug_mode: true,
-    // Allow localhost and replit.dev tracking - DISABLE to avoid duplicate page views  
-    send_page_view: false,
-    // Custom parameters for better tracking
-    page_title: document.title,
-    page_location: window.location.href,
-    // CRITICAL: Set cookie_domain to 'none' for development environments
-    cookie_domain: isDevelopment ? 'none' : 'auto',
-    // Remove problematic cookie flags for development
-    ...(isDevelopment ? {} : { cookie_flags: 'secure;samesite=none' }),
-  };
-
-  window.gtag('config', GA_MEASUREMENT_ID, debugConfig);
-
-  // Log initialization for debugging
-  if (isDevelopment) {
-    console.log('✅ GA4 Successfully Initialized - No Duplicates');
-    console.log('🔍 GA4 Debug Mode Enabled - Tracking ID:', GA_MEASUREMENT_ID);
-    console.log('🌐 Current URL:', window.location.href);
-    console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
-    console.log('⚡ Development Environment Detected');
-    console.log('🚨 FORCED Debug Mode: TRUE (DebugView should work now)');
-    console.log('🎯 Single GA4 Instance Confirmed - Ready for DebugView');
+  // STEP 4: Configure GA4 after script setup (let Google's gtag handle the transport)
+  // Wait briefly to ensure Google's script can override our shim
+  setTimeout(() => {
+    // Fix for development/replit environment
+    const isDevelopment = window.location.hostname.includes('replit.dev') || 
+                         window.location.hostname === 'localhost' || 
+                         window.location.hostname.includes('127.0.0.1');
     
-    // Add URL parameter check for additional debug verification
-    const hasDebugParam = window.location.search.includes('debug=1');
-    console.log('🔗 URL Debug Parameter:', hasDebugParam ? 'Found' : 'Not found');
-  }
+    // CRITICAL: Standard GA4 config - don't override gtag function
+    const debugConfig = {
+      // Debug mode for development - ALWAYS true for replit.dev/localhost
+      debug_mode: true,
+      // CRITICAL: Disable automatic page view to prevent duplicates
+      send_page_view: false,
+      // Custom parameters for better tracking
+      page_title: document.title,
+      page_location: window.location.href,
+      // CRITICAL: Set cookie_domain to 'none' for development environments
+      cookie_domain: isDevelopment ? 'none' : 'auto',
+      // Remove problematic cookie flags for development
+      ...(isDevelopment ? {} : { cookie_flags: 'secure;samesite=none' }),
+    };
+
+    window.gtag('config', GA_MEASUREMENT_ID, debugConfig);
+
+    // Log initialization for debugging
+    if (isDevelopment) {
+      console.log('🔥 CANONICAL GA4 IMPLEMENTATION - Transport Enabled!');
+      console.log('✅ GA4 Successfully Initialized - Using Google\'s gtag transport');
+      console.log('🔍 GA4 Debug Mode Enabled - Tracking ID:', GA_MEASUREMENT_ID);
+      console.log('🌐 Current URL:', window.location.href);
+      console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
+      console.log('⚡ Development Environment Detected');
+      console.log('🚨 FORCED Debug Mode: TRUE (DebugView should work now)');
+      console.log('📡 Network Requests: Check DevTools → Network for "g/collect" with "_dbg=1"');
+      
+      // Add URL parameter check for additional debug verification
+      const hasDebugParam = window.location.search.includes('debug=1');
+      console.log('🔗 URL Debug Parameter:', hasDebugParam ? 'Found' : 'Not found');
+    }
+  }, 100); // Small delay to let Google's script load and define the real gtag
 };
 
 // Initialize Microsoft Clarity
