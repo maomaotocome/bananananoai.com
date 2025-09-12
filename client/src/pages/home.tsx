@@ -21,9 +21,17 @@ import InteractiveBentoGallery from "@/components/ui/interactive-bento-gallery";
 import { bananaNanoAiExamples, defaultGalleryProps } from "@/data/gallery-examples";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
 import { StructuredData, OrganizationStructuredData } from "@/components/structured-data";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Home() {
   console.log("Home component is rendering");
+  
+  // Test function for GA4 verification  
+  const testGA4 = () => {
+    trackEvent('test_button_click', 'debug', 'GA4_verification_test');
+    console.log('🧪 GA4 Test Event Sent - check DebugView!');
+    alert('🎯 GA4 Test Event Sent!\n\nNow check your Google Analytics DebugView:\n1. Go to Admin → DebugView\n2. You should see the test_button_click event');
+  };
   
   // State to handle prompt updates from gallery
   const [editorPrompt, setEditorPrompt] = React.useState('');
@@ -147,6 +155,16 @@ export default function Home() {
                 New User Guide
                 <ArrowRight className="ml-2 w-5 h-5" />
               </InteractiveButton>
+              
+              {/* GA4 Test Button - Remove after verification */}
+              <Button 
+                variant="outline"
+                onClick={testGA4}
+                className="bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100"
+                data-testid="ga4-test-button"
+              >
+                🧪 Test GA4
+              </Button>
             </div>
             
             <div className="flex flex-wrap gap-6 justify-center items-center text-sm text-muted-foreground">
