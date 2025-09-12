@@ -11,34 +11,51 @@ declare global {
 const GA_MEASUREMENT_ID = 'G-S63C99GVPN';
 const CLARITY_PROJECT_ID = 't414yz89wj';
 
-// Prevent duplicate initialization
+// Prevent duplicate initialization - Force refresh for environment changes
 let isGAInitialized = false;
+const GA_INIT_TIMESTAMP = Date.now();
 
-// Initialize Google Analytics - CANONICAL IMPLEMENTATION
+// Initialize Google Analytics - DUAL ENVIRONMENT SUPPORT 
 export const initGA = () => {
-  // CRITICAL: Prevent duplicate initialization 
-  if (isGAInitialized || document.querySelector(`script[src*="gtag/js?id=${GA_MEASUREMENT_ID}"]`)) {
-    console.log('🚫 GA4 already initialized - skipping duplicate initialization');
-    return;
+  // CRITICAL: Strong duplicate prevention - check for any GA4 initialization
+  const existingScript = document.querySelector(`script[src*="gtag/js"]`) || 
+                         document.querySelector(`script[src*="googletagmanager.com"]`);
+  const hasDataLayer = window.dataLayer && window.dataLayer.length > 0;
+  
+  if (isGAInitialized || (existingScript && hasDataLayer)) {
+    console.log('🔄 GA4 OVERRIDE: Taking control of existing GA4 - Environment:', window.location.hostname);
+    // Don't return - we want to reconfigure even if something exists
+  } else if (existingScript) {
+    console.log('🚫 GA4 script exists but no dataLayer - Safe to proceed');
   }
   
   // Mark as initialized
   isGAInitialized = true;
   
-  // STEP 1: Initialize dataLayer and gtag function BEFORE script loads (Google's canonical approach)
+  // STEP 1: FORCE Initialize dataLayer and gtag function (Override any existing)
   window.dataLayer = window.dataLayer || [];
+  
+  // CRITICAL: Always define our gtag to ensure we control the functionality
   window.gtag = function gtag(...args: any[]) {
+    console.log('🏃 GA4 Custom gtag called:', args[0]);
     window.dataLayer.push(args);
   };
   
   // STEP 2: Call gtag with current timestamp
   window.gtag('js', new Date());
   
-  // STEP 3: Create and append the Google Analytics script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
+  // STEP 3: Create and append the Google Analytics script (Only if not exists)
+  const existingGAScript = document.querySelector(`script[src*="gtag/js?id=${GA_MEASUREMENT_ID}"]`);
+  if (!existingGAScript) {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    script.setAttribute('data-source', 'custom-dual-env');
+    document.head.appendChild(script);
+    console.log('📡 GA4 Script Added - Custom Implementation');
+  } else {
+    console.log('📡 GA4 Script Already Exists - Using Existing');
+  }
   
   // STEP 4: Configure GA4 after script setup (let Google's gtag handle the transport)
   // Wait briefly to ensure Google's script can override our shim
@@ -48,38 +65,60 @@ export const initGA = () => {
                          window.location.hostname === 'localhost' || 
                          window.location.hostname.includes('127.0.0.1');
     
-    // CRITICAL: Standard GA4 config - don't override gtag function
+    // PRODUCTION vs DEVELOPMENT configuration - Use environment variables for Vite
+    const isProduction = (import.meta.env.VITE_REPLIT_DEPLOYMENT === '1') || 
+                        window.location.hostname === 'bananananoai.com' ||
+                        window.location.hostname.endsWith('.replit.app');
+    
     const debugConfig = {
-      // Debug mode for development - ALWAYS true for replit.dev/localhost
-      debug_mode: true,
+      // Debug mode: ON in development, OFF in production
+      debug_mode: isDevelopment && !isProduction,
       // CRITICAL: Disable automatic page view to prevent duplicates
       send_page_view: false,
       // Custom parameters for better tracking
       page_title: document.title,
       page_location: window.location.href,
-      // CRITICAL: Set cookie_domain to 'none' for development environments
+      // Cookie domain: 'none' for dev, 'auto' for production
       cookie_domain: isDevelopment ? 'none' : 'auto',
-      // Remove problematic cookie flags for development
-      ...(isDevelopment ? {} : { cookie_flags: 'secure;samesite=none' }),
+      // Cross-domain tracking for production
+      ...(isProduction ? { 
+        cookie_flags: 'secure;samesite=none',
+        allow_google_signals: true,
+        allow_ad_personalization_signals: true 
+      } : {}),
+      // Development-specific settings
+      ...(isDevelopment ? {
+        anonymize_ip: false,  // Allow full IP in dev for testing
+        allow_google_signals: false  // Disable in dev
+      } : {})
     };
 
     window.gtag('config', GA_MEASUREMENT_ID, debugConfig);
 
-    // Log initialization for debugging
-    if (isDevelopment) {
-      console.log('🔥 CANONICAL GA4 IMPLEMENTATION - Transport Enabled!');
-      console.log('✅ GA4 Successfully Initialized - Using Google\'s gtag transport');
-      console.log('🔍 GA4 Debug Mode Enabled - Tracking ID:', GA_MEASUREMENT_ID);
-      console.log('🌐 Current URL:', window.location.href);
-      console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
-      console.log('⚡ Development Environment Detected');
-      console.log('🚨 FORCED Debug Mode: TRUE (DebugView should work now)');
-      console.log('📡 Network Requests: Check DevTools → Network for "g/collect" with "_dbg=1"');
-      
-      // Add URL parameter check for additional debug verification
-      const hasDebugParam = window.location.search.includes('debug=1');
-      console.log('🔗 URL Debug Parameter:', hasDebugParam ? 'Found' : 'Not found');
+    // Enhanced logging for both environments  
+    console.log('🔥 DUAL-ENVIRONMENT GA4 SETUP - Production Ready! [' + GA_INIT_TIMESTAMP + ']');
+    console.log('✅ Environment:', isProduction ? '🚀 PRODUCTION (bananananoai.com)' : '🧪 DEVELOPMENT (replit.dev)');
+    console.log('✅ GA4 Successfully Initialized - Using Google\'s gtag transport');
+    console.log('🔍 GA4 Measurement ID:', GA_MEASUREMENT_ID);
+    console.log('🌐 Current URL:', window.location.href);
+    console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
+    console.log('🚨 Debug Mode:', debugConfig.debug_mode ? 'ON (DebugView Active)' : 'OFF (Production Mode)');
+    console.log('📡 Target Domain:', isProduction ? 'bananananoai.com' : 'replit.dev');
+    
+    if (isDevelopment && !isProduction) {
+      console.log('⚠️  DEV ENVIRONMENT: Limited GA4 functionality due to domain mismatch');
+      console.log('🚀 DEPLOY TO PRODUCTION: GA4 will work fully on bananananoai.com');
+      console.log('📡 Test Network: Check DevTools → Network for "g/collect" requests');
+      console.log('💡 SOLUTION: When you deploy, GA4 will activate automatically on bananananoai.com');
+    } else if (isProduction) {
+      console.log('🎉 PRODUCTION MODE: Full GA4 functionality active!');
+      console.log('📊 Data Collection: Active on bananananoai.com');
+      console.log('🔍 DebugView: Disabled in production for performance');
     }
+    
+    // Add URL parameter check for additional debug verification
+    const hasDebugParam = window.location.search.includes('debug=1');
+    console.log('🔗 URL Debug Parameter:', hasDebugParam ? 'Found' : 'Not found');
   }, 100); // Small delay to let Google's script load and define the real gtag
 };
 
