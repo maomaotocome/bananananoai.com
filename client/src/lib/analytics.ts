@@ -11,13 +11,30 @@ declare global {
 const GA_MEASUREMENT_ID = 'G-S63C99GVPN';
 const CLARITY_PROJECT_ID = 't414yz89wj';
 
+// Prevent duplicate initialization
+let isGAInitialized = false;
+
 // Initialize Google Analytics
 export const initGA = () => {
-  // Create gtag script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script);
+  // CRITICAL: Prevent duplicate initialization 
+  if (isGAInitialized || (typeof window !== 'undefined' && typeof window.gtag === 'function')) {
+    console.log('🚫 GA4 already initialized - skipping duplicate initialization');
+    return;
+  }
+  
+  // Mark as initialized
+  isGAInitialized = true;
+  
+  // Create gtag script - Check if already exists
+  const existingScript = document.querySelector(`script[src*="gtag/js?id=${GA_MEASUREMENT_ID}"]`);
+  if (existingScript) {
+    console.log('🚫 GA4 script already exists - skipping script creation');
+  } else {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+  }
 
   // Initialize dataLayer and gtag
   window.dataLayer = window.dataLayer || [];
@@ -39,8 +56,8 @@ export const initGA = () => {
   const debugConfig = {
     // Debug mode for development - ALWAYS true for replit.dev/localhost
     debug_mode: true,
-    // Allow localhost and replit.dev tracking
-    send_page_view: true,
+    // Allow localhost and replit.dev tracking - DISABLE to avoid duplicate page views  
+    send_page_view: false,
     // Custom parameters for better tracking
     page_title: document.title,
     page_location: window.location.href,
@@ -54,11 +71,13 @@ export const initGA = () => {
 
   // Log initialization for debugging
   if (isDevelopment) {
+    console.log('✅ GA4 Successfully Initialized - No Duplicates');
     console.log('🔍 GA4 Debug Mode Enabled - Tracking ID:', GA_MEASUREMENT_ID);
     console.log('🌐 Current URL:', window.location.href);
     console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
     console.log('⚡ Development Environment Detected');
     console.log('🚨 FORCED Debug Mode: TRUE (DebugView should work now)');
+    console.log('🎯 Single GA4 Instance Confirmed - Ready for DebugView');
     
     // Add URL parameter check for additional debug verification
     const hasDebugParam = window.location.search.includes('debug=1');
