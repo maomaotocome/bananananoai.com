@@ -35,9 +35,10 @@ export const initGA = () => {
                        window.location.hostname === 'localhost' || 
                        window.location.hostname.includes('127.0.0.1');
   
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    // Debug mode for development
-    debug_mode: isDevelopment,
+  // CRITICAL FIX: Force debug mode for DebugView  
+  const debugConfig = {
+    // Debug mode for development - ALWAYS true for replit.dev/localhost
+    debug_mode: true,
     // Allow localhost and replit.dev tracking
     send_page_view: true,
     // Custom parameters for better tracking
@@ -47,7 +48,9 @@ export const initGA = () => {
     cookie_domain: isDevelopment ? 'none' : 'auto',
     // Remove problematic cookie flags for development
     ...(isDevelopment ? {} : { cookie_flags: 'secure;samesite=none' }),
-  });
+  };
+
+  window.gtag('config', GA_MEASUREMENT_ID, debugConfig);
 
   // Log initialization for debugging
   if (isDevelopment) {
@@ -55,6 +58,11 @@ export const initGA = () => {
     console.log('🌐 Current URL:', window.location.href);
     console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
     console.log('⚡ Development Environment Detected');
+    console.log('🚨 FORCED Debug Mode: TRUE (DebugView should work now)');
+    
+    // Add URL parameter check for additional debug verification
+    const hasDebugParam = window.location.search.includes('debug=1');
+    console.log('🔗 URL Debug Parameter:', hasDebugParam ? 'Found' : 'Not found');
   }
 };
 
@@ -96,14 +104,29 @@ export const trackPageView = (path: string, title?: string) => {
   }
 };
 
-// Event tracking
+// Event tracking - Enhanced with debug mode
 export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
+    // Enhanced event tracking with forced debug mode for DebugView
+    const isDevelopment = window.location.hostname.includes('replit.dev') || 
+                         window.location.hostname === 'localhost' || 
+                         window.location.hostname.includes('127.0.0.1');
+    
+    const eventData = {
       event_category: category,
       event_label: label,
       value: value,
-    });
+      // CRITICAL: Force debug mode for all events in development
+      ...(isDevelopment ? { debug_mode: true } : {}),
+    };
+    
+    window.gtag('event', action, eventData);
+    
+    // Debug logging for verification
+    if (isDevelopment) {
+      console.log(`🎯 GA4 Event Sent: ${action}`, eventData);
+      console.log('🔍 Debug mode: TRUE (should appear in DebugView)');
+    }
   }
 };
 

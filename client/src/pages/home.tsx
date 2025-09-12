@@ -26,11 +26,37 @@ import { trackEvent } from "@/lib/analytics";
 export default function Home() {
   console.log("Home component is rendering");
   
-  // Test function for GA4 verification  
+  // Enhanced test function for GA4 verification  
   const testGA4 = () => {
+    // Send multiple test events with different methods
     trackEvent('test_button_click', 'debug', 'GA4_verification_test');
-    console.log('🧪 GA4 Test Event Sent - check DebugView!');
-    alert('🎯 GA4 Test Event Sent!\n\nNow check your Google Analytics DebugView:\n1. Go to Admin → DebugView\n2. You should see the test_button_click event');
+    
+    // Also send a direct gtag event with forced debug
+    if (window.gtag) {
+      window.gtag('event', 'manual_debug_test', {
+        debug_mode: true,
+        event_category: 'debugging',
+        event_label: 'force_debug_test',
+        value: 1
+      });
+    }
+    
+    console.log('🧪 Multiple GA4 Test Events Sent!');
+    console.log('📊 Check browser Network tab for "collect" requests');
+    console.log('🔍 Look for "_dbg=1" in the request URLs');
+    
+    alert(`🎯 GA4 Enhanced Test Complete!
+
+✅ Test events sent to Google Analytics
+📍 Check these locations:
+
+1. GA4 Admin → DebugView (main solution)
+2. Browser DevTools → Network tab → Filter "collect"
+3. Look for requests with "_dbg=1" parameter
+
+If still no data:
+• Install "Google Analytics Debugger" Chrome extension
+• Refresh page and try again`);
   };
   
   // State to handle prompt updates from gallery
