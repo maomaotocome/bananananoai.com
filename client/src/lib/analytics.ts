@@ -41,6 +41,14 @@ export const initGA = () => {
     window.dataLayer.push(args);
   };
   
+  // STEP 1.5: CRITICAL - Grant explicit consent for GA4 data collection
+  window.gtag('consent', 'default', { 
+    analytics_storage: 'granted', 
+    functionality_storage: 'granted', 
+    security_storage: 'granted', 
+    ad_storage: 'denied' 
+  });
+  
   // STEP 2: Call gtag with current timestamp
   window.gtag('js', new Date());
   
@@ -60,38 +68,32 @@ export const initGA = () => {
   // STEP 4: Configure GA4 after script setup (let Google's gtag handle the transport)
   // Wait briefly to ensure Google's script can override our shim
   setTimeout(() => {
-    // Fix for development/replit environment
-    const isDevelopment = window.location.hostname.includes('replit.dev') || 
-                         window.location.hostname === 'localhost' || 
-                         window.location.hostname.includes('127.0.0.1');
-    
-    // PRODUCTION vs DEVELOPMENT configuration - ROBUST Replit detection
+    // FIXED ENVIRONMENT DETECTION - Only bananananoai.com is production
     const host = window.location.hostname;
-    const isReplitProd = host.endsWith('.replit.dev') || host.endsWith('.replit.app');
     const isCustomProd = host === 'bananananoai.com' || host.endsWith('.bananananoai.com');
-    const isProduction = isReplitProd || isCustomProd || import.meta.env.PROD === true;
+    const isProduction = isCustomProd || import.meta.env.PROD === true;
+    const isDevelopment = !isProduction; // Clear development/production separation
     
     const debugConfig = {
       // Debug mode: ON in development, OFF in production
-      debug_mode: isDevelopment && !isProduction,
+      debug_mode: isDevelopment,
       // CRITICAL: Disable automatic page view to prevent duplicates
       send_page_view: false,
       // Custom parameters for better tracking
       page_title: document.title,
       page_location: window.location.href,
-      // Cookie domain: 'none' for dev, 'auto' for production
-      cookie_domain: isDevelopment ? 'none' : 'auto',
-      // Cross-domain tracking for production
+      // Cookie domain: 'auto' for production, 'none' for dev
+      cookie_domain: isProduction ? 'auto' : 'none',
+      // Production settings - clean configuration
       ...(isProduction ? { 
         cookie_flags: 'secure;samesite=none',
         allow_google_signals: true,
         allow_ad_personalization_signals: true 
-      } : {}),
-      // Development-specific settings
-      ...(isDevelopment ? {
+      } : {
+        // Development-specific settings
         anonymize_ip: false,  // Allow full IP in dev for testing
         allow_google_signals: false  // Disable in dev
-      } : {})
+      })
     };
 
     window.gtag('config', GA_MEASUREMENT_ID, debugConfig);
@@ -99,25 +101,27 @@ export const initGA = () => {
     // CRITICAL: Fire initial page_view immediately after config
     trackPageView(window.location.pathname, document.title);
 
-    // Enhanced logging for both environments  
-    console.log('🔥 ROBUST GA4 SETUP - Fixed Production Detection! [' + GA_INIT_TIMESTAMP + ']');
+    // Enhanced logging with clear environment separation
+    console.log('🔥 FIXED GA4 SETUP - Only bananananoai.com = Production! [' + GA_INIT_TIMESTAMP + ']');
     console.log('✅ Environment:', isProduction ? '🚀 PRODUCTION' : '🧪 DEVELOPMENT');
     console.log('🌐 Host Detection:', host);
-    console.log('🎯 Replit Prod?', isReplitProd, '| Custom Prod?', isCustomProd, '| Vite Prod?', import.meta.env.PROD);
+    console.log('🎯 Custom Domain?', isCustomProd, '| Vite Prod?', import.meta.env.PROD);
     console.log('✅ GA4 Successfully Initialized - Using Google\'s gtag transport');
+    console.log('✅ Consent Granted: analytics_storage=granted');
     console.log('🔍 GA4 Measurement ID:', GA_MEASUREMENT_ID);
     console.log('🌐 Current URL:', window.location.href);
-    console.log('🍪 Cookie Domain:', isDevelopment ? 'none' : 'auto');
+    console.log('🍪 Cookie Domain:', debugConfig.cookie_domain);
     console.log('🚨 Debug Mode:', debugConfig.debug_mode ? 'ON (DebugView Active)' : 'OFF (Production Mode)');
     
     if (isProduction) {
-      console.log('🎉 PRODUCTION MODE ACTIVE!');
+      console.log('🎉 PRODUCTION MODE: bananananoai.com detected!');
       console.log('📊 Initial Page View Fired');
       console.log('🔍 GA4 should activate immediately');
-      console.log('⚠️  IMPORTANT: Add this domain to GA4 data stream if not done: ' + host);
+      console.log('📡 VERIFY: Check DevTools → Network for "g/collect" requests with dl=bananananoai.com');
     } else {
-      console.log('🧪 DEVELOPMENT MODE: Limited functionality expected');
-      console.log('📡 Test Network: Check DevTools → Network for "g/collect" requests');
+      console.log('🧪 DEVELOPMENT MODE: Only bananananoai.com counts as production');
+      console.log('📡 Network requests will come from dev domain - won\'t show in GA4 Real-time');
+      console.log('💡 Solution: Visit https://bananananoai.com to test production GA4');
     }
     
     // Add URL parameter check for additional debug verification
