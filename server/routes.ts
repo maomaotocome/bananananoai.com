@@ -592,10 +592,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create 3D model record
       const threeDModel = await storage.createThreeDModel({
-        id: Math.random().toString(36).substr(2, 9),
         figurineId: id,
-        status: 'processing',
-        modelType: 'stl'
+        status: 'processing'
       });
 
       // Simulate 3D conversion process
@@ -604,8 +602,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           await storage.updateThreeDModel(threeDModel.id, {
             status: 'completed',
-            modelUrl: `https://example.com/models/${threeDModel.id}.stl`,
-            fileSize: Math.floor(Math.random() * 5000000) + 1000000 // 1-5MB
+            stlUrl: `https://example.com/models/${threeDModel.id}.stl`
           });
         } catch (error) {
           console.error('3D model update error:', error);

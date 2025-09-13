@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,156 @@ import FigurineGenerator from "@/components/figurine-generator";
 export default function NanoBanana3DFigurines() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
+
+  // SEO meta tags
+  useEffect(() => {
+    // Set page title
+    document.title = "Nano Banana 3D Figurines - AI Image to 3D Model & Print | Free STL Generator";
+    
+    // Remove existing meta tags first
+    const existingMeta = document.querySelectorAll('meta[data-nano-banana-page]');
+    existingMeta.forEach(meta => meta.remove());
+    
+    // Add meta description
+    const metaDescription = document.createElement('meta');
+    metaDescription.name = 'description';
+    metaDescription.content = 'Create custom Nano Banana 3D figurines from any photo. Upload image → AI generates figurine → Convert to 3D STL → Order professional prints. Complete pipeline from image to physical figurine.';
+    metaDescription.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(metaDescription);
+    
+    // Add keywords meta
+    const metaKeywords = document.createElement('meta');
+    metaKeywords.name = 'keywords';
+    metaKeywords.content = 'nano banana 3d figurines, 3d figurine creator, ai image to 3d model, stl generator, 3d printing service, custom figurines, photo to 3d model, gemini 2.5 flash';
+    metaKeywords.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(metaKeywords);
+
+    // Open Graph tags
+    const ogTitle = document.createElement('meta');
+    ogTitle.property = 'og:title';
+    ogTitle.content = 'Nano Banana 3D Figurines - AI Image to 3D Model Generator';
+    ogTitle.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(ogTitle);
+
+    const ogDescription = document.createElement('meta');
+    ogDescription.property = 'og:description';
+    ogDescription.content = 'Transform any photo into professional Nano Banana 3D figurines. Complete workflow: AI generation, 3D conversion, and instant printing quotes. Try it free!';
+    ogDescription.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(ogDescription);
+
+    const ogType = document.createElement('meta');
+    ogType.property = 'og:type';
+    ogType.content = 'website';
+    ogType.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(ogType);
+
+    const ogUrl = document.createElement('meta');
+    ogUrl.property = 'og:url';
+    ogUrl.content = window.location.href;
+    ogUrl.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(ogUrl);
+
+    // Twitter Card tags
+    const twitterCard = document.createElement('meta');
+    twitterCard.name = 'twitter:card';
+    twitterCard.content = 'summary_large_image';
+    twitterCard.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(twitterCard);
+
+    const twitterTitle = document.createElement('meta');
+    twitterTitle.name = 'twitter:title';
+    twitterTitle.content = 'Nano Banana 3D Figurines - AI Image to 3D Model Generator';
+    twitterTitle.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(twitterTitle);
+
+    const twitterDescription = document.createElement('meta');
+    twitterDescription.name = 'twitter:description';
+    twitterDescription.content = 'Transform photos into custom 3D figurines with AI. Complete pipeline from upload to print!';
+    twitterDescription.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(twitterDescription);
+
+    // Structured data (HowTo Schema)
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Create Nano Banana 3D Figurines from Photos",
+      "description": "Step-by-step guide to transform any photo into a professional 3D printed figurine using AI technology",
+      "image": window.location.origin + "/nano-banana-hero.jpg",
+      "totalTime": "PT10M",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "15.99"
+      },
+      "supply": [
+        {
+          "@type": "HowToSupply",
+          "name": "Digital photo or image file"
+        }
+      ],
+      "tool": [
+        {
+          "@type": "HowToTool",
+          "name": "Nano Banana 3D Figurine Generator"
+        },
+        {
+          "@type": "HowToTool", 
+          "name": "Google Gemini 2.5 Flash AI"
+        }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Upload Your Photo",
+          "text": "Select and upload any photo you want to transform into a figurine",
+          "image": window.location.origin + "/step-upload.jpg",
+          "url": window.location.href + "#upload"
+        },
+        {
+          "@type": "HowToStep", 
+          "name": "Choose Style Template",
+          "text": "Select from pre-designed templates like Pet Figurines, Anime Style, or Office Desk themes",
+          "image": window.location.origin + "/step-templates.jpg",
+          "url": window.location.href + "#templates"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Generate AI Figurine", 
+          "text": "Our AI creates a professional figurine design using Google's Gemini 2.5 Flash technology",
+          "image": window.location.origin + "/step-generate.jpg",
+          "url": window.location.href + "#generate"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Convert to 3D Model",
+          "text": "Transform the 2D figurine into a printable 3D STL file ready for manufacturing",
+          "image": window.location.origin + "/step-3d.jpg", 
+          "url": window.location.href + "#3d-conversion"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Order Professional Print",
+          "text": "Get instant quotes and order high-quality 3D prints in various materials and finishes",
+          "image": window.location.origin + "/step-print.jpg",
+          "url": window.location.href + "#printing"
+        }
+      ]
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.setAttribute('data-nano-banana-page', 'true');
+    script.textContent = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup on unmount
+      const metaToRemove = document.querySelectorAll('meta[data-nano-banana-page]');
+      metaToRemove.forEach(meta => meta.remove());
+      const scriptToRemove = document.querySelector('script[data-nano-banana-page]');
+      if (scriptToRemove) scriptToRemove.remove();
+    };
+  }, []);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();

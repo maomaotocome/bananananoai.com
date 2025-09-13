@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload, Sparkles, Download, Loader2, AlertCircle, CheckCircle, Printer, Cube } from "lucide-react";
+import { Upload, Sparkles, Download, Loader2, AlertCircle, CheckCircle, Printer, Box } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -30,10 +30,13 @@ interface Figurine {
 interface ThreeDModel {
   id: string;
   figurineId: string;
-  status: "processing" | "completed" | "failed";
-  modelType: "stl" | "obj" | "glb";
-  modelUrl?: string;
-  fileSize?: number;
+  status: "pending" | "processing" | "completed" | "failed";
+  glbUrl?: string;
+  objUrl?: string;
+  stlUrl?: string;
+  processingService?: string;
+  metadata?: any;
+  createdAt: Date;
 }
 
 interface PrintJob {
@@ -400,7 +403,7 @@ export default function FigurineGenerator({ selectedFile, onGenerationComplete }
                       </>
                     ) : (
                       <>
-                        <Cube className="w-4 h-4 mr-2" />
+                        <Box className="w-4 h-4 mr-2" />
                         Make it 3D (STL)
                       </>
                     )}
@@ -446,17 +449,17 @@ export default function FigurineGenerator({ selectedFile, onGenerationComplete }
                   <div>
                     <p className="font-medium text-green-800 dark:text-green-200">3D Model Ready!</p>
                     <p className="text-sm text-green-600 dark:text-green-400">
-                      STL file • {threeDModel.fileSize ? `${(threeDModel.fileSize / 1024 / 1024).toFixed(1)} MB` : 'Ready for download'}
+                      STL file • Ready for download
                     </p>
                   </div>
                   <Badge variant="outline" className="border-green-300 text-green-700 dark:border-green-700 dark:text-green-300">
-                    {threeDModel.modelType.toUpperCase()}
+                    STL
                   </Badge>
                 </div>
 
                 <div className="flex gap-2">
                   <Button variant="outline" asChild data-testid="button-download-stl">
-                    <a href={threeDModel.modelUrl} download>
+                    <a href={threeDModel.stlUrl} download>
                       <Download className="w-4 h-4 mr-2" />
                       Download STL
                     </a>
