@@ -61,6 +61,20 @@ export default function NanoBanana3DFigurines() {
     ogUrl.setAttribute('data-nano-banana-page', 'true');
     document.head.appendChild(ogUrl);
 
+    // OG Image for social sharing
+    const ogImage = document.createElement('meta');
+    ogImage.setAttribute('property', 'og:image');
+    ogImage.content = window.location.origin + '/assets/nano-banana-social.jpg';
+    ogImage.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(ogImage);
+
+    // Canonical link
+    const canonical = document.createElement('link');
+    canonical.rel = 'canonical';
+    canonical.href = window.location.href;
+    canonical.setAttribute('data-nano-banana-page', 'true');
+    document.head.appendChild(canonical);
+
     // Twitter Card tags
     const twitterCard = document.createElement('meta');
     twitterCard.name = 'twitter:card';
@@ -280,6 +294,7 @@ export default function NanoBanana3DFigurines() {
               <InteractiveButton 
                 variant="primary" 
                 className="px-10 py-4 text-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
+                onClick={() => document.getElementById('upload')?.scrollIntoView({behavior:'smooth'})}
                 data-testid="button-start-creating"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
@@ -303,7 +318,7 @@ export default function NanoBanana3DFigurines() {
           {/* Modern Upload & Generator Section */}
           <div className="max-w-5xl mx-auto">
             {/* Enhanced Upload Area */}
-            <Card className="backdrop-blur-sm bg-background/90 border-primary/20 shadow-xl">
+            <Card id="upload" className="backdrop-blur-sm bg-background/90 border-primary/20 shadow-xl">
               <CardHeader className="text-center pb-6">
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">1</div>
