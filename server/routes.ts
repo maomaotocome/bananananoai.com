@@ -575,6 +575,172 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 3D Conversion endpoints
+  app.post('/api/figurines/:id/make-3d', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Get the figurine
+      const figurine = await storage.getFigurine(id);
+      if (!figurine) {
+        return res.status(404).json({ error: 'Figurine not found' });
+      }
+
+      if (figurine.status !== 'completed') {
+        return res.status(400).json({ error: 'Figurine must be completed before 3D conversion' });
+      }
+
+      // Create 3D model record
+      const threeDModel = await storage.createThreeDModel({
+        id: Math.random().toString(36).substr(2, 9),
+        figurineId: id,
+        status: 'processing',
+        modelType: 'stl'
+      });
+
+      // Simulate 3D conversion process
+      // In real implementation, this would call TripoSR or Meshy API
+      setTimeout(async () => {
+        try {
+          await storage.updateThreeDModel(threeDModel.id, {
+            status: 'completed',
+            modelUrl: `https://example.com/models/${threeDModel.id}.stl`,
+            fileSize: Math.floor(Math.random() * 5000000) + 1000000 // 1-5MB
+          });
+        } catch (error) {
+          console.error('3D model update error:', error);
+        }
+      }, 3000); // 3 second delay to simulate processing
+
+      res.json(threeDModel);
+    } catch (error) {
+      console.error('3D conversion error:', error);
+      res.status(500).json({ error: 'Failed to start 3D conversion' });
+    }
+  });
+
+  app.get('/api/figurines/:id/3d-models', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const models = await storage.getThreeDModelsByFigurine(id);
+      res.json(models);
+    } catch (error) {
+      console.error('Get 3D models error:', error);
+      res.status(500).json({ error: 'Failed to get 3D models' });
+    }
+  });
+
+  app.get('/api/3d-models/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const model = await storage.getThreeDModel(id);
+      
+      if (!model) {
+        return res.status(404).json({ error: '3D model not found' });
+      }
+      
+      res.json(model);
+    } catch (error) {
+      console.error('Get 3D model error:', error);
+      res.status(500).json({ error: 'Failed to get 3D model' });
+    }
+  });
+
+  // Print Quote endpoints
+  app.post('/api/3d-models/:id/print-quote', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { material = 'pla', quality = 'standard', quantity = 1 } = req.body;
+
+      // Get the 3D model
+      const model = await storage.getThreeDModel(id);
+      if (!model) {
+        return res.status(404).json({ error: '3D model not found' });
+      }
+
+      if (model.status !== 'completed') {
+        return res.status(400).json({ error: '3D model must be completed before printing' });
+      }
+
+      // Create print job record
+      const printJob = await storage.createPrintJob({
+        id: Math.random().toString(36).substr(2, 9),
+        threeDModelId: id,
+        material,
+        quality,
+        quantity,
+        status: 'quoted'
+      });
+
+      // Simulate quote calculation
+      // In real implementation, this would call Craftcloud/Shapeways API
+      const basePrice = 15.99;
+      const materialMultiplier = material === 'resin' ? 2.5 : material === 'metal' ? 5.0 : 1.0;
+      const qualityMultiplier = quality === 'high' ? 1.8 : quality === 'ultra' ? 3.0 : 1.0;
+      const estimatedPrice = basePrice * materialMultiplier * qualityMultiplier * quantity;
+
+      const updatedPrintJob = await storage.updatePrintJob(printJob.id, {
+        estimatedPrice: parseFloat(estimatedPrice.toFixed(2)),
+        estimatedDays: Math.floor(Math.random() * 10) + 3 // 3-12 days
+      });
+
+      res.json(updatedPrintJob);
+    } catch (error) {
+      console.error('Print quote error:', error);
+      res.status(500).json({ error: 'Failed to get print quote' });
+    }
+  });
+
+  app.post('/api/print-jobs/:id/order', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { shippingAddress, paymentMethod } = req.body;
+
+      // Get the print job
+      const printJob = await storage.getPrintJob(id);
+      if (!printJob) {
+        return res.status(404).json({ error: 'Print job not found' });
+      }
+
+      if (printJob.status !== 'quoted') {
+        return res.status(400).json({ error: 'Print job must be quoted before ordering' });
+      }
+
+      // Update print job to ordered status
+      const updatedPrintJob = await storage.updatePrintJob(id, {
+        status: 'ordered',
+        shippingAddress,
+        paymentMethod,
+        orderDate: new Date().toISOString()
+      });
+
+      res.json({
+        success: true,
+        printJob: updatedPrintJob,
+        message: 'Order placed successfully! You will receive tracking information via email.'
+      });
+    } catch (error) {
+      console.error('Order creation error:', error);
+      res.status(500).json({ error: 'Failed to place order' });
+    }
+  });
+
+  app.get('/api/print-jobs/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const printJob = await storage.getPrintJob(id);
+      
+      if (!printJob) {
+        return res.status(404).json({ error: 'Print job not found' });
+      }
+      
+      res.json(printJob);
+    } catch (error) {
+      console.error('Get print job error:', error);
+      res.status(500).json({ error: 'Failed to get print job' });
+    }
+  });
+
   // Health check endpoint
   app.get("/api/health", (req, res) => {
     res.json({ 
