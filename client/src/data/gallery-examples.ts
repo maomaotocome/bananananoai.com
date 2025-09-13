@@ -6,7 +6,7 @@ export const bananaNanoAiExamples: MediaItemType[] = [
     type: "image",
     title: "Banana Nano Ai Portrait Style Transfer - Professional AI Photo Editor",
     desc: "Transform portraits with artistic styles while maintaining perfect character consistency using Banana Nano Ai technology",
-    url: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=600&fit=crop&crop=face",
+    url: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=400&h=600&fit=crop&crop=face",
     span: "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
     prompt: "Transform this portrait into a Renaissance painting style while keeping the person's facial features exactly the same"
   },
