@@ -251,9 +251,9 @@ export default function NanoBanana3DFigurines() {
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Transform your photos into professional collectible figurines using Google's Gemini 2.5 Flash Image (Nano Banana). 
-              Generate stunning figurines with packaging, convert to 3D models (STL), and get instant printing quotes.
-              <strong> All images include SynthID watermark for authenticity.</strong>
+              Transform your photos into professional <strong>Nano Banana 3D figurines</strong> using Google's Gemini 2.5 Flash Image technology. 
+              Generate stunning collectible figurines with packaging, convert to downloadable 3D models (STL), and get instant printing quotes from professional services.
+              <strong> All Nano Banana figurines include SynthID watermark for authenticity.</strong>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -428,10 +428,10 @@ export default function NanoBanana3DFigurines() {
           
           <div className="space-y-6">
             <Card className="p-6">
-              <h3 className="font-semibold mb-2">Is Nano Banana free to use?</h3>
+              <h3 className="font-semibold mb-2">Are Nano Banana 3D figurines free to generate?</h3>
               <p className="text-muted-foreground">
-                Yes, Google's Gemini 2.5 Flash Image (Nano Banana) is free with daily usage limits. 
-                You can generate multiple figurines per day at no cost.
+                Yes, creating Nano Banana 3D figurines is completely free using Google's Gemini 2.5 Flash Image technology. 
+                Generate multiple custom figurines daily with no cost. Only 3D printing services have optional fees.
               </p>
             </Card>
             
@@ -444,10 +444,10 @@ export default function NanoBanana3DFigurines() {
             </Card>
             
             <Card className="p-6">
-              <h3 className="font-semibold mb-2">Can I 3D print the figurines?</h3>
+              <h3 className="font-semibold mb-2">How do I 3D print my Nano Banana figurines?</h3>
               <p className="text-muted-foreground">
-                Yes! Our "Make it 3D" feature converts your figurine into STL files ready for 3D printing. 
-                We also provide instant quotes from professional printing services.
+                Turn your Nano Banana 3D figurines into physical collectibles! Use our "Make it 3D" conversion tool to generate STL files. 
+                Get instant printing quotes from professional services or download STL files for personal 3D printing.
               </p>
             </Card>
           </div>
@@ -464,10 +464,10 @@ export default function NanoBanana3DFigurines() {
       <section className="py-20 bg-primary/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Create Your Figurine?
+            Ready to Create Your Nano Banana 3D Figurines?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands creating amazing Nano Banana figurines. Generate yours in seconds!
+            Join thousands creating amazing Nano Banana 3D figurines with our free AI generator. Transform any photo into professional figurines in seconds!
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
