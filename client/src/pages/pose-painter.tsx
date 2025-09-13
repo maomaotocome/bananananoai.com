@@ -16,7 +16,6 @@ import {
   CheckCircle,
   AlertCircle
 } from "lucide-react";
-import { trackEvent } from "@/lib/analytics";
 
 const PosePainter = () => {
   // Canvas state
@@ -107,7 +106,7 @@ const PosePainter = () => {
     
     ctx.fillStyle = "#1a1f2e";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    trackEvent("clear_canvas", "pose_painter");
+    // Analytics: Canvas cleared
   };
 
   // Add preset poses
@@ -149,7 +148,7 @@ const PosePainter = () => {
         break;
     }
     
-    trackEvent("use_preset", "pose_painter", poseType);
+    // Analytics: Preset pose used
   };
 
   const drawStickFigure = (
@@ -273,7 +272,7 @@ const PosePainter = () => {
         newImages[index] = e.target.result as string;
         setReferenceImages(newImages);
         setError("");
-        trackEvent("upload_image", "pose_painter");
+        // Analytics: Image uploaded
       }
     };
     reader.readAsDataURL(file);
@@ -341,7 +340,7 @@ const PosePainter = () => {
       const result = await response.json();
       setGeneratedImage(result.imageUrl);
       setStatusMessage("Generation successful!");
-      trackEvent("generate_success", "pose_painter");
+      // Analytics: Generation successful
       
     } catch (error) {
       console.error("Generation error:", error);
@@ -359,7 +358,7 @@ const PosePainter = () => {
     link.href = generatedImage;
     link.download = `pose-fusion-${Date.now()}.png`;
     link.click();
-    trackEvent("download_image", "pose_painter");
+    // Analytics: Image downloaded
   };
 
   // Initialize canvas

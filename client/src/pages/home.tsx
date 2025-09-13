@@ -21,29 +21,23 @@ import InteractiveBentoGallery from "@/components/ui/interactive-bento-gallery";
 import { bananaNanoAiExamples, defaultGalleryProps } from "@/data/gallery-examples";
 import { SEOHead, seoConfigs } from "@/components/seo-head";
 import { StructuredData, OrganizationStructuredData } from "@/components/structured-data";
-import { trackEvent } from "@/lib/analytics";
 
 export default function Home() {
   console.log("Home component is rendering");
   
-  // Enhanced test function for GA4 verification  
+  // Simple test function for new GA4 setup
   const testGA4 = () => {
-    // Send multiple test events with different methods
-    trackEvent('test_button_click', 'debug', 'GA4_verification_test');
-    
-    // Also send a direct gtag event with forced debug
+    // Send a direct gtag event to test the new GA4
     if (window.gtag) {
-      window.gtag('event', 'manual_debug_test', {
-        debug_mode: true,
-        event_category: 'debugging',
-        event_label: 'force_debug_test',
+      window.gtag('event', 'test_button_click', {
+        event_category: 'engagement',
+        event_label: 'new_ga4_test',
         value: 1
       });
     }
     
-    console.log('🧪 Multiple GA4 Test Events Sent!');
+    console.log('🧪 GA4 Test Event Sent to G-ZM0WLHEDGG!');
     console.log('📊 Check browser Network tab for "collect" requests');
-    console.log('🔍 Look for "_dbg=1" in the request URLs');
     
     alert(`🎯 GA4 Enhanced Test Complete!
 
