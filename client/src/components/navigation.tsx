@@ -9,7 +9,7 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navigation = [
-    { name: "Features", href: "/#features" },
+    { name: "🪄 3D Figurines", href: "/nano-banana-3d-figurines" },
     { name: "🎨 Pose Painter", href: "/pose-painter" },
     { name: "Examples", href: "/examples" },
     { name: "Tutorials", href: "/tutorials" },

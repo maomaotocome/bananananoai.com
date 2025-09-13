@@ -1,0 +1,243 @@
+明白。上一版不合格。这次我直接把“**nano banana 3d figurines**”做成一次到位的：**（A）最新 SERP & 需求深调研 →（B）对标差距与可超车位 →（C）可执行 PRD（含信息架构、功能、落地栈、SEO 页面矩阵、上线节奏、外链打法）**。所有关键结论附权威出处。
+
+---
+
+# A. SERP & 用户需求深调研（结论先行）
+
+**1) 真实搜索意图**
+围绕“nano banana 3d figurines”的用户问题，高频聚焦在：
+
+* **如何免费做**、在哪个入口（Gemini App / Google AI Studio）、有没有**使用次数限制**；**是否有水印（SynthID）**；**是否安全/合规**；**有哪些稳定 prompt**；**宠物/情侣/动漫/包装盒**等主题化模板；**能否导出为可打印 3D 模型（STL）**。这些主题在主流媒体与教程文章中持续出现，并被复述到 PAA。([The Times of India][1])
+
+**2) SERP 版面构成（前 1–2 页代表性）**
+
+* **新闻/教程型**（多）：Times of India、NDTV、Hindustan Times、IndiaTimes、LiveMint 等持续发布“怎么做/热门 prompt/是否免费/多少次”的**指南和解释**，流量与权重强，但**没有在线生成器、更没有“图→STL→打印”闭环**。([The Times of India][1])
+* **品牌/工具导流型**：CyberLink、PerfectCorp 等在写教程时**导流自家产品**（图转视频/编辑），仍**缺少“Nano Banana→可打印 3D”一步到位方案**。([CyberLink][2])
+* **官方/权威**：Google 模型页与博客明确**Gemini 2.5 Flash Image（Nano Banana）提供图像生成功能，且所有图像带不可见 SynthID 水印**；Gemini App 也强调**可见+不可见**双水印。([AI Studio][3])
+
+**3) 关键事实（对产品规划至关重要）**
+
+* **入口**：Google AI Studio 模型页 & Gemini App；大量媒体与教程都按这两条路径教学。([Beebom][4])
+* **水印**：Gemini 2.5 Flash Image **默认嵌入 SynthID**（不可见），Gemini App 还会加**可见水印**；这是我们 FAQ & 合规文案必须说明的。([谷歌开发者博客][5])
+* **次数/免费**：媒体反复讨论“是否免费/每日次数”；我们应围绕“**配额/限额**”写结构化 FAQ 并持续更新。([Navbharat Times][6])
+* **用户已延伸的强需求**：把“**手办风图像**”继续\*\*变成可打印 3D（STL）\*\*并下单打印（SERP 仍是空白）。图 → 3D 网格可用 **TripoSR / Meshy / Tripo** 等 API，打印可接 **Craftcloud/Shapeways**。([Replicate][7])
+
+**结论**：**工具型站点缺位**。当前 Top10 几乎都是新闻/教程；我们若做“**在线生成器 + 一键 STL + 即时报价打印**”，并用**HowTo/FAQ Schema**占位 PAA，有现实机会冲击 Top5。
+
+---
+
+# B. 竞品差距与可超车位
+
+**对标洞察（代表站点）**
+
+* **TOI / NDTV / Hindustan Times / LiveMint / IndiaTimes**：强在权重与时效，内容广谱覆盖“免费/次数/步骤/热门 prompt”；弱在**不提供生成器、不提供 3D/打印闭环**。([The Times of India][1])
+* **Beebom / JagranJosh / 教程博文**：给出具体 prompt 与步骤，但仍停留在内容层。([Beebom][4])
+* **品牌内容（CyberLink/PerfectCorp）**：导流自家功能，**不专注 Nano Banana 3D Figurines 的“生成→三维→打印”链路**。([CyberLink][2])
+  **我们的可超车点**
+
+1. **功能型闭环**：上传 → Nano Banana 生成手办风 → **一键 Make it 3D（STL）** → **即时 3D 打印报价/下单**。
+2. **主题化 Prompt Packs**（宠物/情侣/动漫/盲盒包装/办公桌等）+ **失败修复指引**（手指/姿态/光照）。
+3. **结构化内容矩阵**：HowTo + FAQ（SynthID/免费/配额/商用）、“图→STL 实战指南”、打印材料选型等，全部加 Schema。
+4. **速度/体验**：SSR/SSG 可索引，首屏极速；图库/示例可复现。
+   （以上 1–3 为**SERP 结构差异 + 用户强意图**，是你冲 Top5 的关键道路。）
+
+---
+
+# C. 可执行 PRD（供 Replit 直接实现）
+
+## 1. 产品目标 & KPI
+
+* **目标**：在“nano banana 3d figurines”与相关长尾上，8–12 周内争取 Google Top5。
+* **核心 KPI**：
+
+  * SEO：≥40 可索引页、非品牌自然 UV ≥3k/月、主落地页 CTR ≥8%。
+  * 功能：出图成功率 ≥95%，首图 <12s；**STL 导出转化 ≥8%**；打印报价点击率 ≥3%。
+
+## 2. 用户画像 & 关键场景
+
+* **宠物主**：把狗/猫做成“手办风”，最好能**打印**。
+* **情侣/礼物需求**：希望**一键模板**产出可复现风格 + 快速下单。
+* **二次元/玩家**：要**包装盒/台座**等“陈列感”。
+* **入门用户**：不懂 3D，只要**图→STL**自动完成。
+
+## 3. 信息架构（IA）
+
+* 顶部导航：**Generator**｜**Make it 3D (STL)**｜**Print My Figurine**｜**Prompt Packs**｜**Learn**
+* 关键 URL：
+
+  * `/nano-banana-3d-figurines`（**主落地页**）
+  * `/generator`（手办风生成器）
+  * `/make-it-3d`（图→网格→**STL 导出**）
+  * `/print`（Craftcloud/Shapeways **即时报价/下单**）
+  * `/prompts/*`（主题化包） `/guides/*`（HowTo/FAQ/打印指南）
+    （主落地页与指南页加 **HowTo/FAQPage Schema**；工具页加 **SoftwareApplication + ImageObject**。）
+
+## 4. 核心功能
+
+**F1｜手办风生成器（必须）**
+
+* 上传照片/URL → 选择主题模板（Pet/Anime/Couple/Office Desk/Packaging 等）→ 生成 2–4 张 → 选图下载。
+* **调用 Gemini 2.5 Flash Image（Nano Banana）**；显式声明输出图含 **SynthID 水印**（FAQ 链接）。([谷歌开发者博客][5])
+* **稳定 Prompt 模板**（示例，英文，可复现）：
+
+  > *Create a 1/7-scale commercialized figurine of the person in the photo, realistic lighting, displayed on a computer desk. Use a round transparent acrylic base with no text. Show the ZBrush modeling process on the monitor. Place a BANDAI-style toy box printed with the original artwork next to the monitor.*
+  > （此类 prompt 在媒体与社区教程大量出现与验证。）([mint][8])
+
+**F2｜Make it 3D (STL)（王牌差异化）**
+
+* 选择已生成图片 → **TripoSR / Meshy / Tripo API** 单图重建为 3D 网格（glb/obj）→ 自动修复（非流形、法线、最小壁厚）→ **导出 STL**。([Replicate][7])
+
+**F3｜Print My Figurine（即时报价/下单）**
+
+* 上传 STL → **Craftcloud 或 Shapeways API** 实时价格与材料（建议默认：树脂 SLA + 透明亚克力底座），可跳转下单或代打。([Craftcloud®][9])
+
+**F4｜Prompt Packs（主题模板库）**
+
+* **宠物（狗/猫）**、**情侣/婚礼**、**动漫/手办盒**、**办公桌/玩家布置**、**超级英雄风**等；配**失败修复提示**（手指/姿态/光照）。
+* 每个模板页提供：示例图、Prompt、参数、常见失败与修复。
+
+**F5｜Learn（指南/FAQ/博客）**
+
+* How-To（AI Studio / Gemini App 路径、操作步骤）。([Beebom][4])
+* FAQ：**是否免费/次数**、**SynthID 水印**、**隐私/安全**、**能否 3D 打印**、**商用限制**。([Zee News][10])
+
+## 5. 技术实现（与你现有栈对齐）
+
+* 前端：**React 18 + TypeScript + Vite + Tailwind + Shadcn**（首屏 SSR/SSG 以可索引）。
+* 后端：**Express.js + Node.js**。
+* 队列：BullMQ（生成/三维转换异步任务）。
+* 存储：S3/R2（图像 WebP/AVIF 转码 + CDN）。
+* 数据库（Drizzle + Postgres）：`users, jobs, images, meshes, prompts, orders, logs`。
+* 关键 API：
+
+  * `POST /api/generate-image` → Gemini 2.5 Flash Image（Nano Banana）。([Google AI for Developers][11])
+  * `POST /api/image-to-3d` → TripoSR/Meshy/Tripo 托管 API（返回 glb/obj/stl）。([Replicate][7])
+  * `POST /api/print-quote` → Craftcloud/Shapeways 报价/下单。([Craftcloud®][9])
+* 成本策略：首期使用 **Replicate / FAL / Tripo API** 计次；量大后自托管 **TripoSR**。([Replicate][12])
+
+## 6. SEO 方案（拿 Top5 的做法分解）
+
+**6.1 目标页面与文案（英文）**
+
+* 主落地页 `/nano-banana-3d-figurines`
+
+  * **H1**: *Create Nano Banana 3D Figurines Online — Then Turn Them into Real 3D Prints (STL)*
+  * **Title**: *Nano Banana 3D Figurines — Free Online Generator + STL & 3D Printing*
+  * **副文案**：解释 Nano Banana（Gemini 2.5 Flash Image）、一键生成手办风、**Make it 3D (STL)**、**即时打印报价**；声明 **SynthID**。([谷歌开发者博客][5])
+* 结构化数据：
+
+  * 主/教程页加 **HowTo**，FAQ 汇总加 **FAQPage**；工具页加 **SoftwareApplication + ImageObject**。
+* **程序化页面矩阵（首批 30+）**
+
+  * `/prompts/nano-banana-classic-figurine`
+  * `/prompts/pet-dog-figurine`、`/prompts/pet-cat-figurine`（宠物高意图）。([mint][13])
+  * `/prompts/anime-figurine-toy-box`、`/prompts/couple-wedding-figurine`
+  * `/guides/how-to-use-nano-banana-in-ai-studio`（步骤型）([Beebom][4])
+  * `/guides/is-nano-banana-free-daily-limit`（次数/配额）([Navbharat Times][6])
+  * `/guides/what-is-synthid-watermark`（水印合规）([谷歌开发者博客][5])
+  * `/guides/turn-nano-banana-figurine-into-stl-3d-print`（**差异化王牌**，含 Craftcloud/Shapeways）([Craftcloud®][9])
+* **内链策略**：
+
+  * Prompt 页 → **Generator**；成功出图 → **Make it 3D** → **Print**；FAQ/HowTo → 对应锚点。
+* **性能**：关键 CSS 内联、路由级分包、图片懒加载；首屏总 <1MB。
+
+**6.2 内容策略（2–4 周打底）**
+
+* 每日 1–2 篇短教程/Prompt 贴，**实拍对比**（原图 vs 出图 vs STL 预览），稳定模板可下载；
+* 专题长文：**宠物手办**、**情侣结婚礼物**、**动漫/包装盒风格**、**打印材料选择**；
+* 每篇首屏下方插入**即时体验 CTA**，并带 HowTo/FAQ Schema。
+
+**6.3 外链冷启动（可直接操作）**
+
+* Reddit：**r/GeminiAI / r/PromptEngineering / r/3Dprinting / r/3Dmodeling** 发布“可复现 Prompt + 在线生成器 + 图→STL→实体打印全程”。（该类 prompt 在社区已被讨论/验证）([Reddit][14])
+* 3D 模型平台：**Cults3D / Printables / Thingiverse** 上架示范 STL（描述处放回链）+ 打印参数；**Craftcloud/Shapeways** 合作文章与案例页回链。([Craftcloud®][9])
+* 新闻/博客：借势**免费/次数/水印**与**打印实操**写投放稿，蹭“时效话题”。([Zee News][10])
+
+## 7. 合规与风控（必须放到 FAQ）
+
+* **水印**：所有通过 Gemini 2.5 Flash Image 生成/编辑的图**默认含 SynthID**；Gemini App 还会加**可见水印**。不得误导为实拍。([谷歌开发者博客][5])
+* **版权/人物肖像**：限制名人/IP 商用；优先“本人/宠物/自有素材”。
+* **敏感内容过滤**：遵循 Gemini 安全策略与站内词库。
+
+## 8. 里程碑（4 周冲击首页）
+
+* **Week 1**：上线 **Generator MVP** + 10 篇指南/FAQ；外链 20 条（Reddit/目录/3D 平台）。([Beebom][4])
+* **Week 2**：接通 **Make it 3D (STL)**（TripoSR/Meshy/Tripo），发布 10 个 Prompt 页。([Replicate][7])
+* **Week 3**：接 **Craftcloud/Shapeways 报价/下单**，发布“打印材料/参数”内容 5 篇。([Craftcloud®][9])
+* **Week 4**：A/B 首屏文案与 CTA；补充“次数/水印/安全”长尾；目标 Top10→Top5。([Zee News][10])
+
+## 9. Replit 技术落地（你的常用栈）
+
+**项目结构**（建议）
+
+```
+apps/web  (React18+TS+Vite+Tailwind+Shadcn，含SSR/SSG)
+apps/api  (Express + Drizzle + BullMQ)
+packages/ui (公用组件)
+packages/prompt-packs (JSON 模板库)
+```
+
+**核心 .env**
+
+```
+GEMINI_API_KEY=...
+FAL_KEY=... 或 REPLICATE_API_TOKEN=...
+CRAFTCLOUD_API_KEY=... 或 SHAPEWAYS_CLIENT_ID/SECRET=...
+S3_...（对象存储）
+```
+
+**后端路由**
+
+* `POST /api/generate-image`：接收 `{imageUrl|upload, promptId, seed, guidance}` → 转发 Gemini 2.5 Flash Image。([Google AI for Developers][11])
+* `POST /api/image-to-3d`：接收 `{imageId}` → 调用 TripoSR/Meshy/Tripo → 返回 `{glb, obj, stl}` 下载链接。([Replicate][12])
+* `POST /api/print-quote`：接收 `{stl, material}` → Craftcloud/Shapeways 即时报价。([Craftcloud®][9])
+
+**前端页面**
+
+* `/generator`：上传→选择主题→生成→画廊→下载/“Make it 3D”。
+* `/make-it-3d`：单图→3D 预览（OrbitControls）→修复选项→导出 STL。
+* `/print`：上传 STL→材质/尺寸→即时价格卡片→下单跳转。
+* **Schema**：落地/FAQ/HowTo 注入 JSON-LD；工具页注入 SoftwareApplication。
+
+**Prompt Packs（示例 6 个，英文）**
+
+* *Pet Figurine (Dog/Cat)*、*Couple Wedding Figurine*、*Anime Kotobukiya Style*、*Office Desk Display*、*Superhero Box*、*Gamer Setup*（每个含参数/负面词/失败修复 tips）。
+
+---
+
+## 10. 我们的“胜出点”一页话术（放到首页首屏下）
+
+* **唯一闭环**：*Generate → Make it 3D (STL) → Print* — 市面教程很多，但能**一键 STL 与打印报价**的几乎没有。
+* **模板即结果**：社区验证过的**可复现 Prompt**，普通用户也能一次成功。([mint][8])
+* **合规透明**：清晰标注 **SynthID 水印**与版权/商用边界，减少用户疑虑。([谷歌开发者博客][5])
+
+---
+
+如果你愿意，我还能把你“附件里的初步调研结果”逐条并入上面的 PRD（如具体长尾词、对标域名、外链清单），直接出一版**可提交给 Replit 的执行手册**（含 30 个首批程序化页面的标题与 meta 草稿、10 个 Prompt 页的完整文案、以及 5 个 FAQ 的 JSON-LD 模板）。你也可以先把附件再次发我，我会当场融合。
+
+——
+
+**延伸阅读（最新权威/热度来源）**：
+
+* [Indiatimes](https://indiatimes.com/trending/geminis-nano-banana-trend-takes-over-social-media-lionel-messis-wooden-avatar-to-spider-man-figurines-fans-showcase-creativity-669898.html?utm_source=chatgpt.com)
+* [Indiatimes](https://indiatimes.com/trending/is-nano-banana-ai-3d-figurines-the-safest-tool-yet-google-gemini-craze-goes-viral-yet-invisible-watermark-hints-at-a-bigger-story-669977.html?utm_source=chatgpt.com)
+* [Navbharat Times](https://navbharattimes.indiatimes.com/tech/gadgets-news/google-nano-banana-3d-model-limit-per-day-for-free-pro-or-ultra-users-in-hindi/articleshow/123854243.cms?utm_source=chatgpt.com)
+* [Indiatimes](https://indiatimes.com/trending/is-nano-banana-ai-3d-figurines-the-safest-tool-yet-google-gemini-craze-goes-viral-yet-invisible-watermark-hints-at-a-bigger-story-669977.html?utm_source=chatgpt.com)
+* [Indiatimes](https://indiatimes.com/trending/top-nano-banana-viral-prompts-you-must-use-for-figurines-celeb-selfies-and-more-670018.html?utm_source=chatgpt.com)
+
+（其余关键技术与官方信息：Gemini 2.5 Flash Image 与 SynthID 水印、AI Studio/Gemini App 路径、图→3D→打印 API 方案等，已在正文相应段落给出出处。）
+
+[1]: https://timesofindia.indiatimes.com/technology/tech-tips/how-to-use-nano-banana-ai-step-by-step-guide-and-tips-to-create-stunning-3d-figurines-from-photos-instantly-for-free/articleshow/123801086.cms?utm_source=chatgpt.com "How to use Nano Banana AI: Guide to create 3D figurines ..."
+[2]: https://www.cyberlink.com/blog/trending-topics/4208/gemini-ai-3d-figure?srsltid=AfmBOooHpg66iAAUKb2_xqiWHLx0jG_bYOjJq_Qy2rIC6te-drI0nNdX&utm_source=chatgpt.com "How to Create an AI Figure with Nano Banana ..."
+[3]: https://aistudio.google.com/models/gemini-2-5-flash-image?utm_source=chatgpt.com "Gemini 2.5 Flash Image (Nano Banana)"
+[4]: https://beebom.com/how-to-use-nano-banana-ai-to-create-3d-figurines-from-your-photos/?utm_source=chatgpt.com "How to Use Nano Banana AI to Create 3D Figurines From ..."
+[5]: https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/?utm_source=chatgpt.com "Introducing Gemini 2.5 Flash Image, our state-of-the-art ..."
+[6]: https://navbharattimes.indiatimes.com/tech/gadgets-news/google-nano-banana-3d-model-limit-per-day-for-free-pro-or-ultra-users-in-hindi/articleshow/123854243.cms?utm_source=chatgpt.com "आप भी अपनी फोटो को खिलौनों जैसा बना रहे? जानें एक दिन में ऐसे क‍ितने 3D मॉडल बना सकते हैं"
+[7]: https://replicate.com/camenduru/tripo-sr?utm_source=chatgpt.com "camenduru/tripo-sr | Run with an API on ..."
+[8]: https://www.livemint.com/technology/tech-news/how-to-create-3d-model-of-yourself-with-gemini-nano-banana-ai-check-our-step-by-step-guide-11757608216240.html?utm_source=chatgpt.com "How to create 3D model of yourself with Gemini Nano ..."
+[9]: https://craftcloud3d.com/en/upload?utm_source=chatgpt.com "Upload your 3D models to get instant quotes"
+[10]: https://zeenews.india.com/photos/technology/google-gemini-nano-banana-how-many-free-images-can-you-generate-5-viral-prompts-trending-is-it-safe-to-use-check-alternative-ai-tools-for-3d-models-2959147?utm_source=chatgpt.com "Google Gemini Nano Banana: How Many Free Images Can ..."
+[11]: https://ai.google.dev/gemini-api/docs/image-generation?utm_source=chatgpt.com "Image generation with Gemini (aka Nano Banana) - Gemini API"
+[12]: https://replicate.com/camenduru/tripo-sr/api?utm_source=chatgpt.com "camenduru/tripo-sr | Get started"
+[13]: https://www.livemint.com/news/trends/i-turned-my-pet-into-a-nano-banana-3d-figurine-step-by-step-guide-with-expert-prompts-for-your-dog-and-cat-11757732953684.html?utm_source=chatgpt.com "I turned my pet into a Nano Banana 3D figurine"
+[14]: https://www.reddit.com/r/GeminiAI/comments/1n3lj16/nano_banana_gives_me_a_3d_model_made_of_my_dog_so/?utm_source=chatgpt.com "Nano Banana gives me a 3d model made of my dog, so cool!"

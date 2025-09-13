@@ -21,6 +21,7 @@ import LandingFunnel from "@/pages/landing-funnel";
 import FAQ from "@/pages/faq";
 import NotFound from "@/pages/not-found";
 import PosePainter from "@/pages/pose-painter";
+import NanoBanana3DFigurines from "@/pages/nano-banana-3d-figurines";
 
 function Router() {
   console.log("Router component is rendering");
@@ -31,6 +32,7 @@ function Router() {
       <main>
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/nano-banana-3d-figurines" component={NanoBanana3DFigurines} />
           <Route path="/what-is-nano-banana" component={WhatIsNanoBanana} />
           <Route path="/how-to-use" component={HowToUse} />
           <Route path="/api" component={ApiDocs} />

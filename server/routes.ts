@@ -5,6 +5,7 @@ import { generateImage, generateImageFromText } from "./gemini";
 import { promptOptimizerService } from "./promptOptimizer";
 import { generatePoseImage, enhancePrompt } from "./gemini";
 import { generatePoseFusion, generatePoseFusionEdit } from "./poseGenerator";
+import { storage } from "./storage";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -455,6 +456,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: "Failed to enhance prompt",
         details: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // Nano Banana 3D Figurines API endpoints
+
+  // Get all prompt packs
+  app.get("/api/prompt-packs", async (req, res) => {
+    try {
+      const packs = await storage.getActivePromptPacks();
+      res.json(packs);
+    } catch (error) {
+      console.error("Error fetching prompt packs:", error);
+      res.status(500).json({ error: "Failed to fetch prompt packs" });
+    }
+  });
+
+  // Generate figurine
+  app.post("/api/generate-figurine", upload.single('image'), async (req, res) => {
+    try {
+      const { promptId, customPrompt } = req.body;
+      const imageFile = (req as any).file as Express.Multer.File;
+
+      if (!imageFile) {
+        return res.status(400).json({
+          success: false,
+          error: "Image file is required"
+        });
+      }
+
+      if (!promptId && !customPrompt) {
+        return res.status(400).json({
+          success: false,
+          error: "Either promptId or customPrompt is required"
+        });
+      }
+
+      // Check if API key is available
+      if (!process.env.GEMINI_API_KEY) {
+        return res.status(500).json({
+          success: false,
+          error: "Gemini API key not configured. Please set GEMINI_API_KEY environment variable."
+        });
+      }
+
+      // Get prompt template if promptId is provided
+      let finalPrompt = customPrompt;
+      if (promptId && !customPrompt) {
+        const promptPack = await storage.getPromptPack(promptId);
+        if (!promptPack) {
+          return res.status(404).json({
+            success: false,
+            error: "Prompt pack not found"
+          });
+        }
+        finalPrompt = promptPack.prompt;
+      }
+
+      // Create figurine record
+      const figurine = await storage.createFigurine({
+        originalImageUrl: "temp", // We'll store this properly in production
+        promptId: promptId || null,
+        customPrompt: customPrompt || null,
+        status: "generating"
+      });
+
+      // Generate image using Gemini API with Nano Banana model
+      const result = await generateImage(imageFile.buffer, imageFile.mimetype, finalPrompt);
+
+      if (result.success && result.imageData) {
+        // Convert buffer to base64 data URL for frontend
+        const base64Image = `data:image/png;base64,${result.imageData.toString('base64')}`;
+        
+        // Update figurine with generated image
+        const updatedFigurine = await storage.updateFigurine(figurine.id, { 
+          generatedImageUrl: base64Image,
+          status: "completed"
+        });
+
+        res.json(updatedFigurine);
+      } else {
+        // Update status to failed
+        await storage.updateFigurine(figurine.id, { status: "failed" });
+
+        res.status(500).json({
+          success: false,
+          error: result.error || "Failed to generate figurine"
+        });
+      }
+
+    } catch (error) {
+      console.error("Figurine generation error:", error);
+      
+      if (error instanceof MulterError) {
+        return res.status(400).json({
+          success: false,
+          error: error.code === 'LIMIT_FILE_SIZE' 
+            ? "File too large. Maximum size is 10MB." 
+            : `File upload error: ${error.message}`
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : String(error) || "Internal server error"
+      });
+    }
+  });
+
+  // Get figurines (optional - for history)
+  app.get("/api/figurines", async (req, res) => {
+    try {
+      const userFigurines = await storage.getAllFigurines();
+      res.json(userFigurines);
+    } catch (error) {
+      console.error("Error fetching figurines:", error);
+      res.status(500).json({ error: "Failed to fetch figurines" });
     }
   });
 
