@@ -25,33 +25,6 @@ import { StructuredData, OrganizationStructuredData } from "@/components/structu
 export default function Home() {
   console.log("Home component is rendering");
   
-  // Simple test function for new GA4 setup
-  const testGA4 = () => {
-    // Send a direct gtag event to test the new GA4
-    if (window.gtag) {
-      window.gtag('event', 'test_button_click', {
-        event_category: 'engagement',
-        event_label: 'new_ga4_test',
-        value: 1
-      });
-    }
-    
-    console.log('🧪 GA4 Test Event Sent to G-ZM0WLHEDGG!');
-    console.log('📊 Check browser Network tab for "collect" requests');
-    
-    alert(`🎯 GA4 Enhanced Test Complete!
-
-✅ Test events sent to Google Analytics
-📍 Check these locations:
-
-1. GA4 Admin → DebugView (main solution)
-2. Browser DevTools → Network tab → Filter "collect"
-3. Look for requests with "_dbg=1" parameter
-
-If still no data:
-• Install "Google Analytics Debugger" Chrome extension
-• Refresh page and try again`);
-  };
   
   // State to handle prompt updates from gallery
   const [editorPrompt, setEditorPrompt] = React.useState('');
@@ -175,16 +148,6 @@ If still no data:
                 New User Guide
                 <ArrowRight className="ml-2 w-5 h-5" />
               </InteractiveButton>
-              
-              {/* GA4 Test Button - Remove after verification */}
-              <Button 
-                variant="outline"
-                onClick={testGA4}
-                className="bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100"
-                data-testid="ga4-test-button"
-              >
-                🧪 Test GA4
-              </Button>
             </div>
             
             <div className="flex flex-wrap gap-6 justify-center items-center text-sm text-muted-foreground">
