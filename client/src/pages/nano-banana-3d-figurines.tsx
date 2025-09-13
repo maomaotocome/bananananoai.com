@@ -256,8 +256,8 @@ export default function NanoBanana3DFigurines() {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-12 leading-relaxed">
-              Transform any photo into professional <strong className="text-foreground">Nano Banana 3D figurines</strong> using cutting-edge AI. 
-              Generate → Convert to 3D STL → Get instant printing quotes — complete pipeline in one place.
+              Transform any photo into stunning <strong className="text-foreground">Nano Banana 3D figurines</strong> using Google's breakthrough AI technology. 
+              Upload → AI Generate → 3D Convert → Print Quote — experience the complete pipeline from image to physical figurine in minutes.
             </p>
 
             {/* Stats Bar */}
@@ -562,7 +562,7 @@ export default function NanoBanana3DFigurines() {
             Ready to Create Your Nano Banana 3D Figurines?
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands creating amazing Nano Banana 3D figurines with our free AI generator. Transform any photo into professional figurines in seconds!
+            Join 50,000+ users creating incredible Nano Banana 3D figurines with our free AI-powered generator. Transform any photo into professional-quality figurines and physical collectibles in seconds!
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
