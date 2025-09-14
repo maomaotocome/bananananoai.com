@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Upload, Sparkles, Printer, Download, ArrowRight, Star, Play, CheckCircle, Zap, Palette, Users, Globe } from "lucide-react";
 import { Link } from "wouter";
 import { AnimatedBackground, InteractiveButton } from "@/components/ui/animated-background";
-import { StepIndicator } from "@/components/ui/step-guide";
 import FigurineGenerator from "@/components/figurine-generator";
 
 export default function NanoBanana3DFigurines() {
