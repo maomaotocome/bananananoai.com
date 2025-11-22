@@ -7,6 +7,8 @@ import { generatePoseImage, enhancePrompt } from "./gemini";
 import { generatePoseFusion, generatePoseFusionEdit } from "./poseGenerator";
 import { storage } from "./storage";
 import { createGenerationTask, getTaskStatus } from "./kie-service";
+import { insertGeneratedResultSchema } from "@shared/schema";
+import { z } from "zod";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -860,6 +862,254 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         success: false,
         error: "Failed to get tasks"
+      });
+    }
+  });
+
+  // ===== Generated Results API (UGC Gallery) =====
+  
+  // Get all public results (for gallery with pagination)
+  app.get("/api/results", async (req, res) => {
+    try {
+      // Sanitize pagination parameters: non-negative integers with sensible bounds
+      const rawLimit = parseInt(req.query.limit as string);
+      const rawOffset = parseInt(req.query.offset as string);
+      const limit = Math.min(Math.max(rawLimit > 0 ? rawLimit : 50, 1), 100); // 1-100
+      const offset = Math.max(rawOffset >= 0 ? rawOffset : 0, 0); // >= 0
+      
+      // Pass offset to storage layer for proper SQL-based pagination
+      const results = await storage.getPublicGeneratedResults(limit, offset);
+      
+      res.json({
+        success: true,
+        results,
+        pagination: {
+          limit,
+          offset,
+          returned: results.length,
+          hasMore: results.length === limit // If we got full limit, there might be more
+        }
+      });
+    } catch (error) {
+      console.error("Get results error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to get results"
+      });
+    }
+  });
+
+  // Get featured results (for homepage gallery)
+  app.get("/api/results/featured", async (req, res) => {
+    try {
+      const rawLimit = parseInt(req.query.limit as string);
+      const rawOffset = parseInt(req.query.offset as string);
+      const limit = Math.min(Math.max(rawLimit > 0 ? rawLimit : 12, 1), 100); // 1-100
+      const offset = Math.max(rawOffset >= 0 ? rawOffset : 0, 0); // >= 0
+      const results = await storage.getFeaturedGeneratedResults(limit, offset);
+      res.json({
+        success: true,
+        results,
+        pagination: {
+          limit,
+          offset,
+          returned: results.length,
+          hasMore: results.length === limit
+        }
+      });
+    } catch (error) {
+      console.error("Get featured results error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to get featured results"
+      });
+    }
+  });
+
+  // Get results by category
+  app.get("/api/results/category/:category", async (req, res) => {
+    try {
+      const { category } = req.params;
+      const rawLimit = parseInt(req.query.limit as string);
+      const rawOffset = parseInt(req.query.offset as string);
+      const limit = Math.min(Math.max(rawLimit > 0 ? rawLimit : 20, 1), 100); // 1-100
+      const offset = Math.max(rawOffset >= 0 ? rawOffset : 0, 0); // >= 0
+      const results = await storage.getGeneratedResultsByCategory(category, limit, offset);
+      res.json({
+        success: true,
+        results,
+        pagination: {
+          limit,
+          offset,
+          returned: results.length,
+          hasMore: results.length === limit
+        }
+      });
+    } catch (error) {
+      console.error("Get results by category error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to get results by category"
+      });
+    }
+  });
+
+  // Create a new generated result
+  app.post("/api/results", async (req, res) => {
+    try {
+      // Validate request body with Zod schema
+      const validated = insertGeneratedResultSchema.parse(req.body);
+      
+      // Calculate deterministic quality score (0-100)
+      // Weights: prompt quality (40%) + metadata (30%) + engagement potential (30%)
+      const promptScore = Math.min(40, Math.floor(
+        (validated.prompt.length > 100 ? 40 : validated.prompt.length * 0.4) +
+        (validated.title ? 5 : 0)
+      ));
+      
+      const metadataScore = Math.min(30, Math.floor(
+        (validated.metadata && typeof validated.metadata === 'object' && 'resolution' in validated.metadata
+          ? (validated.metadata.resolution === "4K" ? 30 : 20)
+          : 15) +
+        (validated.tags && Array.isArray(validated.tags) && validated.tags.length > 0 ? 5 : 0)
+      ));
+      
+      // Initial engagement score (will increase with actual likes/views)
+      const engagementScore = Math.min(30, Math.floor(
+        (validated.likes || 0) * 0.5 +
+        (validated.views || 0) * 0.01 +
+        (validated.shares || 0) * 1.5
+      ));
+      
+      const qualityScore = Math.min(100, promptScore + metadataScore + engagementScore);
+
+      const result = await storage.createGeneratedResult({
+        ...validated,
+        qualityScore,
+        isFeatured: false // Admin sets this later
+      });
+
+      res.json({
+        success: true,
+        result
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation failed",
+          details: error.errors
+        });
+      }
+      console.error("Create result error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to create result"
+      });
+    }
+  });
+
+  // Increment result views (for analytics)
+  app.post("/api/results/:id/view", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.incrementResultViews(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Increment views error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to increment views"
+      });
+    }
+  });
+
+  // Like a result
+  app.post("/api/results/:id/like", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.incrementResultLikes(id);
+      const result = await storage.getGeneratedResult(id);
+      res.json({
+        success: true,
+        likes: result?.likes || 0
+      });
+    } catch (error) {
+      console.error("Like result error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to like result"
+      });
+    }
+  });
+
+  // Share a result (increment share count)
+  app.post("/api/results/:id/share", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.incrementResultShares(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Share result error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to record share"
+      });
+    }
+  });
+
+  // Update result (for admin features like setting featured)
+  app.patch("/api/results/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Validate partial update with Zod
+      const updateSchema = insertGeneratedResultSchema.partial();
+      const validated = updateSchema.parse(req.body);
+      
+      // Recalculate quality score if relevant fields changed
+      if (validated.likes !== undefined || validated.views !== undefined || validated.shares !== undefined) {
+        const currentResult = await storage.getGeneratedResult(id);
+        if (currentResult) {
+          const promptScore = Math.min(40, Math.floor(
+            (currentResult.prompt.length > 100 ? 40 : currentResult.prompt.length * 0.4) +
+            (currentResult.title ? 5 : 0)
+          ));
+          
+          const metadataScore = Math.min(30, Math.floor(
+            (currentResult.metadata && typeof currentResult.metadata === 'object' && 'resolution' in currentResult.metadata
+              ? (currentResult.metadata.resolution === "4K" ? 30 : 20)
+              : 15) +
+            (currentResult.tags && Array.isArray(currentResult.tags) && currentResult.tags.length > 0 ? 5 : 0)
+          ));
+          
+          const engagementScore = Math.min(30, Math.floor(
+            (validated.likes ?? currentResult.likes) * 0.5 +
+            (validated.views ?? currentResult.views) * 0.01 +
+            (validated.shares ?? currentResult.shares) * 1.5
+          ));
+          
+          validated.qualityScore = Math.min(100, promptScore + metadataScore + engagementScore);
+        }
+      }
+      
+      const result = await storage.updateGeneratedResult(id, validated);
+      res.json({
+        success: true,
+        result
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation failed",
+          details: error.errors
+        });
+      }
+      console.error("Update result error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to update result"
       });
     }
   });

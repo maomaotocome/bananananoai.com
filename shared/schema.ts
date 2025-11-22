@@ -124,3 +124,32 @@ export const insertGenerationTaskSchema = createInsertSchema(generationTasks).om
 
 export type InsertGenerationTask = z.infer<typeof insertGenerationTaskSchema>;
 export type GenerationTask = typeof generationTasks.$inferSelect;
+
+// Generated Results - UGC Content for Community Gallery
+export const generatedResults = pgTable("generated_results", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  generationTaskId: varchar("generation_task_id").references(() => generationTasks.id),
+  imageUrl: text("image_url").notNull(), // Final image URL
+  prompt: text("prompt").notNull(),
+  title: text("title"), // Optional user-provided title
+  category: varchar("category").default("general").notNull(), // general, text, poster, portrait, etc.
+  isPublic: boolean("is_public").default(true).notNull(), // Public/Private toggle
+  isFeatured: boolean("is_featured").default(false).notNull(), // Featured in gallery
+  qualityScore: integer("quality_score").default(0).notNull(), // Auto-calculated quality (0-100)
+  likes: integer("likes").default(0).notNull(),
+  views: integer("views").default(0).notNull(),
+  shares: integer("shares").default(0).notNull(),
+  tags: jsonb("tags"), // Array of string tags for filtering
+  metadata: jsonb("metadata"), // Resolution, model version, processing time, etc.
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertGeneratedResultSchema = createInsertSchema(generatedResults).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertGeneratedResult = z.infer<typeof insertGeneratedResultSchema>;
+export type GeneratedResult = typeof generatedResults.$inferSelect;

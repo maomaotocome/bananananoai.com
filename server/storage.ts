@@ -4,12 +4,13 @@ import {
   type PromptPack, type InsertPromptPack,
   type ThreeDModel, type InsertThreeDModel,
   type PrintJob, type InsertPrintJob,
-  type GenerationTask, type InsertGenerationTask
+  type GenerationTask, type InsertGenerationTask,
+  type GeneratedResult, type InsertGeneratedResult
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { users, figurines, promptPacks, threeDModels, printJobs, generationTasks } from "@shared/schema";
-import { eq, desc } from "drizzle-orm";
+import { users, figurines, promptPacks, threeDModels, printJobs, generationTasks, generatedResults } from "@shared/schema";
+import { eq, desc, and, sql } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -56,6 +57,19 @@ export interface IStorage {
   createGenerationTask(task: InsertGenerationTask): Promise<GenerationTask>;
   updateGenerationTask(id: string, task: Partial<GenerationTask>): Promise<GenerationTask>;
   deleteGenerationTask(id: string): Promise<void>;
+  
+  // Generated Result operations (UGC Gallery)
+  getGeneratedResult(id: string): Promise<GeneratedResult | undefined>;
+  getAllGeneratedResults(): Promise<GeneratedResult[]>;
+  getPublicGeneratedResults(limit?: number, offset?: number): Promise<GeneratedResult[]>;
+  getFeaturedGeneratedResults(limit?: number, offset?: number): Promise<GeneratedResult[]>;
+  getGeneratedResultsByCategory(category: string, limit?: number, offset?: number): Promise<GeneratedResult[]>;
+  createGeneratedResult(result: InsertGeneratedResult): Promise<GeneratedResult>;
+  updateGeneratedResult(id: string, result: Partial<GeneratedResult>): Promise<GeneratedResult>;
+  incrementResultViews(id: string): Promise<void>;
+  incrementResultLikes(id: string): Promise<void>;
+  incrementResultShares(id: string): Promise<void>;
+  deleteGeneratedResult(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -224,6 +238,82 @@ export class DatabaseStorage implements IStorage {
   async deleteGenerationTask(id: string): Promise<void> {
     await db.delete(generationTasks).where(eq(generationTasks.id, id));
   }
+
+  // Generated Result operations (UGC Gallery)
+  async getGeneratedResult(id: string): Promise<GeneratedResult | undefined> {
+    const [result] = await db.select().from(generatedResults).where(eq(generatedResults.id, id));
+    return result;
+  }
+
+  async getAllGeneratedResults(): Promise<GeneratedResult[]> {
+    return await db.select().from(generatedResults).orderBy(desc(generatedResults.createdAt));
+  }
+
+  async getPublicGeneratedResults(limit: number = 50, offset: number = 0): Promise<GeneratedResult[]> {
+    return await db.select().from(generatedResults)
+      .where(eq(generatedResults.isPublic, true))
+      .orderBy(desc(generatedResults.qualityScore), desc(generatedResults.likes), desc(generatedResults.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getFeaturedGeneratedResults(limit: number = 12, offset: number = 0): Promise<GeneratedResult[]> {
+    return await db.select().from(generatedResults)
+      .where(and(
+        eq(generatedResults.isPublic, true),
+        eq(generatedResults.isFeatured, true)
+      ))
+      .orderBy(desc(generatedResults.qualityScore), desc(generatedResults.likes))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getGeneratedResultsByCategory(category: string, limit: number = 20, offset: number = 0): Promise<GeneratedResult[]> {
+    return await db.select().from(generatedResults)
+      .where(and(
+        eq(generatedResults.isPublic, true),
+        eq(generatedResults.category, category)
+      ))
+      .orderBy(desc(generatedResults.qualityScore), desc(generatedResults.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async createGeneratedResult(insertResult: InsertGeneratedResult): Promise<GeneratedResult> {
+    const [result] = await db.insert(generatedResults).values(insertResult).returning();
+    return result;
+  }
+
+  async updateGeneratedResult(id: string, updateData: Partial<GeneratedResult>): Promise<GeneratedResult> {
+    const updatedData = { ...updateData, updatedAt: new Date() };
+    const [result] = await db.update(generatedResults)
+      .set(updatedData)
+      .where(eq(generatedResults.id, id))
+      .returning();
+    return result;
+  }
+
+  async incrementResultViews(id: string): Promise<void> {
+    await db.update(generatedResults)
+      .set({ views: sql`${generatedResults.views} + 1`, updatedAt: new Date() })
+      .where(eq(generatedResults.id, id));
+  }
+
+  async incrementResultLikes(id: string): Promise<void> {
+    await db.update(generatedResults)
+      .set({ likes: sql`${generatedResults.likes} + 1`, updatedAt: new Date() })
+      .where(eq(generatedResults.id, id));
+  }
+
+  async incrementResultShares(id: string): Promise<void> {
+    await db.update(generatedResults)
+      .set({ shares: sql`${generatedResults.shares} + 1`, updatedAt: new Date() })
+      .where(eq(generatedResults.id, id));
+  }
+
+  async deleteGeneratedResult(id: string): Promise<void> {
+    await db.delete(generatedResults).where(eq(generatedResults.id, id));
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -233,6 +323,7 @@ export class MemStorage implements IStorage {
   private threeDModelsList: Map<string, ThreeDModel>;
   private printJobsList: Map<string, PrintJob>;
   private generationTasksList: Map<string, GenerationTask>;
+  private generatedResultsList: Map<string, GeneratedResult>;
 
   constructor() {
     this.users = new Map();
@@ -241,6 +332,7 @@ export class MemStorage implements IStorage {
     this.threeDModelsList = new Map();
     this.printJobsList = new Map();
     this.generationTasksList = new Map();
+    this.generatedResultsList = new Map();
   }
 
   // User operations
@@ -475,6 +567,117 @@ export class MemStorage implements IStorage {
 
   async deleteGenerationTask(id: string): Promise<void> {
     this.generationTasksList.delete(id);
+  }
+
+  // Generated Result operations (UGC Gallery)
+  async getGeneratedResult(id: string): Promise<GeneratedResult | undefined> {
+    return this.generatedResultsList.get(id);
+  }
+
+  async getAllGeneratedResults(): Promise<GeneratedResult[]> {
+    return Array.from(this.generatedResultsList.values()).sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+
+  async getPublicGeneratedResults(limit: number = 50, offset: number = 0): Promise<GeneratedResult[]> {
+    return Array.from(this.generatedResultsList.values())
+      .filter(r => r.isPublic)
+      .sort((a, b) => {
+        if (b.qualityScore !== a.qualityScore) return b.qualityScore - a.qualityScore;
+        if (b.likes !== a.likes) return b.likes - a.likes;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      })
+      .slice(offset, offset + limit);
+  }
+
+  async getFeaturedGeneratedResults(limit: number = 12, offset: number = 0): Promise<GeneratedResult[]> {
+    return Array.from(this.generatedResultsList.values())
+      .filter(r => r.isPublic && r.isFeatured)
+      .sort((a, b) => {
+        if (b.qualityScore !== a.qualityScore) return b.qualityScore - a.qualityScore;
+        return b.likes - a.likes;
+      })
+      .slice(offset, offset + limit);
+  }
+
+  async getGeneratedResultsByCategory(category: string, limit: number = 20, offset: number = 0): Promise<GeneratedResult[]> {
+    return Array.from(this.generatedResultsList.values())
+      .filter(r => r.isPublic && r.category === category)
+      .sort((a, b) => {
+        if (b.qualityScore !== a.qualityScore) return b.qualityScore - a.qualityScore;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      })
+      .slice(offset, offset + limit);
+  }
+
+  async createGeneratedResult(insertResult: InsertGeneratedResult): Promise<GeneratedResult> {
+    const id = randomUUID();
+    const result: GeneratedResult = {
+      id,
+      generationTaskId: insertResult.generationTaskId || null,
+      imageUrl: insertResult.imageUrl,
+      prompt: insertResult.prompt,
+      title: insertResult.title || null,
+      category: insertResult.category || "general",
+      isPublic: insertResult.isPublic ?? true,
+      isFeatured: insertResult.isFeatured ?? false,
+      qualityScore: insertResult.qualityScore || 0,
+      likes: insertResult.likes || 0,
+      views: insertResult.views || 0,
+      shares: insertResult.shares || 0,
+      tags: insertResult.tags || null,
+      metadata: insertResult.metadata || null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.generatedResultsList.set(id, result);
+    return result;
+  }
+
+  async updateGeneratedResult(id: string, updateData: Partial<GeneratedResult>): Promise<GeneratedResult> {
+    const existing = this.generatedResultsList.get(id);
+    if (!existing) {
+      throw new Error(`Generated result ${id} not found`);
+    }
+    const updated: GeneratedResult = { 
+      ...existing, 
+      ...updateData,
+      updatedAt: new Date()
+    };
+    this.generatedResultsList.set(id, updated);
+    return updated;
+  }
+
+  async incrementResultViews(id: string): Promise<void> {
+    const result = this.generatedResultsList.get(id);
+    if (result) {
+      result.views += 1;
+      result.updatedAt = new Date();
+      this.generatedResultsList.set(id, result);
+    }
+  }
+
+  async incrementResultLikes(id: string): Promise<void> {
+    const result = this.generatedResultsList.get(id);
+    if (result) {
+      result.likes += 1;
+      result.updatedAt = new Date();
+      this.generatedResultsList.set(id, result);
+    }
+  }
+
+  async incrementResultShares(id: string): Promise<void> {
+    const result = this.generatedResultsList.get(id);
+    if (result) {
+      result.shares += 1;
+      result.updatedAt = new Date();
+      this.generatedResultsList.set(id, result);
+    }
+  }
+
+  async deleteGeneratedResult(id: string): Promise<void> {
+    this.generatedResultsList.delete(id);
   }
 }
 
