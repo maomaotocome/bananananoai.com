@@ -382,249 +382,238 @@ export default function NanoBananaPro() {
     <div className="min-h-screen bg-background relative">
       <AnimatedBackground />
       
-      {/* Hero Section - Optimized for SEO */}
-      <div className="relative bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 pt-20 pb-32 overflow-hidden">
+      {/* Hero Section with Integrated Tool - V2.0 Premium Tool Page */}
+      <div className="relative bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 pt-20 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center mb-16">
-            <Badge className="inline-flex items-center px-6 py-3 bg-primary/15 backdrop-blur-sm rounded-full text-sm font-semibold text-primary mb-8 border border-primary/20" data-testid="badge-powered-by">
+          <div className="text-center mb-12">
+            <Badge className="inline-flex items-center px-6 py-3 bg-primary/15 backdrop-blur-sm rounded-full text-sm font-semibold text-primary mb-6 border border-primary/20" data-testid="badge-powered-by">
               <Zap className="w-4 h-4 mr-2" />
               Powered by Google Gemini 3 Pro • Released Nov 2025
             </Badge>
             
-            <h1 className="text-5xl md:text-8xl font-extrabold mb-8 max-w-6xl mx-auto leading-tight tracking-tight">
+            <h1 className="text-4xl md:text-7xl font-extrabold mb-6 max-w-6xl mx-auto leading-tight tracking-tight">
               <span className="gradient-text bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
                 Nano Banana Pro
               </span>
               <br />
-              <span className="text-foreground">Free AI Image Generator</span>
+              <span className="text-foreground text-3xl md:text-5xl">Free AI Image Generator</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8 leading-relaxed">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-4 leading-relaxed">
               Create stunning <strong className="text-foreground">4K images with perfect text rendering</strong> using Nano Banana Pro. 
               The only platform offering <strong className="text-foreground">complete pipeline</strong>: AI Generation → 3D Conversion → Printing Quotes.
             </p>
 
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-12">
-              Try <strong className="text-foreground">Nano Banana Pro free online</strong> • No signup required • 100+ tested prompts • Real-time playground
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-8 mb-12 text-sm">
+            <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <ImageIcon className="w-4 h-4 text-primary" />
-                <span className="font-semibold text-foreground">4K</span> resolution output
+                <span className="font-semibold text-foreground">4K</span> resolution
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Sparkles className="w-4 h-4 text-primary" />
-                <span className="font-semibold text-foreground">Best-in-class</span> text rendering
+                <span className="font-semibold text-foreground">Perfect</span> text rendering
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Zap className="w-4 h-4 text-primary" />
-                <span className="font-semibold text-foreground">100%</span> free to try
+                <span className="font-semibold text-foreground">100%</span> free • No signup
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <InteractiveButton 
-                variant="primary" 
-                className="px-10 py-4 text-lg font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
-                onClick={() => document.getElementById('playground')?.scrollIntoView({behavior:'smooth'})}
-                data-testid="button-try-free-playground"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Try Free Playground
-              </InteractiveButton>
-              <InteractiveButton 
-                variant="secondary" 
-                className="px-10 py-4 text-lg font-semibold hover:scale-105 transition-all duration-300"
-                onClick={() => document.getElementById('prompts')?.scrollIntoView({behavior:'smooth'})}
-                data-testid="button-view-prompts"
-              >
-                <BookOpen className="w-5 h-5 mr-2" />
-                100+ Prompts
-              </InteractiveButton>
-            </div>
+          {/* Integrated Tool Form - First Screen Interactive */}
+          <Card id="hero-tool" className="max-w-5xl mx-auto backdrop-blur-sm bg-card/95 border-primary/20 shadow-2xl">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-2 justify-center">
+                <Wand2 className="w-6 h-6 text-primary" />
+                Start Creating Now - Free Forever
+              </CardTitle>
+              <CardDescription className="text-base text-center">
+                Enter your prompt below and watch Nano Banana Pro generate stunning 4K images instantly
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <Textarea
+                  placeholder='Example: Create a vintage concert poster for "Banana Jazz Fest 2025" with art deco typography, warm golden tones, elegant serif fonts, centered layout, decorative borders'
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="min-h-32 text-base resize-none"
+                  data-testid="textarea-prompt-input"
+                />
+                
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-sm text-muted-foreground">Quick start:</span>
+                  {featuredPrompts.slice(0, 3).map((p) => (
+                    <Badge 
+                      key={p.id} 
+                      variant="outline" 
+                      className="cursor-pointer hover:bg-primary/10 transition-colors"
+                      onClick={() => setPrompt(p.prompt)}
+                      data-testid={`badge-quick-prompt-${p.id}`}
+                    >
+                      {p.title}
+                    </Badge>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={handleGenerateFromText}
+                  disabled={isGenerating || !prompt.trim()}
+                  className="w-full py-6 text-lg font-semibold"
+                  data-testid="button-generate-image"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2 animate-spin" />
+                      Generating with Nano Banana Pro...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      Generate 4K Image (Free)
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {generatedImage && (
+                <div className="space-y-4 p-6 bg-muted/50 rounded-lg animate-in fade-in duration-500">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      Your Generated Image
+                    </h3>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = generatedImage;
+                        link.download = `nano-banana-pro-${Date.now()}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        toast({ title: "Image downloaded successfully!" });
+                      }}
+                      data-testid="button-download-image"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download 4K
+                    </Button>
+                  </div>
+                  <img 
+                    src={generatedImage} 
+                    alt="Generated by Nano Banana Pro" 
+                    className="w-full rounded-lg shadow-lg"
+                    data-testid="img-generated-result"
+                  />
+                  
+                  {/* Social Share & Next Steps */}
+                  <div className="border-t pt-4 space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Share2 className="w-4 h-4" />
+                      <span className="font-medium">Love it? Share your creation:</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const shareText = `Amazing 4K image created with Nano Banana Pro! 🎨\n\n"${prompt.slice(0, 100)}${prompt.length > 100 ? '...' : ''}"\n\nTry it free at ${window.location.origin}/nano-banana-pro`;
+                          const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+                          window.open(shareUrl, '_blank', 'width=550,height=420');
+                        }}
+                        data-testid="button-share-twitter"
+                        className="hover:bg-blue-500/10"
+                      >
+                        <Twitter className="w-4 h-4 mr-2" />
+                        Share on X
+                      </Button>
+                      <Link href="/nano-banana-3d-figurines">
+                        <Button variant="outline" size="sm" data-testid="button-convert-to-3d">
+                          <Printer className="w-4 h-4 mr-2" />
+                          Convert to 3D & Print
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quick Benefits Below Tool */}
+          <div className="mt-8 text-center text-sm text-muted-foreground max-w-2xl mx-auto">
+            ✨ <strong className="text-foreground">No signup required</strong> • 
+            🎨 <strong className="text-foreground">100+ tested prompts</strong> • 
+            🚀 <strong className="text-foreground">Instant 4K output</strong> • 
+            🔗 <strong className="text-foreground">Direct 3D conversion</strong>
           </div>
         </div>
       </div>
 
-      {/* Interactive Playground Section */}
-      <div id="playground" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
+      {/* Featured Gallery Showcase - User Generated Results */}
+      <div id="gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
             <span className="gradient-text bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-              Nano Banana Pro Playground
+              Community Creations
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Start creating instantly - no signup required. Enter your prompt and watch Nano Banana Pro generate stunning 4K images in seconds.
+            Explore amazing 4K images created by our community using Nano Banana Pro. Click any image to view the prompt and create your own variation.
           </p>
         </div>
 
-        <Card className="max-w-4xl mx-auto backdrop-blur-sm bg-card/95 border-primary/20 shadow-2xl">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Wand2 className="w-6 h-6 text-primary" />
-              Generate Your First Image
-            </CardTitle>
-            <CardDescription className="text-base">
-              Enter a detailed prompt or select from our tested templates below
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <Textarea
-                placeholder='Example: Create a vintage concert poster for "Banana Jazz Fest 2025" with art deco typography, warm golden tones, elegant serif fonts, centered layout, decorative borders'
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-32 text-base resize-none"
-                data-testid="textarea-prompt-input"
-              />
-              
-              <div className="flex flex-wrap gap-2">
-                <span className="text-sm text-muted-foreground">Quick prompts:</span>
-                {featuredPrompts.slice(0, 3).map((p) => (
-                  <Badge 
-                    key={p.id} 
-                    variant="outline" 
-                    className="cursor-pointer hover:bg-primary/10 transition-colors"
-                    onClick={() => setPrompt(p.prompt)}
-                    data-testid={`badge-quick-prompt-${p.id}`}
-                  >
-                    {p.title}
-                  </Badge>
-                ))}
-              </div>
-
-              <Button
-                onClick={handleGenerateFromText}
-                disabled={isGenerating || !prompt.trim()}
-                className="w-full py-6 text-lg font-semibold"
-                data-testid="button-generate-image"
-              >
-                {isGenerating ? (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2 animate-spin" />
-                    Generating with Nano Banana Pro...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Generate Image (Free)
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {generatedImage && (
-              <div className="space-y-4 p-6 bg-muted/50 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    Generated Image
-                  </h3>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = generatedImage;
-                      link.download = `nano-banana-pro-${Date.now()}.png`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      toast({ title: "Image downloaded successfully!" });
-                    }}
-                    data-testid="button-download-image"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {galleryShowcase.map((item, index) => (
+            <Card 
+              key={index} 
+              className="group overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              onClick={() => {
+                setPrompt(item.prompt);
+                document.getElementById('hero-tool')?.scrollIntoView({behavior: 'smooth'});
+                toast({
+                  title: "Prompt loaded!",
+                  description: "Scroll up to generate your own version"
+                });
+              }}
+              data-testid={`card-gallery-${index}`}
+            >
+              <div className="relative aspect-square overflow-hidden bg-muted">
                 <img 
-                  src={generatedImage} 
-                  alt="Generated by Nano Banana Pro" 
-                  className="w-full rounded-lg shadow-lg"
-                  data-testid="img-generated-result"
+                  src={item.image} 
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
                 />
-                
-                {/* Social Share Buttons */}
-                <div className="border-t pt-4 space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Share2 className="w-4 h-4" />
-                    <span className="font-medium">Share your creation:</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                    <p className="text-sm text-gray-300 line-clamp-2">{item.prompt}</p>
+                    <Badge className="mt-2 bg-primary/90">{item.category}</Badge>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const shareText = `Amazing image created with Nano Banana Pro! 🎨\n\n"${prompt.slice(0, 100)}${prompt.length > 100 ? '...' : ''}"\n\nTry it free at ${window.location.origin}/nano-banana-pro`;
-                        const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-                        window.open(shareUrl, '_blank', 'width=550,height=420');
-                      }}
-                      data-testid="button-share-twitter"
-                      className="hover:bg-blue-500/10"
-                    >
-                      <Twitter className="w-4 h-4 mr-2" />
-                      Share on X
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/nano-banana-pro')}&quote=${encodeURIComponent(`Check out this amazing image I created with Nano Banana Pro!`)}`;
-                        window.open(shareUrl, '_blank', 'width=550,height=420');
-                      }}
-                      data-testid="button-share-facebook"
-                      className="hover:bg-blue-600/10"
-                    >
-                      <Facebook className="w-4 h-4 mr-2" />
-                      Share on Facebook
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const shareText = `Amazing image created with Nano Banana Pro - Free AI Image Generator with 4K text rendering!\n\n"${prompt.slice(0, 150)}${prompt.length > 150 ? '...' : ''}"\n\nTry it free: ${window.location.origin}/nano-banana-pro`;
-                        const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/nano-banana-pro')}`;
-                        window.open(shareUrl, '_blank', 'width=550,height=420');
-                      }}
-                      data-testid="button-share-linkedin"
-                      className="hover:bg-blue-700/10"
-                    >
-                      <Linkedin className="w-4 h-4 mr-2" />
-                      Share on LinkedIn
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const shareText = `${window.location.origin}/nano-banana-pro - Amazing image created with Nano Banana Pro!`;
-                        navigator.clipboard.writeText(shareText);
-                        toast({ 
-                          title: "Link copied!", 
-                          description: "Share link copied to clipboard" 
-                        });
-                      }}
-                      data-testid="button-copy-share-link"
-                      className="hover:bg-purple-500/10"
-                    >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copy Link
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    💡 Tip: Download the image first, then share it along with your social media post for maximum engagement!
-                  </p>
                 </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </Card>
+          ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <p className="text-sm text-muted-foreground mb-4">
+            💡 <strong className="text-foreground">Pro Tip:</strong> Click any image above to load its prompt and create your own unique variation
+          </p>
+          <Button 
+            variant="outline" 
+            size="lg"
+            onClick={() => document.getElementById('hero-tool')?.scrollIntoView({behavior: 'smooth'})}
+            data-testid="button-create-yours"
+          >
+            <Sparkles className="w-4 h-4 mr-2" />
+            Create Your Own Masterpiece
+          </Button>
+        </div>
       </div>
 
       {/* Prompt Library Section */}
@@ -726,7 +715,11 @@ export default function NanoBananaPro() {
                     size="sm"
                     onClick={() => {
                       setPrompt(promptTemplate.prompt);
-                      document.getElementById('playground')?.scrollIntoView({behavior:'smooth'});
+                      document.getElementById('hero-tool')?.scrollIntoView({behavior:'smooth'});
+                      setTimeout(() => {
+                        const textarea = document.querySelector('textarea[data-testid="textarea-prompt-input"]') as HTMLTextAreaElement;
+                        textarea?.focus();
+                      }, 500);
                     }}
                     data-testid={`button-use-prompt-${promptTemplate.id}`}
                   >
@@ -846,7 +839,7 @@ export default function NanoBananaPro() {
           <p className="text-lg text-muted-foreground mb-6">
             <strong className="text-foreground">Nano Banana Pro</strong> excels at text-heavy designs, high-resolution outputs, and multi-image compositions - perfect for professional marketing and design work.
           </p>
-          <Button size="lg" onClick={() => document.getElementById('playground')?.scrollIntoView({behavior:'smooth'})} data-testid="button-try-comparison">
+          <Button size="lg" onClick={() => document.getElementById('hero-tool')?.scrollIntoView({behavior:'smooth'})} data-testid="button-try-comparison">
             Try Nano Banana Pro Free
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
@@ -986,7 +979,7 @@ export default function NanoBananaPro() {
             <Button 
               size="lg" 
               className="px-10 py-6 text-lg font-semibold"
-              onClick={() => document.getElementById('playground')?.scrollIntoView({behavior:'smooth'})}
+              onClick={() => document.getElementById('hero-tool')?.scrollIntoView({behavior:'smooth'})}
               data-testid="button-gallery-try-now"
             >
               <Sparkles className="w-5 h-5 mr-2" />
@@ -1102,7 +1095,7 @@ export default function NanoBananaPro() {
             <Button 
               size="lg" 
               className="px-10 py-6 text-lg font-semibold"
-              onClick={() => document.getElementById('playground')?.scrollIntoView({behavior:'smooth'})}
+              onClick={() => document.getElementById('hero-tool')?.scrollIntoView({behavior:'smooth'})}
               data-testid="button-final-cta-playground"
             >
               <Play className="w-5 h-5 mr-2" />
