@@ -4,98 +4,107 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   
-  <!-- Homepage - Highest Priority -->
+  <!-- PRIMARY HOMEPAGE - Nano Banana Pro (Highest Priority for SEO) -->
+  <!-- Note: Root URL (/) not included as it 301 redirects to this canonical URL -->
   <url>
-    <loc>https://bananananoai.com/</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <loc>https://bananananoai.com/nano-banana-pro</loc>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
-  <!-- Core Product Pages - High Priority -->
+  <!-- CORE PRODUCT PAGES - Very High Priority -->
+  <url>
+    <loc>https://bananananoai.com/nano-banana-3d-figurines</loc>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
   <url>
     <loc>https://bananananoai.com/pose-painter</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
+  <!-- ESSENTIAL USER GUIDES - High Priority -->
   <url>
     <loc>https://bananananoai.com/how-to-use</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.85</priority>
   </url>
   
   <url>
     <loc>https://bananananoai.com/examples</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://bananananoai.com/faq</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
   
   <url>
     <loc>https://bananananoai.com/tutorials</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Educational Content -->
+  <url>
+    <loc>https://bananananoai.com/faq</loc>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- EDUCATIONAL CONTENT - Medium-High Priority -->
   <url>
     <loc>https://bananananoai.com/what-is-nano-banana</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.75</priority>
   </url>
   
   <url>
     <loc>https://bananananoai.com/blog</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://bananananoai.com/case-studies</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
-  <!-- Technical Documentation -->
+  <!-- TECHNICAL RESOURCES - Medium Priority -->
   <url>
     <loc>https://bananananoai.com/api</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.65</priority>
   </url>
   
-  <!-- Marketing Pages -->
+  <!-- MARKETING & CONVERSION PAGES - Lower Priority -->
   <url>
     <loc>https://bananananoai.com/social-media-kit</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://bananananoai.com/outreach-strategy</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://bananananoai.com/landing-funnel</loc>
-    <lastmod>2025-09-06T06:57:00+00:00</lastmod>
+    <lastmod>2025-11-22T15:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
