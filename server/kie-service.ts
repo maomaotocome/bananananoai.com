@@ -3,6 +3,8 @@
  * Documentation: https://kie.ai/nano-banana-pro
  */
 
+import { storage } from "./storage";
+
 interface KieCreateTaskRequest {
   model: "nano-banana-pro";
   input: {
@@ -218,4 +220,105 @@ export async function pollTaskUntilComplete(
 
   console.warn(`⏰ Max attempts reached for task ${taskId}`);
   return { state: "timeout" };
+}
+
+/**
+ * Process pending outbox commands - Transactional outbox pattern
+ * Returns processing results for API response
+ */
+export async function processOutboxCommands(limit: number = 10): Promise<{
+  processed: number;
+  succeeded: number;
+  failed: number;
+  refunded: number;
+  pending: number;
+}> {
+  let processed = 0;
+  let succeeded = 0;
+  let failed = 0;
+  let refunded = 0;
+  let pending = 0;
+
+  try {
+    // Claim pending commands with distributed lock
+    const commands = await storage.claimPendingOutbox(limit);
+    
+    if (commands.length === 0) {
+      return { processed: 0, succeeded: 0, failed: 0, refunded: 0, pending: 0 };
+    }
+
+    console.log(`📤 Processing ${commands.length} pending outbox commands`);
+    processed = commands.length;
+
+    // Process each command
+    for (const cmd of commands) {
+      const payload = cmd.payload as any;
+      console.log(`🔄 Processing outbox ${cmd.id} | Attempt ${cmd.attempts}`);
+
+      // Attempts >= 5: Refund-only (no task creation)
+      if (cmd.attempts >= 5) {
+        try {
+          await storage.completeOutboxWithRefund(cmd.id, `Max retries exceeded (${cmd.attempts} attempts)`);
+          refunded++;
+          console.log(`💸 Outbox ${cmd.id} refunded after ${cmd.attempts} attempts`);
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : "Unknown error";
+          console.error(`❌ Refund failed for outbox ${cmd.id}:`, errorMsg);
+          
+          // Refund failed - reset to pending for retry (stale reclaim will retry refund)
+          await storage.resetOutboxToPending(cmd.id, `Refund error: ${errorMsg}`);
+          pending++;
+          failed++;
+          console.log(`🔁 Outbox ${cmd.id} refund failed, will retry`);
+        }
+        continue; // Skip task creation for attempts >= 5
+      }
+
+      // Attempts < 5: Try task creation
+      try {
+        const { taskId } = await createGenerationTask({
+          prompt: payload.prompt,
+          imageInput: payload.imageInput || [],
+          aspectRatio: payload.aspectRatio || "1:1",
+          resolution: payload.resolution || "1K",
+          outputFormat: payload.outputFormat || "png",
+        });
+
+        // Success: Complete with task creation
+        await storage.completeOutboxWithTask(cmd.id, {
+          taskId,
+          model: "nano-banana-pro",
+          state: "waiting",
+          prompt: payload.prompt,
+          imageInput: payload.imageInput || null,
+          aspectRatio: payload.aspectRatio || "1:1",
+          resolution: payload.resolution || "1K",
+          outputFormat: payload.outputFormat || "png",
+          resultUrls: null,
+          failCode: null,
+          failMsg: null,
+          costTime: null,
+          completeTime: null,
+        });
+
+        succeeded++;
+        console.log(`✅ Outbox ${cmd.id} completed | TaskId: ${taskId}`);
+      } catch (error) {
+        // Task creation failed
+        const errorMsg = error instanceof Error ? error.message : "Unknown error";
+        console.error(`❌ Outbox ${cmd.id} task creation failed (attempt ${cmd.attempts}):`, errorMsg);
+
+        // Reset to pending for retry (will refund on 5th attempt)
+        await storage.resetOutboxToPending(cmd.id, errorMsg);
+        pending++;
+        failed++;
+        console.log(`🔁 Outbox ${cmd.id} reset to pending (${cmd.attempts}/5)`);
+      }
+    }
+
+    return { processed, succeeded, failed, refunded, pending };
+  } catch (error) {
+    console.error("❌ Outbox processor error:", error);
+    return { processed, succeeded, failed, refunded, pending };
+  }
 }

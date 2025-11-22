@@ -7,6 +7,10 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  email: text("email").unique(), // For registered users
+  credits: integer("credits").default(72).notNull(), // Signup bonus: 72 credits = 3 images
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // Nano Banana 3D Figurines core tables
@@ -153,3 +157,52 @@ export const insertGeneratedResultSchema = createInsertSchema(generatedResults).
 
 export type InsertGeneratedResult = z.infer<typeof insertGeneratedResultSchema>;
 export type GeneratedResult = typeof generatedResults.$inferSelect;
+
+// Task Outbox - Transactional outbox for reliable task creation
+export const taskOutbox = pgTable("task_outbox", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  type: varchar("type").default("create_generation_task").notNull(), // Future: image_edit, etc.
+  userId: varchar("user_id").notNull().references(() => users.id),
+  ledgerId: varchar("ledger_id").references(() => usageLedger.id),
+  payload: jsonb("payload").notNull(), // {prompt, imageInput, aspectRatio, resolution, outputFormat}
+  credits: integer("credits").notNull(), // Amount already deducted
+  status: varchar("status", { enum: ["pending", "processing", "succeeded", "refunded"] }).default("pending").notNull(),
+  attempts: integer("attempts").default(0).notNull(),
+  lockedAt: timestamp("locked_at"), // For distributed locking (FOR UPDATE SKIP LOCKED)
+  lastError: text("last_error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Usage Ledger - Track credit consumption with transactional status
+export const usageLedger = pgTable("usage_ledger", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  operation: varchar("operation").notNull(), // "image_generation", "refund", etc.
+  creditsConsumed: integer("credits_consumed").notNull(), // Credits deducted (negative for refunds)
+  creditsRemaining: integer("credits_remaining").notNull(), // Balance after operation
+  status: varchar("status", { enum: ["pending", "succeeded", "refunded"] }).default("pending").notNull(),
+  outboxId: varchar("outbox_id").references(() => taskOutbox.id), // Link to outbox command
+  endpoint: text("endpoint"), // API endpoint used (/api/kie/create, etc.)
+  metadata: jsonb("metadata"), // Resolution, prompt length, etc.
+  generationTaskId: varchar("generation_task_id").references(() => generationTasks.id),
+  success: boolean("success").default(true).notNull(), // Was operation successful?
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertTaskOutboxSchema = createInsertSchema(taskOutbox).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertTaskOutbox = z.infer<typeof insertTaskOutboxSchema>;
+export type TaskOutbox = typeof taskOutbox.$inferSelect;
+
+export const insertUsageLedgerSchema = createInsertSchema(usageLedger).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertUsageLedger = z.infer<typeof insertUsageLedgerSchema>;
+export type UsageLedger = typeof usageLedger.$inferSelect;

@@ -6,7 +6,7 @@ import { promptOptimizerService } from "./promptOptimizer";
 import { generatePoseImage, enhancePrompt } from "./gemini";
 import { generatePoseFusion, generatePoseFusionEdit } from "./poseGenerator";
 import { storage } from "./storage";
-import { createGenerationTask, getTaskStatus } from "./kie-service";
+import { createGenerationTask, getTaskStatus, processOutboxCommands } from "./kie-service";
 import { insertGeneratedResultSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -737,13 +737,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Kie.ai Nano Banana Pro API endpoints
+  // Kie.ai Nano Banana Pro API endpoints - Using Transactional Outbox Pattern
   
-  // Create generation task (async workflow)
+  // Create generation task (async workflow) - REQUIRES LOGIN & CREDITS
   app.post("/api/kie/generate", async (req, res) => {
     try {
+      // 1. CHECK AUTHENTICATION - Must be logged in
+      const user = req.user as any;
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          error: "Authentication required. Please register/login to generate images.",
+          code: "AUTH_REQUIRED"
+        });
+      }
+
+      const userId = user.id;
       const { prompt, imageInput, aspectRatio, resolution, outputFormat } = req.body;
 
+      // 2. VALIDATE INPUT
       if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
         return res.status(400).json({
           success: false,
@@ -758,40 +770,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Create task via Kie.ai API
-      const { taskId } = await createGenerationTask({
-        prompt: prompt.trim(),
-        imageInput: imageInput || [],
-        aspectRatio: aspectRatio || "1:1",
-        resolution: resolution || "1K",
-        outputFormat: outputFormat || "png",
-      });
+      // 3. ENQUEUE GENERATION (Atomic: deduct credits + enqueue outbox command)
+      const CREDIT_COST = 24; // $0.12 per image
+      const result = await storage.enqueueKieGeneration(
+        userId,
+        CREDIT_COST,
+        {
+          prompt: prompt.trim(),
+          imageInput: imageInput || [],
+          aspectRatio: aspectRatio || "1:1",
+          resolution: resolution || "1K",
+          outputFormat: outputFormat || "png",
+        },
+        { resolution: resolution || "1K", aspectRatio: aspectRatio || "1:1", promptLength: prompt.length }
+      );
 
-      // Store task in database
-      const task = await storage.createGenerationTask({
-        taskId,
-        model: "nano-banana-pro",
-        state: "waiting",
-        prompt: prompt.trim(),
-        imageInput: imageInput || null,
-        aspectRatio: aspectRatio || "1:1",
-        resolution: resolution || "1K",
-        outputFormat: outputFormat || "png",
-        resultUrls: null,
-        failCode: null,
-        failMsg: null,
-        costTime: null,
-        completeTime: null,
-      });
+      if (!result.success) {
+        // Insufficient credits (atomic guard prevented deduction)
+        return res.status(403).json({
+          success: false,
+          error: result.error === "INSUFFICIENT_CREDITS" 
+            ? `Insufficient credits. You have ${result.remaining} credits, but need ${CREDIT_COST} credits to generate an image.`
+            : "Failed to enqueue generation task",
+          code: result.error || "UNKNOWN_ERROR",
+          credits: result.remaining,
+          required: CREDIT_COST
+        });
+      }
 
-      console.log(`✅ Task created and stored: ${taskId}`);
+      console.log(`✅ Enqueued generation | Outbox: ${result.outboxId} | Ledger: ${result.ledgerId} | User: ${userId} | Credits: ${result.remaining}`);
 
-      res.json({
-        success: true,
-        taskId,
-        id: task.id,
-        state: "waiting"
-      });
+      // 4. PROCESS OUTBOX IMMEDIATELY (sync for MVP - could be background worker later)
+      // This calls Kie API and completes/refunds transaction
+      const processing = await processOutboxCommands(1);
+
+      // 5. RETURN RESPONSE BASED ON ACTUAL PROCESSING OUTCOME
+      if (processing.succeeded > 0) {
+        // Task created successfully on first attempt
+        res.json({
+          success: true,
+          outboxId: result.outboxId,
+          ledgerId: result.ledgerId,
+          creditsUsed: CREDIT_COST,
+          creditsRemaining: result.remaining,
+          state: "succeeded", // Task created
+          message: "Image generation started successfully"
+        });
+      } else if (processing.refunded > 0) {
+        // Failed after max retries, credits refunded
+        return res.status(500).json({
+          success: false,
+          error: "Image generation failed after multiple retries. Credits have been refunded.",
+          code: "GENERATION_FAILED_REFUNDED",
+          outboxId: result.outboxId,
+          ledgerId: result.ledgerId,
+          credits: result.remaining + CREDIT_COST, // Show post-refund balance
+          refunded: true
+        });
+      } else if (processing.pending > 0) {
+        // First attempt failed, will retry automatically
+        res.json({
+          success: true,
+          outboxId: result.outboxId,
+          ledgerId: result.ledgerId,
+          creditsUsed: CREDIT_COST,
+          creditsRemaining: result.remaining,
+          state: "pending", // Will retry
+          message: "Generation request queued. The system will retry automatically.",
+          retrying: true
+        });
+      } else {
+        // No processing happened (should not reach here)
+        res.json({
+          success: true,
+          outboxId: result.outboxId,
+          ledgerId: result.ledgerId,
+          creditsUsed: CREDIT_COST,
+          creditsRemaining: result.remaining,
+          state: "pending"
+        });
+      }
     } catch (error) {
       console.error("Kie.ai generation error:", error);
       res.status(500).json({
@@ -1110,6 +1168,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         success: false,
         error: "Failed to update result"
+      });
+    }
+  });
+
+  // ===== Credit System API =====
+  
+  // Get current user's credit balance
+  app.get("/api/credits", async (req, res) => {
+    try {
+      const user = req.user as any;
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          error: "Authentication required"
+        });
+      }
+
+      const userId = user.id;
+      const credits = await storage.getUserCredits(userId);
+      
+      res.json({
+        success: true,
+        credits,
+        imagesRemaining: Math.floor(credits / 24) // 24 credits per image
+      });
+    } catch (error) {
+      console.error("Get credits error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to get credits"
+      });
+    }
+  });
+
+  // Get current user's usage history
+  app.get("/api/credits/history", async (req, res) => {
+    try {
+      const user = req.user as any;
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          error: "Authentication required"
+        });
+      }
+
+      const userId = user.id;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const history = await storage.getUserUsageHistory(userId, limit);
+      
+      res.json({
+        success: true,
+        history
+      });
+    } catch (error) {
+      console.error("Get usage history error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to get usage history"
       });
     }
   });

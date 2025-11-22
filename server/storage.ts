@@ -5,12 +5,14 @@ import {
   type ThreeDModel, type InsertThreeDModel,
   type PrintJob, type InsertPrintJob,
   type GenerationTask, type InsertGenerationTask,
-  type GeneratedResult, type InsertGeneratedResult
+  type GeneratedResult, type InsertGeneratedResult,
+  type UsageLedger, type InsertUsageLedger,
+  type TaskOutbox, type InsertTaskOutbox
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { users, figurines, promptPacks, threeDModels, printJobs, generationTasks, generatedResults } from "@shared/schema";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { users, figurines, promptPacks, threeDModels, printJobs, generationTasks, generatedResults, usageLedger, taskOutbox } from "@shared/schema";
+import { eq, desc, and, sql, lt } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -70,6 +72,24 @@ export interface IStorage {
   incrementResultLikes(id: string): Promise<void>;
   incrementResultShares(id: string): Promise<void>;
   deleteGeneratedResult(id: string): Promise<void>;
+  
+  // Credit Management operations
+  getUserCredits(userId: string): Promise<number>;
+  refundCredits(userId: string, amount: number, reason: string): Promise<{ success: boolean; newBalance: number }>;
+  consumeCredits(userId: string, amount: number, operation: string, metadata?: any, generationTaskId?: string): Promise<{ success: boolean; remaining: number }>;
+  getUserUsageHistory(userId: string, limit?: number): Promise<UsageLedger[]>;
+  
+  // Transactional Outbox operations (for reliable task creation)
+  enqueueKieGeneration(
+    userId: string,
+    credits: number,
+    payload: { prompt: string; imageInput?: any; aspectRatio?: string; resolution?: string; outputFormat?: string; },
+    metadata?: any
+  ): Promise<{ success: boolean; outboxId?: string; ledgerId?: string; remaining?: number; error?: string }>;
+  claimPendingOutbox(limit?: number): Promise<TaskOutbox[]>;
+  resetOutboxToPending(outboxId: string, errorMsg: string): Promise<void>;
+  completeOutboxWithTask(outboxId: string, taskData: InsertGenerationTask): Promise<void>;
+  completeOutboxWithRefund(outboxId: string, errorMsg: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -313,6 +333,277 @@ export class DatabaseStorage implements IStorage {
 
   async deleteGeneratedResult(id: string): Promise<void> {
     await db.delete(generatedResults).where(eq(generatedResults.id, id));
+  }
+
+  // Credit Management operations
+  async getUserCredits(userId: string): Promise<number> {
+    const [user] = await db.select().from(users).where(eq(users.id, userId));
+    return user?.credits || 0;
+  }
+
+  async refundCredits(userId: string, amount: number, reason: string): Promise<{ success: boolean; newBalance: number }> {
+    // Refund credits (e.g., when task creation fails)
+    const [updated] = await db.update(users)
+      .set({ 
+        credits: sql`${users.credits} + ${amount}`,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    if (!updated) {
+      return { success: false, newBalance: 0 };
+    }
+
+    // Log refund to ledger
+    await db.insert(usageLedger).values({
+      userId,
+      operation: "refund",
+      creditsConsumed: -amount, // Negative indicates credit addition
+      creditsRemaining: updated.credits,
+      metadata: { reason },
+      generationTaskId: null,
+      success: true,
+    });
+
+    return { success: true, newBalance: updated.credits };
+  }
+
+  async consumeCredits(
+    userId: string, 
+    amount: number, 
+    operation: string, 
+    metadata?: any,
+    generationTaskId?: string
+  ): Promise<{ success: boolean; remaining: number }> {
+    // Use transaction to ensure atomicity and prevent race conditions
+    return await db.transaction(async (tx) => {
+      // Atomic UPDATE with WHERE guard - only succeeds if sufficient credits
+      const [updated] = await tx.update(users)
+        .set({ 
+          credits: sql`${users.credits} - ${amount}`,
+          updatedAt: new Date()
+        })
+        .where(and(
+          eq(users.id, userId),
+          sql`${users.credits} >= ${amount}` // Guard: prevents negative balance
+        ))
+        .returning();
+
+      if (!updated) {
+        // Insufficient credits or user not found - get fresh balance
+        const [user] = await tx.select().from(users).where(eq(users.id, userId));
+        return { success: false, remaining: user?.credits || 0 };
+      }
+
+      // Log to usage ledger with fresh balance from UPDATE RETURNING
+      await tx.insert(usageLedger).values({
+        userId,
+        operation,
+        creditsConsumed: amount,
+        creditsRemaining: updated.credits,
+        metadata,
+        generationTaskId,
+        success: true,
+      });
+
+      return { success: true, remaining: updated.credits };
+    });
+  }
+
+  async getUserUsageHistory(userId: string, limit: number = 50): Promise<UsageLedger[]> {
+    return await db.select()
+      .from(usageLedger)
+      .where(eq(usageLedger.userId, userId))
+      .orderBy(desc(usageLedger.createdAt))
+      .limit(limit);
+  }
+
+  // Transactional Outbox Pattern - Ensures atomic credit deduction + task creation
+  async enqueueKieGeneration(
+    userId: string,
+    credits: number,
+    payload: { prompt: string; imageInput?: any; aspectRatio?: string; resolution?: string; outputFormat?: string; },
+    metadata?: any
+  ): Promise<{ success: boolean; outboxId?: string; ledgerId?: string; remaining?: number; error?: string }> {
+    // Single atomic transaction: deduct credits + create ledger + enqueue outbox command
+    return await db.transaction(async (tx) => {
+      // Step 1: Deduct credits with atomic guard
+      const [updated] = await tx.update(users)
+        .set({ 
+          credits: sql`${users.credits} - ${credits}`,
+          updatedAt: new Date()
+        })
+        .where(and(
+          eq(users.id, userId),
+          sql`${users.credits} >= ${credits}` // Guard: prevents negative balance
+        ))
+        .returning();
+
+      if (!updated) {
+        // Insufficient credits - get fresh balance
+        const [user] = await tx.select().from(users).where(eq(users.id, userId));
+        return { 
+          success: false, 
+          remaining: user?.credits || 0,
+          error: "INSUFFICIENT_CREDITS"
+        };
+      }
+
+      // Step 2: Create ledger entry with status=pending
+      const [ledger] = await tx.insert(usageLedger).values({
+        userId,
+        operation: "image_generation",
+        creditsConsumed: credits,
+        creditsRemaining: updated.credits,
+        status: "pending", // Will be updated when task completes or refunded
+        metadata,
+        generationTaskId: null, // Will be linked later when task created
+        success: true,
+      }).returning();
+
+      // Step 3: Enqueue outbox command
+      const [outbox] = await tx.insert(taskOutbox).values({
+        type: "create_generation_task",
+        userId,
+        ledgerId: ledger.id,
+        payload,
+        credits,
+        status: "pending",
+        attempts: 0,
+      }).returning();
+
+      return { 
+        success: true, 
+        outboxId: outbox.id,
+        ledgerId: ledger.id,
+        remaining: updated.credits 
+      };
+    });
+  }
+
+  async claimPendingOutbox(limit: number = 10): Promise<TaskOutbox[]> {
+    // Claim pending OR stale processing commands with distributed locking
+    return await db.transaction(async (tx) => {
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      
+      const pending = await tx.select()
+        .from(taskOutbox)
+        .where(and(
+          sql`(${taskOutbox.status} = 'pending' OR (${taskOutbox.status} = 'processing' AND ${taskOutbox.lockedAt} < ${fiveMinutesAgo}))`,
+          sql`${taskOutbox.attempts} <= 7` // ✅ Max: 4 task retries (1-4) + 3 refund retries (5-7) = 7 attempts total
+        ))
+        .orderBy(taskOutbox.createdAt)
+        .limit(limit)
+        .for('update', { skipLocked: true });
+
+      // Mark as processing and increment attempts
+      if (pending.length > 0) {
+        await tx.update(taskOutbox)
+          .set({ 
+            status: "processing",
+            lockedAt: new Date(),
+            attempts: sql`${taskOutbox.attempts} + 1`, // Incremented here
+            updatedAt: new Date()
+          })
+          .where(sql`${taskOutbox.id} IN (${sql.join(pending.map(p => sql`${p.id}`), sql`, `)})`);
+
+        // Re-fetch with incremented attempts for accurate retry logic
+        return await tx.select()
+          .from(taskOutbox)
+          .where(sql`${taskOutbox.id} IN (${sql.join(pending.map(p => sql`${p.id}`), sql`, `)})`);
+      }
+
+      return [];
+    });
+  }
+
+  async resetOutboxToPending(outboxId: string, errorMsg: string): Promise<void> {
+    // Reset failed outbox command to pending for retry
+    await db.update(taskOutbox)
+      .set({ 
+        status: "pending", // Reset to pending for next retry
+        lockedAt: null, // Clear lock
+        lastError: errorMsg,
+        updatedAt: new Date()
+      })
+      .where(eq(taskOutbox.id, outboxId));
+  }
+
+  async completeOutboxWithTask(outboxId: string, taskData: InsertGenerationTask): Promise<void> {
+    await db.transaction(async (tx) => {
+      // Get outbox to find linked ledger
+      const [outbox] = await tx.select().from(taskOutbox).where(eq(taskOutbox.id, outboxId));
+      
+      if (!outbox) {
+        throw new Error(`Outbox ${outboxId} not found`);
+      }
+
+      // Create generation task
+      const [task] = await tx.insert(generationTasks).values(taskData).returning();
+
+      // Update outbox status to succeeded
+      await tx.update(taskOutbox)
+        .set({ 
+          status: "succeeded",
+          updatedAt: new Date()
+        })
+        .where(eq(taskOutbox.id, outboxId));
+
+      // Update ORIGINAL ledger entry with task link and status=succeeded
+      if (outbox.ledgerId) {
+        await tx.update(usageLedger)
+          .set({ 
+            status: "succeeded",
+            generationTaskId: task.id,
+            outboxId: outboxId
+          })
+          .where(eq(usageLedger.id, outbox.ledgerId));
+      }
+    });
+  }
+
+  async completeOutboxWithRefund(outboxId: string, errorMsg: string): Promise<void> {
+    await db.transaction(async (tx) => {
+      // Get outbox data
+      const [outbox] = await tx.select().from(taskOutbox).where(eq(taskOutbox.id, outboxId));
+      
+      if (!outbox) {
+        throw new Error(`Outbox ${outboxId} not found`);
+      }
+
+      // Refund credits
+      await tx.update(users)
+        .set({ 
+          credits: sql`${users.credits} + ${outbox.credits}`,
+          updatedAt: new Date()
+        })
+        .where(eq(users.id, outbox.userId));
+
+      // Get fresh balance AFTER refund
+      const [user] = await tx.select().from(users).where(eq(users.id, outbox.userId));
+
+      // Update ORIGINAL ledger entry to refunded (DO NOT create new entry)
+      if (outbox.ledgerId) {
+        await tx.update(usageLedger)
+          .set({ 
+            status: "refunded",
+            outboxId: outboxId,
+            creditsRemaining: user?.credits || 0, // Update to post-refund balance
+            metadata: { reason: "task_creation_failed", error: errorMsg }
+          })
+          .where(eq(usageLedger.id, outbox.ledgerId));
+      }
+
+      // Update outbox status to refunded
+      await tx.update(taskOutbox)
+        .set({ 
+          status: "refunded",
+          lastError: errorMsg,
+          updatedAt: new Date()
+        })
+        .where(eq(taskOutbox.id, outboxId));
+    });
   }
 }
 
@@ -678,6 +969,86 @@ export class MemStorage implements IStorage {
 
   async deleteGeneratedResult(id: string): Promise<void> {
     this.generatedResultsList.delete(id);
+  }
+
+  // Credit Management operations
+  async getUserCredits(userId: string): Promise<number> {
+    const user = this.users.get(userId);
+    return user?.credits || 0;
+  }
+
+  async consumeCredits(
+    userId: string, 
+    amount: number, 
+    operation: string, 
+    metadata?: any,
+    generationTaskId?: string
+  ): Promise<{ success: boolean; remaining: number }> {
+    const user = this.users.get(userId);
+    if (!user) {
+      return { success: false, remaining: 0 };
+    }
+
+    if (user.credits < amount) {
+      return { success: false, remaining: user.credits };
+    }
+
+    // Deduct credits
+    user.credits -= amount;
+    user.updatedAt = new Date();
+    this.users.set(userId, user);
+
+    const remaining = user.credits;
+
+    // Log to usage ledger (in-memory)
+    const ledgerEntry: UsageLedger = {
+      id: randomUUID(),
+      userId,
+      operation,
+      creditsConsumed: amount,
+      creditsRemaining: remaining,
+      endpoint: null,
+      metadata: metadata || null,
+      generationTaskId: generationTaskId || null,
+      success: true,
+      createdAt: new Date(),
+    };
+
+    // Store in memory (you could add a Map for this if needed)
+    // For now, just return success
+    return { success: true, remaining };
+  }
+
+  async getUserUsageHistory(userId: string, limit: number = 50): Promise<UsageLedger[]> {
+    // In-memory implementation would need a separate Map to store ledger
+    // For now, return empty array
+    return [];
+  }
+
+  // Transactional Outbox - Stub implementations (project uses DatabaseStorage)
+  async enqueueKieGeneration(
+    userId: string,
+    credits: number,
+    payload: any,
+    metadata?: any
+  ): Promise<{ success: boolean; outboxId?: string; ledgerId?: string; remaining?: number; error?: string }> {
+    throw new Error("MemStorage does not support transactional outbox");
+  }
+
+  async claimPendingOutbox(limit?: number): Promise<TaskOutbox[]> {
+    return [];
+  }
+
+  async resetOutboxToPending(outboxId: string, errorMsg: string): Promise<void> {
+    throw new Error("MemStorage does not support transactional outbox");
+  }
+
+  async completeOutboxWithTask(outboxId: string, taskData: InsertGenerationTask): Promise<void> {
+    throw new Error("MemStorage does not support transactional outbox");
+  }
+
+  async completeOutboxWithRefund(outboxId: string, errorMsg: string): Promise<void> {
+    throw new Error("MemStorage does not support transactional outbox");
   }
 }
 
