@@ -6,6 +6,7 @@ import { promptOptimizerService } from "./promptOptimizer";
 import { generatePoseImage, enhancePrompt } from "./gemini";
 import { generatePoseFusion, generatePoseFusionEdit } from "./poseGenerator";
 import { storage } from "./storage";
+import { createGenerationTask, getTaskStatus } from "./kie-service";
 
 // Configure multer for file uploads
 const upload = multer({
@@ -661,10 +662,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create print job record
       const printJob = await storage.createPrintJob({
-        id: Math.random().toString(36).substr(2, 9),
-        threeDModelId: id,
+        modelId: id,
         material,
-        quality,
         quantity,
         status: 'quoted'
       });
@@ -677,8 +676,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const estimatedPrice = basePrice * materialMultiplier * qualityMultiplier * quantity;
 
       const updatedPrintJob = await storage.updatePrintJob(printJob.id, {
-        estimatedPrice: parseFloat(estimatedPrice.toFixed(2)),
-        estimatedDays: Math.floor(Math.random() * 10) + 3 // 3-12 days
+        quotedPrice: estimatedPrice.toFixed(2)
       });
 
       res.json(updatedPrintJob);
@@ -706,9 +704,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Update print job to ordered status
       const updatedPrintJob = await storage.updatePrintJob(id, {
         status: 'ordered',
-        shippingAddress,
-        paymentMethod,
-        orderDate: new Date().toISOString()
+        customerEmail: req.body.email || null,
+        shippingInfo: { shippingAddress, paymentMethod, orderDate: new Date().toISOString() }
       });
 
       res.json({
@@ -738,12 +735,142 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Kie.ai Nano Banana Pro API endpoints
+  
+  // Create generation task (async workflow)
+  app.post("/api/kie/generate", async (req, res) => {
+    try {
+      const { prompt, imageInput, aspectRatio, resolution, outputFormat } = req.body;
+
+      if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        return res.status(400).json({
+          success: false,
+          error: "Prompt is required and must be a non-empty string"
+        });
+      }
+
+      if (!process.env.KIE_API_KEY) {
+        return res.status(500).json({
+          success: false,
+          error: "Kie.ai API key not configured"
+        });
+      }
+
+      // Create task via Kie.ai API
+      const { taskId } = await createGenerationTask({
+        prompt: prompt.trim(),
+        imageInput: imageInput || [],
+        aspectRatio: aspectRatio || "1:1",
+        resolution: resolution || "1K",
+        outputFormat: outputFormat || "png",
+      });
+
+      // Store task in database
+      const task = await storage.createGenerationTask({
+        taskId,
+        model: "nano-banana-pro",
+        state: "waiting",
+        prompt: prompt.trim(),
+        imageInput: imageInput || null,
+        aspectRatio: aspectRatio || "1:1",
+        resolution: resolution || "1K",
+        outputFormat: outputFormat || "png",
+        resultUrls: null,
+        failCode: null,
+        failMsg: null,
+        costTime: null,
+        completeTime: null,
+      });
+
+      console.log(`✅ Task created and stored: ${taskId}`);
+
+      res.json({
+        success: true,
+        taskId,
+        id: task.id,
+        state: "waiting"
+      });
+    } catch (error) {
+      console.error("Kie.ai generation error:", error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to create generation task"
+      });
+    }
+  });
+
+  // Poll task status
+  app.get("/api/kie/task/:taskId", async (req, res) => {
+    try {
+      const { taskId } = req.params;
+
+      // Get task from database
+      const dbTask = await storage.getGenerationTaskByTaskId(taskId);
+      if (!dbTask) {
+        return res.status(404).json({
+          success: false,
+          error: "Task not found"
+        });
+      }
+
+      // If task is already completed/failed, return cached result
+      if (dbTask.state === "success" || dbTask.state === "fail") {
+        return res.json({
+          success: true,
+          task: dbTask
+        });
+      }
+
+      // Poll Kie.ai API for latest status
+      const status = await getTaskStatus(taskId);
+
+      // Update database with latest status
+      const updatedTask = await storage.updateGenerationTask(dbTask.id, {
+        state: status.state,
+        resultUrls: status.resultUrls ? status.resultUrls as any : null,
+        failCode: status.failCode || null,
+        failMsg: status.failMsg || null,
+        costTime: status.costTime || null,
+        completeTime: status.completeTime ? new Date(status.completeTime) : null,
+      });
+
+      res.json({
+        success: true,
+        task: updatedTask
+      });
+    } catch (error) {
+      console.error("Task status error:", error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to get task status"
+      });
+    }
+  });
+
+  // Get all generation tasks (for history/gallery)
+  app.get("/api/kie/tasks", async (req, res) => {
+    try {
+      const tasks = await storage.getAllGenerationTasks();
+      res.json({
+        success: true,
+        tasks
+      });
+    } catch (error) {
+      console.error("Get tasks error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to get tasks"
+      });
+    }
+  });
+
   // Health check endpoint
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "ok", 
       timestamp: new Date().toISOString(),
-      geminiConfigured: !!process.env.GEMINI_API_KEY
+      geminiConfigured: !!process.env.GEMINI_API_KEY,
+      kieConfigured: !!process.env.KIE_API_KEY
     });
   });
 

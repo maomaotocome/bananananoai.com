@@ -3,11 +3,12 @@ import {
   type Figurine, type InsertFigurine,
   type PromptPack, type InsertPromptPack,
   type ThreeDModel, type InsertThreeDModel,
-  type PrintJob, type InsertPrintJob
+  type PrintJob, type InsertPrintJob,
+  type GenerationTask, type InsertGenerationTask
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { users, figurines, promptPacks, threeDModels, printJobs } from "@shared/schema";
+import { users, figurines, promptPacks, threeDModels, printJobs, generationTasks } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
@@ -47,6 +48,14 @@ export interface IStorage {
   createPrintJob(printJob: InsertPrintJob): Promise<PrintJob>;
   updatePrintJob(id: string, printJob: Partial<PrintJob>): Promise<PrintJob>;
   deletePrintJob(id: string): Promise<void>;
+  
+  // Generation Task operations
+  getGenerationTask(id: string): Promise<GenerationTask | undefined>;
+  getGenerationTaskByTaskId(taskId: string): Promise<GenerationTask | undefined>;
+  getAllGenerationTasks(): Promise<GenerationTask[]>;
+  createGenerationTask(task: InsertGenerationTask): Promise<GenerationTask>;
+  updateGenerationTask(id: string, task: Partial<GenerationTask>): Promise<GenerationTask>;
+  deleteGenerationTask(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -183,6 +192,38 @@ export class DatabaseStorage implements IStorage {
   async deletePrintJob(id: string): Promise<void> {
     await db.delete(printJobs).where(eq(printJobs.id, id));
   }
+
+  // Generation Task operations
+  async getGenerationTask(id: string): Promise<GenerationTask | undefined> {
+    const [task] = await db.select().from(generationTasks).where(eq(generationTasks.id, id));
+    return task;
+  }
+
+  async getGenerationTaskByTaskId(taskId: string): Promise<GenerationTask | undefined> {
+    const [task] = await db.select().from(generationTasks).where(eq(generationTasks.taskId, taskId));
+    return task;
+  }
+
+  async getAllGenerationTasks(): Promise<GenerationTask[]> {
+    return await db.select().from(generationTasks).orderBy(desc(generationTasks.createdAt));
+  }
+
+  async createGenerationTask(insertTask: InsertGenerationTask): Promise<GenerationTask> {
+    const [task] = await db.insert(generationTasks).values(insertTask).returning();
+    return task;
+  }
+
+  async updateGenerationTask(id: string, updateData: Partial<GenerationTask>): Promise<GenerationTask> {
+    const [task] = await db.update(generationTasks)
+      .set(updateData)
+      .where(eq(generationTasks.id, id))
+      .returning();
+    return task;
+  }
+
+  async deleteGenerationTask(id: string): Promise<void> {
+    await db.delete(generationTasks).where(eq(generationTasks.id, id));
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -191,6 +232,7 @@ export class MemStorage implements IStorage {
   private promptPacksList: Map<string, PromptPack>;
   private threeDModelsList: Map<string, ThreeDModel>;
   private printJobsList: Map<string, PrintJob>;
+  private generationTasksList: Map<string, GenerationTask>;
 
   constructor() {
     this.users = new Map();
@@ -198,6 +240,7 @@ export class MemStorage implements IStorage {
     this.promptPacksList = new Map();
     this.threeDModelsList = new Map();
     this.printJobsList = new Map();
+    this.generationTasksList = new Map();
   }
 
   // User operations
@@ -378,6 +421,60 @@ export class MemStorage implements IStorage {
 
   async deletePrintJob(id: string): Promise<void> {
     this.printJobsList.delete(id);
+  }
+
+  // Generation Task operations
+  async getGenerationTask(id: string): Promise<GenerationTask | undefined> {
+    return this.generationTasksList.get(id);
+  }
+
+  async getGenerationTaskByTaskId(taskId: string): Promise<GenerationTask | undefined> {
+    return Array.from(this.generationTasksList.values()).find(
+      (task) => task.taskId === taskId,
+    );
+  }
+
+  async getAllGenerationTasks(): Promise<GenerationTask[]> {
+    return Array.from(this.generationTasksList.values()).sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+
+  async createGenerationTask(insertTask: InsertGenerationTask): Promise<GenerationTask> {
+    const id = randomUUID();
+    const task: GenerationTask = { 
+      id,
+      taskId: insertTask.taskId,
+      model: insertTask.model || "nano-banana-pro",
+      state: insertTask.state,
+      prompt: insertTask.prompt,
+      imageInput: insertTask.imageInput || null,
+      aspectRatio: insertTask.aspectRatio || "1:1",
+      resolution: insertTask.resolution || "1K",
+      outputFormat: insertTask.outputFormat || "png",
+      resultUrls: insertTask.resultUrls || null,
+      failCode: insertTask.failCode || null,
+      failMsg: insertTask.failMsg || null,
+      costTime: insertTask.costTime || null,
+      completeTime: insertTask.completeTime || null,
+      createdAt: new Date() 
+    };
+    this.generationTasksList.set(id, task);
+    return task;
+  }
+
+  async updateGenerationTask(id: string, updateData: Partial<GenerationTask>): Promise<GenerationTask> {
+    const existing = this.generationTasksList.get(id);
+    if (!existing) {
+      throw new Error(`GenerationTask with id ${id} not found`);
+    }
+    const updated = { ...existing, ...updateData };
+    this.generationTasksList.set(id, updated);
+    return updated;
+  }
+
+  async deleteGenerationTask(id: string): Promise<void> {
+    this.generationTasksList.delete(id);
   }
 }
 

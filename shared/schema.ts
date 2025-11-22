@@ -97,3 +97,30 @@ export type ThreeDModel = typeof threeDModels.$inferSelect;
 
 export type InsertPrintJob = z.infer<typeof insertPrintJobSchema>;
 export type PrintJob = typeof printJobs.$inferSelect;
+
+// Kie.ai Generation Tasks
+export const generationTasks = pgTable("generation_tasks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  taskId: text("task_id").notNull().unique(), // Kie.ai task ID
+  model: varchar("model").default("nano-banana-pro").notNull(),
+  state: varchar("state", { enum: ["waiting", "success", "fail"] }).notNull(),
+  prompt: text("prompt").notNull(),
+  imageInput: jsonb("image_input"), // Array of image URLs or base64
+  aspectRatio: varchar("aspect_ratio").default("1:1"),
+  resolution: varchar("resolution").default("1K"),
+  outputFormat: varchar("output_format").default("png"),
+  resultUrls: jsonb("result_urls"), // Array of result image URLs
+  failCode: text("fail_code"),
+  failMsg: text("fail_msg"),
+  costTime: integer("cost_time"), // In milliseconds
+  completeTime: timestamp("complete_time"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertGenerationTaskSchema = createInsertSchema(generationTasks).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertGenerationTask = z.infer<typeof insertGenerationTaskSchema>;
+export type GenerationTask = typeof generationTasks.$inferSelect;
