@@ -4,6 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { queryClient } from "@/lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { initializePerformance } from "@/lib/performance";
+import { initGA, initClarity } from "@/lib/analytics";
+import { usePageTracking } from "@/hooks/useAnalytics";
 import { SchemaMarkup } from "@/components/schema-markup";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
@@ -26,6 +28,9 @@ import NanoBananaPro from "@/pages/nano-banana-pro";
 
 function Router() {
   console.log("Router component is rendering");
+  
+  // Track page views automatically when routes change
+  usePageTracking();
   
   return (
     <div className="min-h-screen bg-background">
@@ -56,9 +61,18 @@ function Router() {
 }
 
 function App() {
-  // Initialize performance monitoring when app loads
+  // Initialize analytics and performance monitoring when app loads
   useEffect(() => {
+    // Initialize Google Analytics 4
+    initGA();
+    
+    // Initialize Microsoft Clarity
+    initClarity();
+    
+    // Initialize performance monitoring
     initializePerformance();
+    
+    console.log('📊 Analytics initialized: Google Analytics 4 + Microsoft Clarity');
   }, []);
 
   return (

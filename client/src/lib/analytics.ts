@@ -8,8 +8,9 @@ declare global {
 }
 
 // Google Analytics 4 Configuration
-const GA_MEASUREMENT_ID = 'G-S63C99GVPN';
-const CLARITY_PROJECT_ID = 't414yz89wj';
+// Prefer environment variable, fallback to hardcoded for backwards compatibility
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-S63C99GVPN';
+const CLARITY_PROJECT_ID = import.meta.env.VITE_CLARITY_PROJECT_ID || 't414yz89wj';
 
 // Prevent duplicate initialization - Force refresh for environment changes
 let isGAInitialized = false;
@@ -98,8 +99,8 @@ export const initGA = () => {
 
     window.gtag('config', GA_MEASUREMENT_ID, debugConfig);
 
-    // CRITICAL: Fire initial page_view immediately after config
-    trackPageView(window.location.pathname, document.title);
+    // NOTE: Initial page_view is handled by usePageTracking() hook in Router component
+    // to avoid double-firing events. DO NOT call trackPageView here.
 
     // Enhanced logging with clear environment separation
     console.log('🔥 FIXED GA4 SETUP - Only bananananoai.com = Production! [' + GA_INIT_TIMESTAMP + ']');
