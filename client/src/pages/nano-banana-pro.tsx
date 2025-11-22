@@ -8,11 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Upload, Sparkles, Printer, Download, ArrowRight, Star, Play, CheckCircle, 
   Zap, Palette, Users, Globe, Image as ImageIcon, Wand2, Code, BookOpen,
-  ChevronRight, Copy, Check, Search, Filter
+  ChevronRight, Copy, Check, Search, Filter, Share2, Twitter, Facebook, Linkedin
 } from "lucide-react";
 import { Link } from "wouter";
 import { AnimatedBackground, InteractiveButton } from "@/components/ui/animated-background";
 import { useToast } from "@/hooks/use-toast";
+import fallbackImage from "@assets/stock_images/futuristic_ai_genera_a2c9ed67.jpg";
 import { 
   nanoBananaProPrompts, 
   promptCategories, 
@@ -220,11 +221,32 @@ export default function NanoBananaPro() {
       // Check if response is OK before parsing
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: `Server error: ${response.status}` }));
+        
+        // Handle quota exceeded errors specifically
+        // Error can be string or object { code, message }
+        let errorMessage: string;
+        if (typeof errorData.error === 'string') {
+          errorMessage = errorData.error;
+        } else if (errorData.error && typeof errorData.error === 'object') {
+          errorMessage = (errorData.error as any).message || JSON.stringify(errorData.error);
+        } else {
+          errorMessage = `Server returned ${response.status}`;
+        }
+        
+        const isQuotaError = errorMessage.toLowerCase().includes('quota') || 
+                            errorMessage.toLowerCase().includes('429') || 
+                            errorMessage.toLowerCase().includes('rate limit') ||
+                            errorMessage.toLowerCase().includes('exceeded');
+        
         toast({
-          title: "Generation failed",
-          description: errorData.error || `Server returned ${response.status}. Please try again later.`,
-          variant: "destructive"
+          title: isQuotaError ? "API Quota Exceeded - Using Demo Image" : "Generation failed - Using Demo Image",
+          description: isQuotaError 
+            ? "The Gemini API free tier quota has been reached. Showing a demo image so you can try the share feature. Please try generating again later or use your own API key."
+            : (errorMessage || "Please try again later.") + " Showing a demo image instead.",
         });
+        
+        // Use fallback demo image so users can still test sharing functionality
+        setGeneratedImage(fallbackImage);
         return;
       }
 
@@ -425,7 +447,20 @@ export default function NanoBananaPro() {
                     <CheckCircle className="w-5 h-5 text-green-500" />
                     Generated Image
                   </h3>
-                  <Button variant="outline" size="sm" data-testid="button-download-image">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = generatedImage;
+                      link.download = `nano-banana-pro-${Date.now()}.png`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      toast({ title: "Image downloaded successfully!" });
+                    }}
+                    data-testid="button-download-image"
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>
@@ -436,6 +471,80 @@ export default function NanoBananaPro() {
                   className="w-full rounded-lg shadow-lg"
                   data-testid="img-generated-result"
                 />
+                
+                {/* Social Share Buttons */}
+                <div className="border-t pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Share2 className="w-4 h-4" />
+                    <span className="font-medium">Share your creation:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const shareText = `Amazing image created with Nano Banana Pro! 🎨\n\n"${prompt.slice(0, 100)}${prompt.length > 100 ? '...' : ''}"\n\nTry it free at ${window.location.origin}/nano-banana-pro`;
+                        const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+                        window.open(shareUrl, '_blank', 'width=550,height=420');
+                      }}
+                      data-testid="button-share-twitter"
+                      className="hover:bg-blue-500/10"
+                    >
+                      <Twitter className="w-4 h-4 mr-2" />
+                      Share on X
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/nano-banana-pro')}&quote=${encodeURIComponent(`Check out this amazing image I created with Nano Banana Pro!`)}`;
+                        window.open(shareUrl, '_blank', 'width=550,height=420');
+                      }}
+                      data-testid="button-share-facebook"
+                      className="hover:bg-blue-600/10"
+                    >
+                      <Facebook className="w-4 h-4 mr-2" />
+                      Share on Facebook
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const shareText = `Amazing image created with Nano Banana Pro - Free AI Image Generator with 4K text rendering!\n\n"${prompt.slice(0, 150)}${prompt.length > 150 ? '...' : ''}"\n\nTry it free: ${window.location.origin}/nano-banana-pro`;
+                        const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + '/nano-banana-pro')}`;
+                        window.open(shareUrl, '_blank', 'width=550,height=420');
+                      }}
+                      data-testid="button-share-linkedin"
+                      className="hover:bg-blue-700/10"
+                    >
+                      <Linkedin className="w-4 h-4 mr-2" />
+                      Share on LinkedIn
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const shareText = `${window.location.origin}/nano-banana-pro - Amazing image created with Nano Banana Pro!`;
+                        navigator.clipboard.writeText(shareText);
+                        toast({ 
+                          title: "Link copied!", 
+                          description: "Share link copied to clipboard" 
+                        });
+                      }}
+                      data-testid="button-copy-share-link"
+                      className="hover:bg-purple-500/10"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy Link
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    💡 Tip: Download the image first, then share it along with your social media post for maximum engagement!
+                  </p>
+                </div>
               </div>
             )}
           </CardContent>
