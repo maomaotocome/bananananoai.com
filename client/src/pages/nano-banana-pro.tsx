@@ -46,77 +46,83 @@ export default function NanoBananaPro() {
 
   // SEO meta tags - Optimized for "Nano Banana Pro" keyword
   useEffect(() => {
+    const PAGE_MARKER = 'home';
     document.title = "Nano Banana Pro - Free AI Image Generator | 4K Text Rendering | Gemini 3 Pro";
     
-    const existingMeta = document.querySelectorAll('meta[data-nano-banana-page]');
+    // Cleanup only this page's meta tags, links, and scripts
+    const existingMeta = document.querySelectorAll(`meta[data-nano-banana-page="${PAGE_MARKER}"]`);
     existingMeta.forEach(meta => meta.remove());
+    const existingLinks = document.querySelectorAll(`link[data-nano-banana-page="${PAGE_MARKER}"]`);
+    existingLinks.forEach(link => link.remove());
+    const existingScripts = document.querySelectorAll(`script[data-nano-banana-page="${PAGE_MARKER}"]`);
+    existingScripts.forEach(script => script.remove());
     
     const metaDescription = document.createElement('meta');
     metaDescription.name = 'description';
     metaDescription.content = 'Create stunning 4K images with perfect text rendering using Nano Banana Pro. Free online AI image generator powered by Google Gemini 3 Pro. Try now, no signup required. Complete pipeline: generation → 3D → printing.';
-    metaDescription.setAttribute('data-nano-banana-page', 'true');
+    metaDescription.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(metaDescription);
     
     const metaKeywords = document.createElement('meta');
     metaKeywords.name = 'keywords';
     metaKeywords.content = 'nano banana pro, nano banana pro free, nano banana pro playground, gemini 3 pro image, ai image generator, 4k text rendering, nano banana pro tutorial, nano banana pro prompts, free online tool';
-    metaKeywords.setAttribute('data-nano-banana-page', 'true');
+    metaKeywords.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(metaKeywords);
 
     // Open Graph tags
     const ogTitle = document.createElement('meta');
     ogTitle.setAttribute('property', 'og:title');
     ogTitle.content = 'Nano Banana Pro - Free AI Image Generator with 4K Output';
-    ogTitle.setAttribute('data-nano-banana-page', 'true');
+    ogTitle.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogTitle);
 
     const ogDescription = document.createElement('meta');
     ogDescription.setAttribute('property', 'og:description');
     ogDescription.content = 'Create professional 4K images with perfect text rendering. Powered by Google Gemini 3 Pro. Try free online now - no signup required!';
-    ogDescription.setAttribute('data-nano-banana-page', 'true');
+    ogDescription.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogDescription);
 
     const ogType = document.createElement('meta');
     ogType.setAttribute('property', 'og:type');
     ogType.content = 'website';
-    ogType.setAttribute('data-nano-banana-page', 'true');
+    ogType.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogType);
 
     const ogUrl = document.createElement('meta');
     ogUrl.setAttribute('property', 'og:url');
     ogUrl.content = window.location.href;
-    ogUrl.setAttribute('data-nano-banana-page', 'true');
+    ogUrl.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogUrl);
 
     const ogImage = document.createElement('meta');
     ogImage.setAttribute('property', 'og:image');
     ogImage.content = window.location.origin + '/assets/nano-banana-pro-social.jpg';
-    ogImage.setAttribute('data-nano-banana-page', 'true');
+    ogImage.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogImage);
 
     const canonical = document.createElement('link');
     canonical.rel = 'canonical';
     canonical.href = window.location.href;
-    canonical.setAttribute('data-nano-banana-page', 'true');
+    canonical.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(canonical);
 
     // Twitter Card tags
     const twitterCard = document.createElement('meta');
     twitterCard.name = 'twitter:card';
     twitterCard.content = 'summary_large_image';
-    twitterCard.setAttribute('data-nano-banana-page', 'true');
+    twitterCard.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(twitterCard);
 
     const twitterTitle = document.createElement('meta');
     twitterTitle.name = 'twitter:title';
     twitterTitle.content = 'Nano Banana Pro - Free AI Image Generator';
-    twitterTitle.setAttribute('data-nano-banana-page', 'true');
+    twitterTitle.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(twitterTitle);
 
     const twitterDescription = document.createElement('meta');
     twitterDescription.name = 'twitter:description';
     twitterDescription.content = 'Create 4K images with perfect text. Powered by Gemini 3 Pro. Try free!';
-    twitterDescription.setAttribute('data-nano-banana-page', 'true');
+    twitterDescription.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(twitterDescription);
 
     // Structured data (SoftwareApplication Schema)
@@ -152,7 +158,7 @@ export default function NanoBananaPro() {
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';
-    script.setAttribute('data-nano-banana-page', 'true');
+    script.setAttribute('data-nano-banana-page', PAGE_MARKER);
     script.textContent = JSON.stringify(structuredData);
     document.head.appendChild(script);
 
@@ -198,7 +204,7 @@ export default function NanoBananaPro() {
 
     const faqScript = document.createElement('script');
     faqScript.type = 'application/ld+json';
-    faqScript.setAttribute('data-nano-banana-page', 'true');
+    faqScript.setAttribute('data-nano-banana-page', PAGE_MARKER);
     faqScript.textContent = JSON.stringify(faqData);
     document.head.appendChild(faqScript);
 

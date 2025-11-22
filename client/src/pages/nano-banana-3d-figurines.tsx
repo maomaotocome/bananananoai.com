@@ -7,6 +7,8 @@ import { Upload, Sparkles, Printer, Download, ArrowRight, Star, Play, CheckCircl
 import { Link } from "wouter";
 import { AnimatedBackground, InteractiveButton } from "@/components/ui/animated-background";
 import FigurineGenerator from "@/components/figurine-generator";
+import { Breadcrumb } from "@/components/breadcrumb";
+import { BreadcrumbSchema } from "@/components/breadcrumb-schema";
 
 export default function NanoBanana3DFigurines() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -14,83 +16,88 @@ export default function NanoBanana3DFigurines() {
 
   // SEO meta tags
   useEffect(() => {
+    const PAGE_MARKER = 'figurines';
     // Set page title
     document.title = "Nano Banana 3D Figurines - AI Image to 3D Model & Print | Free STL Generator";
     
-    // Remove existing meta tags first
-    const existingMeta = document.querySelectorAll('meta[data-nano-banana-page]');
+    // Cleanup only this page's meta tags, links, and scripts
+    const existingMeta = document.querySelectorAll(`meta[data-nano-banana-page="${PAGE_MARKER}"]`);
     existingMeta.forEach(meta => meta.remove());
+    const existingLinks = document.querySelectorAll(`link[data-nano-banana-page="${PAGE_MARKER}"]`);
+    existingLinks.forEach(link => link.remove());
+    const existingScripts = document.querySelectorAll(`script[data-nano-banana-page="${PAGE_MARKER}"]`);
+    existingScripts.forEach(script => script.remove());
     
     // Add meta description
     const metaDescription = document.createElement('meta');
     metaDescription.name = 'description';
     metaDescription.content = 'Create custom Nano Banana 3D figurines from any photo. Upload image → AI generates figurine → Convert to 3D STL → Order professional prints. Complete pipeline from image to physical figurine.';
-    metaDescription.setAttribute('data-nano-banana-page', 'true');
+    metaDescription.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(metaDescription);
     
     // Add keywords meta
     const metaKeywords = document.createElement('meta');
     metaKeywords.name = 'keywords';
     metaKeywords.content = 'nano banana 3d figurines, 3d figurine creator, ai image to 3d model, stl generator, 3d printing service, custom figurines, photo to 3d model, gemini 2.5 flash';
-    metaKeywords.setAttribute('data-nano-banana-page', 'true');
+    metaKeywords.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(metaKeywords);
 
     // Open Graph tags
     const ogTitle = document.createElement('meta');
     ogTitle.setAttribute('property', 'og:title');
     ogTitle.content = 'Nano Banana 3D Figurines - AI Image to 3D Model Generator';
-    ogTitle.setAttribute('data-nano-banana-page', 'true');
+    ogTitle.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogTitle);
 
     const ogDescription = document.createElement('meta');
     ogDescription.setAttribute('property', 'og:description');
     ogDescription.content = 'Transform any photo into professional Nano Banana 3D figurines. Complete workflow: AI generation, 3D conversion, and instant printing quotes. Try it free!';
-    ogDescription.setAttribute('data-nano-banana-page', 'true');
+    ogDescription.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogDescription);
 
     const ogType = document.createElement('meta');
     ogType.setAttribute('property', 'og:type');
     ogType.content = 'website';
-    ogType.setAttribute('data-nano-banana-page', 'true');
+    ogType.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogType);
 
     const ogUrl = document.createElement('meta');
     ogUrl.setAttribute('property', 'og:url');
     ogUrl.content = window.location.href;
-    ogUrl.setAttribute('data-nano-banana-page', 'true');
+    ogUrl.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogUrl);
 
     // OG Image for social sharing
     const ogImage = document.createElement('meta');
     ogImage.setAttribute('property', 'og:image');
     ogImage.content = window.location.origin + '/assets/nano-banana-social.jpg';
-    ogImage.setAttribute('data-nano-banana-page', 'true');
+    ogImage.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(ogImage);
 
     // Canonical link
     const canonical = document.createElement('link');
     canonical.rel = 'canonical';
     canonical.href = window.location.href;
-    canonical.setAttribute('data-nano-banana-page', 'true');
+    canonical.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(canonical);
 
     // Twitter Card tags
     const twitterCard = document.createElement('meta');
     twitterCard.name = 'twitter:card';
     twitterCard.content = 'summary_large_image';
-    twitterCard.setAttribute('data-nano-banana-page', 'true');
+    twitterCard.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(twitterCard);
 
     const twitterTitle = document.createElement('meta');
     twitterTitle.name = 'twitter:title';
     twitterTitle.content = 'Nano Banana 3D Figurines - AI Image to 3D Model Generator';
-    twitterTitle.setAttribute('data-nano-banana-page', 'true');
+    twitterTitle.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(twitterTitle);
 
     const twitterDescription = document.createElement('meta');
     twitterDescription.name = 'twitter:description';
     twitterDescription.content = 'Transform photos into custom 3D figurines with AI. Complete pipeline from upload to print!';
-    twitterDescription.setAttribute('data-nano-banana-page', 'true');
+    twitterDescription.setAttribute('data-nano-banana-page', PAGE_MARKER);
     document.head.appendChild(twitterDescription);
 
     // Structured data (HowTo Schema)
@@ -163,7 +170,7 @@ export default function NanoBanana3DFigurines() {
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';
-    script.setAttribute('data-nano-banana-page', 'true');
+    script.setAttribute('data-nano-banana-page', PAGE_MARKER);
     script.textContent = JSON.stringify(structuredData);
     document.head.appendChild(script);
 
@@ -250,9 +257,24 @@ export default function NanoBanana3DFigurines() {
     }
   ];
 
+  // Breadcrumb data
+  const breadcrumbItems = [
+    { label: "Nano Banana Pro", href: "/nano-banana-pro" },
+    { label: "3D Figurines", href: "/nano-banana-3d-figurines" }
+  ];
+
+  const breadcrumbSchemaItems = [
+    { position: 1, name: "Home", item: "https://bananananoai.com/" },
+    { position: 2, name: "Nano Banana Pro", item: "https://bananananoai.com/nano-banana-pro" },
+    { position: 3, name: "3D Figurines", item: "https://bananananoai.com/nano-banana-3d-figurines" }
+  ];
+
   return (
     <div className="min-h-screen bg-background relative">
+      <BreadcrumbSchema items={breadcrumbSchemaItems} />
       <AnimatedBackground />
+      
+      <Breadcrumb items={breadcrumbItems} />
       
       {/* Modern Hero Section */}
       <div className="relative bg-gradient-to-br from-primary/5 via-primary/10 to-secondary/5 pt-20 pb-24 overflow-hidden">
