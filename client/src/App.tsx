@@ -22,6 +22,7 @@ import FAQ from "@/pages/faq";
 import NotFound from "@/pages/not-found";
 import PosePainter from "@/pages/pose-painter";
 import NanoBanana3DFigurines from "@/pages/nano-banana-3d-figurines";
+import NanoBananaPro from "@/pages/nano-banana-pro";
 
 function Router() {
   console.log("Router component is rendering");
@@ -31,7 +32,8 @@ function Router() {
       <Navigation />
       <main>
         <Switch>
-          <Route path="/" component={Home} />
+          <Route path="/" component={NanoBananaPro} />
+          <Route path="/nano-banana-pro" component={NanoBananaPro} />
           <Route path="/nano-banana-3d-figurines" component={NanoBanana3DFigurines} />
           <Route path="/what-is-nano-banana" component={WhatIsNanoBanana} />
           <Route path="/how-to-use" component={HowToUse} />

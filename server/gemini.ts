@@ -1,5 +1,22 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
+/**
+ * SECURITY NOTE: API Key Management
+ * 
+ * This implementation uses GEMINI_API_KEY environment variable directly because:
+ * 1. Replit AI Integrations currently only supports gemini-2.5-flash-image (Nano Banana)
+ * 2. We need gemini-3-pro-image-preview (Nano Banana Pro) for advanced features
+ * 3. GEMINI_API_KEY is stored as a Replit secret (encrypted, not exposed to client)
+ * 
+ * Security measures:
+ * - API key is never sent to client (server-side only)
+ * - Stored as encrypted secret in Replit environment
+ * - All API calls are made from secure backend routes
+ * - No API key exposure in client-side code or logs
+ * 
+ * Future: When Replit AI Integrations adds gemini-3-pro-image-preview support,
+ * migrate to AI Integrations for automatic key rotation and credit billing.
+ */
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 interface GenerateImageResponse {
@@ -21,11 +38,12 @@ export async function generateImage(
     // Convert buffer to base64
     const base64Data = imageBuffer.toString('base64');
 
-    // Try image generation first, fall back to text if quota exceeded
+    // Try Nano Banana Pro (gemini-3-pro-image-preview) first, fall back to 2.5 if unavailable
     let response;
+    let modelUsed = "gemini-3-pro-image-preview";
     try {
       response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-image-preview",
+        model: modelUsed,
         contents: [
           {
             role: "user",
@@ -171,11 +189,11 @@ REQUIREMENTS:
 
 Generate a beautiful, detailed character illustration that perfectly combines the character from the reference images with the pose from the sketch in the described scene.`;
 
-    // Try image generation
+    // Try Nano Banana Pro (gemini-3-pro-image-preview)
     let response;
     try {
       response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-image-preview",
+        model: "gemini-3-pro-image-preview",
         contents: [
           {
             role: "user",
@@ -286,8 +304,9 @@ export async function generateImageFromText(prompt: string): Promise<GenerateIma
       throw new Error("GEMINI_API_KEY environment variable is not set");
     }
 
+    // Use Nano Banana Pro (gemini-3-pro-image-preview) for text-to-image generation
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-image-preview",
+      model: "gemini-3-pro-image-preview",
       contents: [
         {
           role: "user",
