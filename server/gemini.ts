@@ -60,6 +60,10 @@ export async function generateImage(
         ],
         config: {
           responseModalities: [Modality.TEXT, Modality.IMAGE],
+          imageConfig: {
+            aspectRatio: "16:9",
+            imageSize: "2K"
+          }
         },
       });
     } catch (quotaError: any) {
@@ -205,6 +209,10 @@ Generate a beautiful, detailed character illustration that perfectly combines th
         ],
         config: {
           responseModalities: [Modality.TEXT, Modality.IMAGE],
+          imageConfig: {
+            aspectRatio: "16:9",
+            imageSize: "2K"
+          }
         },
       });
     } catch (quotaError: any) {
@@ -315,6 +323,10 @@ export async function generateImageFromText(prompt: string): Promise<GenerateIma
       ],
       config: {
         responseModalities: [Modality.TEXT, Modality.IMAGE],
+        imageConfig: {
+          aspectRatio: "16:9",
+          imageSize: "2K"
+        }
       },
     });
 
