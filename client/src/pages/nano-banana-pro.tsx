@@ -23,6 +23,16 @@ import {
   PromptTemplate 
 } from "@/data/nano-banana-pro-prompts";
 
+// Gallery showcase images
+import gallery1 from "@assets/stock_images/fantasy_digital_art__5ed09107.jpg";
+import gallery2 from "@assets/stock_images/fantasy_digital_art__082449cc.jpg";
+import gallery3 from "@assets/stock_images/fantasy_digital_art__70c61bc8.jpg";
+import gallery4 from "@assets/stock_images/futuristic_cityscape_5cd72aba.jpg";
+import gallery5 from "@assets/stock_images/futuristic_cityscape_5856bda0.jpg";
+import gallery6 from "@assets/stock_images/futuristic_cityscape_a9021fe1.jpg";
+import gallery7 from "@assets/stock_images/creative_portrait_ar_f3507b42.jpg";
+import gallery8 from "@assets/stock_images/creative_portrait_ar_a0dbe4b3.jpg";
+
 export default function NanoBananaPro() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -301,6 +311,66 @@ export default function NanoBananaPro() {
   };
 
   const featuredPrompts = getFeaturedPrompts().slice(0, 6);
+
+  // Gallery showcase data
+  const galleryShowcase = [
+    {
+      id: 1,
+      image: gallery1,
+      title: "Ethereal Fantasy Realm",
+      prompt: "Mystical floating islands with bioluminescent forests, crystal waterfalls, dramatic sunset lighting, 4K ultra detailed",
+      category: "Fantasy"
+    },
+    {
+      id: 2,
+      image: gallery2,
+      title: "Magical Landscape",
+      prompt: "Enchanted valley with magical creatures, golden hour lighting, volumetric fog, cinematic composition",
+      category: "Fantasy"
+    },
+    {
+      id: 3,
+      image: gallery3,
+      title: "Dragon's Domain",
+      prompt: "Majestic fantasy landscape with ancient ruins, dramatic skies, epic scale, photorealistic rendering",
+      category: "Fantasy"
+    },
+    {
+      id: 4,
+      image: gallery4,
+      title: "Neon Metropolis",
+      prompt: "Futuristic cityscape at night, neon signs displaying 'TECH CITY', cyberpunk aesthetic, rain-soaked streets, 4K sharp details",
+      category: "Sci-Fi"
+    },
+    {
+      id: 5,
+      image: gallery5,
+      title: "Cyber District",
+      prompt: "Dense urban environment with holographic billboards, flying vehicles, purple and blue neon lighting, ultra HD",
+      category: "Sci-Fi"
+    },
+    {
+      id: 6,
+      image: gallery6,
+      title: "Future Vision",
+      prompt: "Advanced civilization cityscape, towering skyscrapers, energy streams, atmospheric perspective, 8K quality",
+      category: "Sci-Fi"
+    },
+    {
+      id: 7,
+      image: gallery7,
+      title: "Artistic Portrait",
+      prompt: "Creative portrait with vibrant colors, artistic lighting, professional studio quality, high detail facial features",
+      category: "Portrait"
+    },
+    {
+      id: 8,
+      image: gallery8,
+      title: "Modern Character",
+      prompt: "Contemporary portrait art, dynamic pose, cinematic lighting, photorealistic skin texture, 4K resolution",
+      category: "Portrait"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -856,6 +926,66 @@ export default function NanoBananaPro() {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Gallery Showcase Section */}
+      <div id="gallery" className="relative bg-gradient-to-br from-purple-500/10 to-pink-500/10 py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Featured <span className="gradient-text bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                Creations
+              </span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Stunning images created with Nano Banana Pro. From fantasy landscapes to futuristic cityscapes, 
+              explore what's possible with AI-powered 4K image generation.
+            </p>
+          </div>
+
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {galleryShowcase.map((item) => (
+              <Card 
+                key={item.id}
+                className="group overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer"
+                data-testid={`gallery-item-${item.id}`}
+              >
+                <div className="relative aspect-square overflow-hidden">
+                  <img 
+                    src={item.image} 
+                    alt={`${item.title} - Created with Nano Banana Pro`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                      <Badge variant="secondary" className="mb-2">{item.category}</Badge>
+                      <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                      <p className="text-sm text-white/80 line-clamp-2">{item.prompt}</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* CTA to try Nano Banana Pro */}
+          <div className="mt-16 text-center">
+            <p className="text-lg text-muted-foreground mb-6">
+              Ready to create stunning images like these?
+            </p>
+            <Button 
+              size="lg" 
+              className="px-10 py-6 text-lg font-semibold"
+              onClick={() => document.getElementById('playground')?.scrollIntoView({behavior:'smooth'})}
+              data-testid="button-gallery-try-now"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              Try Nano Banana Pro Free
+            </Button>
           </div>
         </div>
       </div>
